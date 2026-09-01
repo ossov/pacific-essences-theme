@@ -298,14 +298,8 @@
       }
     </script>
 
-    <style>
-  .card__information .card__heading .full-unstyled-link {
-      font-size: 23px;
-      font-weight: 400;
-  }
-</style>
-
 {{ 'custom-styles.css' | asset_url | stylesheet_tag }}
+{{ 'pacess.css' | asset_url | stylesheet_tag }}
 
   <style>
     @font-face {
@@ -326,22 +320,16 @@
       font-family: 'Nunito', sans-serif !important;
     }
   </style>
-    
-  <style>Add commentMore actions
-    .card__information .card__heading .full-unstyled-link {
-        font-size: 30px;
-    }
-
-    .product-card__metafield-resonance {
-      font-size: 25px; /* Adjust this value to your desired size */
-      color: #555555;   /* Optional: change the color */
-    }
-
-  </style>
 
   </head>
 
-  <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
+  {%- comment -%}
+      t-* is a stable identity for the current template, e.g. t-index, t-blog,
+      t-blog-essence-stories. It gives assets/pacess.css a way to scope a rule to
+      one template without hardcoding a section id — the previous approach, which
+      silently died when the section was recreated.
+    {%- endcomment -%}
+    <body class="gradient t-{{ request.page_type | handle }}{%- if template.suffix != blank %}-{{ template.suffix | handle }}{% endif %}{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>

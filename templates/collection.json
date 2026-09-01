@@ -12,11 +12,6 @@
     "banner": {
       "type": "main-collection-banner",
       "disabled": true,
-      "custom_css": [
-        ".collection-hero__title {display: none !important;}",
-        ".collection-hero__image-container {width: 100% !important;}",
-        ".collection-hero__image-container .media {margin: 0 auto; width: auto; max-width: 60%;}"
-      ],
       "settings": {
         "show_collection_description": false,
         "show_collection_image": true,
@@ -25,10 +20,6 @@
     },
     "image_banner_DfQVLz": {
       "type": "image-banner",
-      "custom_css": [
-        ".banner__media {display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 25px; background-color: white; width: 100%; min-height: 100px; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px;}",
-        ".banner__media img {max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 20px;}"
-      ],
       "name": "t:sections.image-banner.presets.name",
       "settings": {
         "image": "{{ collection.metafields.custom.collection_image.value }}",
@@ -70,11 +61,6 @@
         "slide_38PUDd"
       ],
       "disabled": true,
-      "custom_css": [
-        ".slideshow__media img {width: 100% !important; height: 100% !important; object-fit: cover !important;}",
-        ".banner__box {display: none;}",
-        "div#Slide-template--19587008921845__slideshow_Gpzwdz-1 > div:nth-of-type(2) > div {border-radius: 50px;}"
-      ],
       "name": "t:sections.slideshow.presets.name",
       "settings": {
         "layout": "full_bleed",
@@ -108,9 +94,6 @@
         "heading_qbrw6J",
         "text_MGBiUU"
       ],
-      "custom_css": [
-        "@media (min-width: 1024px) {h2 {white-space: nowrap; display: flex; justify-content: center; align-items: center; }}"
-      ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -123,9 +106,6 @@
     },
     "collection_refine_buttons_wJjgJQ": {
       "type": "collection-refine-buttons",
-      "custom_css": [
-        ".button {background-color: transparent; border: 3px solid #2a87b9; color: #2a87b9; box-shadow: none; border-radius: 30px; font-size: 1.7rem; font-weight: 600; letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s ease-in-out;}"
-      ],
       "name": "Collection Refine Buttons",
       "settings": {}
     },

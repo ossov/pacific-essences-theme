@@ -1,0 +1,285 @@
+/* ============================================================================
+   pacess.css — store styles, consolidated
+
+   Everything here was previously spread across three places: the "custom CSS"
+   boxes on individual sections in the theme editor (53 rules across 21
+   templates), and two inline <style> blocks in layout/theme.liquid.
+
+   Rules were moved verbatim. Nothing was restyled, and the !important flags
+   were kept exactly as they were authored — this pass is about putting the
+   rules in one place, not about changing how anything looks. Specificity can
+   be cleaned up later, when we are deliberately changing the design anyway.
+
+   Dropped on the way in (all provably inactive):
+     - 17 rules attached to sections that are disabled on their template
+     - a slideshow rule keyed to section id "template--19587008921845__…",
+       which no longer exists — the homepage is on template--22364247130357__…
+     - `box-color: #559edb` — not a CSS property
+     - `padding-right: 25` — no unit, so ignored by the parser
+     - `.card__heading .full-unstyled-link { font-size: 30px }` — sat behind a
+       stray "Add commentMore actions" pasted into theme.liquid, which made its
+       selector invalid. It has never applied; the 23px rule below is what you
+       have been seeing.
+
+   Scoping note: the theme editor scoped each of these to its own section id.
+   Most are safe at type level because the section appears once on the site
+   (a slideshow only on the home page, refine buttons only on collections).
+   Where a rule really is template-specific, it uses the t-* class that
+   layout/theme.liquid puts on <body>.
+
+   Loaded after custom-styles.css so source order settles ties.
+   ========================================================================= */
+
+:root {
+  /* Brand */
+  --pe-blue: #2a87b9;
+  --pe-muted: #666666;
+  --pe-muted-2: #555555;
+
+  /* Links in long-form copy */
+  --pe-link: #2359a6;
+  --pe-link-hover: #0a3066;
+
+  /* Heading gradients. Two are in use; they differ in angle and stops.
+     Worth reducing to one when we get to the restyle. */
+  --pe-gradient-title: linear-gradient(90deg, #5dbdfc, #975af2, #f45dfc);
+  --pe-gradient-heading: linear-gradient(100deg, #830af5, #ffbff2);
+
+  /* Corner radii. There are four distinct values in play; also a restyle
+     decision rather than something to change silently here. */
+  --pe-radius-pill: 50px;
+  --pe-radius-button: 30px;
+  --pe-radius-media: 25px;
+  --pe-radius-media-inner: 20px;
+}
+
+/* ---------------------------------------------------------------------------
+   Shared
+   Previously inline <style> blocks in layout/theme.liquid, so already global.
+   ------------------------------------------------------------------------ */
+
+.card__information .card__heading .full-unstyled-link {
+  font-size: 23px;
+  font-weight: 400;
+}
+
+.product-card__metafield-resonance {
+  font-size: 25px;
+  color: var(--pe-muted-2);
+}
+
+/* ---------------------------------------------------------------------------
+   Home — slideshow
+   The slideshow is live only on the home page, so this needs no scoping.
+   ------------------------------------------------------------------------ */
+
+.slideshow__media img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* .slideshow__text distinguishes the slideshow's box from image-banner's,
+   which carries .banner__box on its own. */
+.slideshow__text.banner__box {
+  border-radius: var(--pe-radius-pill);
+  background: rgba(255, 255, 255, 1) !important;
+  padding: 12px 30px !important;
+  margin: 0 25px !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Home — essence guide
+   ------------------------------------------------------------------------ */
+
+.eg-title {
+  font-size: 4.7rem !important;
+  font-weight: bold;
+  background: var(--pe-gradient-title);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.eg-sub,
+.flower-menu-wrapper .flower-menu__subtitle {
+  color: var(--pe-muted);
+  font-size: 20px;
+}
+
+.flower-menu-wrapper .title-wrapper-with-link {
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center !important;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------------------
+   Home — featured collection and featured blog
+   ------------------------------------------------------------------------ */
+
+.collection__title h2 {
+  text-align: center;
+  font-weight: bold;
+  background: var(--pe-gradient-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.collection__view-all .button:after {
+  box-shadow: none !important;
+}
+
+.blog .title-wrapper-with-link {
+  justify-content: center;
+}
+
+/* ---------------------------------------------------------------------------
+   Product
+   ------------------------------------------------------------------------ */
+
+.product__tax.caption {
+  display: none !important;
+}
+
+.custom-quantity-price-wrapper .price--on-sale .price__container {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.custom-quantity-price-wrapper .price--on-sale .price-item {
+  line-height: 0;
+  font-size: 1.8rem;
+}
+
+.custom-quantity-price-wrapper .price--on-sale s {
+  text-decoration: line-through;
+}
+
+.price--on-sale .custom-quantity {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.price--on-sale .price-item {
+  position: relative;
+  top: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+   Collection
+   image-banner is live only on the default collection template.
+   ------------------------------------------------------------------------ */
+
+.banner__media {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: var(--pe-radius-media);
+  background-color: white;
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+}
+
+.banner__media img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--pe-radius-media-inner);
+}
+
+/* Was duplicated identically on collection and collection.specials. */
+@media (min-width: 1024px) {
+  .rich-text h2 {
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+/* Also duplicated across both collection templates. The section only exists
+   on collection pages, so the type-level selector is enough. */
+.refine-buttons__container .button {
+  background-color: transparent;
+  border: 3px solid var(--pe-blue);
+  color: var(--pe-blue);
+  box-shadow: none;
+  border-radius: var(--pe-radius-button);
+  font-size: 1.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* ---------------------------------------------------------------------------
+   Blog and article
+   Each of these was pasted identically into both the default template and the
+   essence-stories one.
+   ------------------------------------------------------------------------ */
+
+.main-blog .title--primary {
+  text-align: center !important;
+  margin: 2rem auto !important;
+  width: fit-content;
+  display: block;
+}
+
+/* Only the default blog template had this; blog.essence-stories keeps Dawn's
+   two-column default. Hence the template scope rather than a bare selector. */
+@media screen and (min-width: 990px) {
+  .t-blog .blog-articles {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+.article-template__hero-container .media {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.article-template .rte,
+.article-template .rte p,
+.article-template .rte span {
+  font-size: 18px !important;
+  line-height: 1.7 !important;
+}
+
+.article-template .rte a,
+.article-template__content a {
+  color: var(--pe-link) !important;
+  text-decoration: underline;
+}
+
+.article-template__content a:hover {
+  color: var(--pe-link-hover) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Pages
+   ------------------------------------------------------------------------ */
+
+.multirow .button::after {
+  display: none !important;
+}
+
+.contact .button {
+  box-shadow: none !important;
+}
+
+/* Same rule again, on the cart footer. */
+.cart__footer .button:after {
+  box-shadow: none !important;
+}
+
+.collapsible-content .accordion {
+  margin-top: 10px !important;
+  margin-bottom: 15px !important;
+}

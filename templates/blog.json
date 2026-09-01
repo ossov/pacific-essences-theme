@@ -11,10 +11,6 @@
   "sections": {
     "main": {
       "type": "main-blog",
-      "custom_css": [
-        ".title--primary {text-align: center !important; margin: 2rem auto !important; width: fit-content; display: block;}",
-        "@media screen and (min-width: 990px) {.blog-articles {grid-template-columns: repeat(3, 1fr) !important; }}"
-      ],
       "settings": {
         "layout": "grid",
         "show_image": true,

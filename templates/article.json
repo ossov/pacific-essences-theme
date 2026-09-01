@@ -42,12 +42,6 @@
         "share",
         "content"
       ],
-      "custom_css": [
-        ".article-template__hero-container .media {background-color: transparent !important; border: none !important;}",
-        ".rte,.rte p,.rte span {font-size: 18px !important; line-height: 1.7 !important;}",
-        ".rte a,.article-template__content a {color: #2359a6 !important; text-decoration: underline;}",
-        ".article-template__content a:hover {color: #0a3066 !important;}"
-      ],
       "settings": {}
     }
   },
