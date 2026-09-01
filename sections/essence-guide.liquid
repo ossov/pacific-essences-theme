@@ -1,0 +1,967 @@
+{%- comment -%}
+  Essence Guide — the Essence Chat and the flower menu in one section.
+
+  Renders, top to bottom:
+    heading -> chat -> divider -> flower menu
+
+  The petals are plain links: clicking one opens its collection page, exactly as
+  the standalone flower menu did. The chat sits above them and is used by typing
+  into it.
+
+  Setup:
+    1. Edit code -> Sections -> Add a new section -> name it "essence-guide"
+       -> paste this file -> Save.
+    2. Customize -> Home page -> Add section -> "Essence guide".
+    3. Add 5 petal blocks. For each: image, collection link, prompt, label.
+    4. REMOVE the separate "Essence Chat" and "Flower Menu" sections from this
+       page — this section replaces both. Two chat widgets on one page fight
+       each other; the second one deletes the first.
+
+  Requires the essence-chat.js asset. The flower is drawn entirely by this
+  section; custom-flower-menu.css is no longer loaded or needed here.
+{%- endcomment -%}
+
+{%- liquid
+  # Colour settings come back blank if a merchant clears the swatch, which would
+  # break the gradients. Fall back before they are used anywhere.
+  assign band_a = section.settings.band_start | default: '#f7fbfd'
+  assign band_b = section.settings.band_end | default: '#f2f8f5'
+  assign seam_color = section.settings.seam_color | default: '#2a87b9'
+  assign seam_text_color = section.settings.seam_text_color | default: '#4d7387'
+  assign accent = section.settings.accent | default: '#2A87B9'
+  assign glow = section.settings.glow_color | default: '#43a6db'
+  assign glow_ring = glow | color_modify: 'alpha', 0.30
+  assign glow_a1 = section.settings.glow_strength | divided_by: 220.0
+  assign glow_a2 = section.settings.glow_strength | divided_by: 420.0
+  assign glow_near = glow | color_modify: 'alpha', glow_a1
+  assign glow_far = glow | color_modify: 'alpha', glow_a2
+  assign glow_blur = section.settings.glow_strength | plus: 34
+
+  # Animation timing. 100% = 1.2s petal travel, 150ms between petals.
+  assign speed = section.settings.anim_speed | default: 100
+  assign dur_move = 1200 | times: speed | divided_by: 100
+  assign dur_fade = 850 | times: speed | divided_by: 100
+  assign dur_seam = 1000 | times: speed | divided_by: 100
+  assign stagger = 150 | times: speed | divided_by: 100
+  assign stagger2 = stagger | times: 2
+  assign stagger3 = stagger | times: 3
+  assign stagger4 = stagger | times: 4
+  assign stagger5 = stagger | times: 5
+  assign chip_delay = dur_seam | divided_by: 3
+-%}
+
+{% style %}
+  #eg-{{ section.id }} {
+    background: linear-gradient(180deg, {{ band_a }} 0%, {{ band_b }} 100%);
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+  }
+
+  /* ---------------------------------------------------------------------
+     The flower
+
+     This section no longer loads custom-flower-menu.css. That file positioned
+     the petals with two hand-tuned sets of pixel values — one for desktop and
+     one for under 750px — plus clip-paths traced by hand to the old artwork.
+     New images meant re-deriving twenty numbers by eye, and nothing was
+     correct at the widths in between.
+
+     Everything here is a percentage of one square container instead, so a
+     single set of numbers is right at every width. They were measured from the
+     alpha channel of the petal images: each petal is scaled so its tip sits the
+     same distance from the centre as the old artwork did, then placed so all
+     five tips meet. The clip-path is a 26-point trace of each shape's own
+     outline, so a petal's transparent corners cannot swallow a click meant for
+     its neighbour. The text box is the largest rectangle that fits inside that
+     petal's lobe.
+
+     Keyed to slot, so the block order is assumed to be:
+       1 water/blue   2 earth/yellow   3 metal/purple   4 fire/pink   5 wood/green
+     --------------------------------------------------------------------- */
+
+  /* Kept as overrides rather than deleted: if any other section on the page
+     loads custom-flower-menu.css, this wrapper gets 150px of padding back. */
+  #eg-{{ section.id }} .flower-menu-wrapper {
+    background: transparent;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    /* Each image carries transparent canvas around its shape, so a petal's box
+       can reach past the container even though nothing visible does. Clipping
+       here means that overhang can never produce a horizontal scrollbar.
+       overflow-x rather than overflow, so the page still scrolls normally. */
+    overflow-x: clip;
+  }
+
+  /* The petals sit ~20px inside the top of their container, so the text needs
+     that much extra before the gap reads as the value set here. */
+  #eg-{{ section.id }} .flower-menu-wrapper .title-wrapper-with-link {
+    margin-top: 0 !important;
+    margin-bottom: calc({{ section.settings.flower_text_gap }}px + 20px) !important;
+  }
+
+  #eg-{{ section.id }} .eg-flower {
+    position: relative;
+    width: min(460px, 100%);
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
+  }
+
+  #eg-{{ section.id }} .eg-petal {
+    position: absolute;
+    transition: transform 0.3s ease;
+  }
+  #eg-{{ section.id }} .eg-petal:hover { transform: scale(1.05); }
+
+  #eg-{{ section.id }} .eg-petal__link { display: block; text-decoration: none; }
+  #eg-{{ section.id }} .eg-petal__link:focus-visible {
+    outline: 2px solid {{ accent }};
+    outline-offset: 4px;
+    border-radius: 6px;
+  }
+
+  #eg-{{ section.id }} .eg-flower__hub {
+    position: absolute;
+    left: 50.04%;
+    top: 52.64%;
+    width: 32.61%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+  #eg-{{ section.id }} .eg-flower__hub img {
+    display: block;
+    width: 100%;
+    height: auto;
+    /* The centrepiece is a circle in a square PNG, and it sits above the petals.
+       Without this its transparent corners take clicks meant for the petal art
+       underneath — the same problem the petal clip-paths solve. */
+    clip-path: circle(50%);
+  }
+
+  /* water / blue — Path 26.png */
+  #eg-{{ section.id }} .eg-petal--1 {
+    width: 47.27%;
+    left: 6.63%;
+    top: 44.68%;
+    clip-path: polygon(87.7% 56.6%, 85.4% 63.1%, 83.0% 69.3%, 79.9% 76.0%, 75.1% 82.7%, 68.0% 88.8%, 58.6% 93.3%, 47.5% 93.7%, 37.0% 91.6%, 27.6% 87.0%, 18.4% 81.7%, 10.8% 74.7%, 6.8% 65.9%, 8.9% 56.6%, 15.0% 48.8%, 22.1% 43.0%, 28.6% 38.7%, 35.2% 35.2%, 41.5% 31.6%, 48.9% 28.3%, 57.8% 24.4%, 69.9% 20.1%, 89.1% 13.8%, 92.7% 27.7%, 91.2% 40.0%, 89.3% 49.3%);
+  }
+  #eg-{{ section.id }} .eg-petal--1 .eg-petal-text {
+    left: 25.0%;
+    top: 41.9%;
+    width: 49.0%;
+    height: 40.3%;
+  }
+  /* earth / yellow — Path 25.png */
+  #eg-{{ section.id }} .eg-petal--2 {
+    width: 59.31%;
+    left: 47.28%;
+    top: 17.47%;
+    clip-path: polygon(87.1% 43.0%, 86.7% 51.8%, 82.5% 59.6%, 74.9% 64.2%, 67.1% 66.4%, 60.1% 67.0%, 54.0% 67.2%, 48.2% 67.2%, 42.0% 67.0%, 35.2% 66.0%, 26.2% 65.0%, 14.0% 62.6%, 7.6% 53.8%, 16.0% 43.0%, 22.4% 36.0%, 27.4% 30.6%, 32.2% 26.4%, 36.8% 22.2%, 42.0% 18.7%, 47.8% 15.1%, 54.8% 12.7%, 62.7% 11.9%, 70.7% 14.3%, 77.1% 19.9%, 81.5% 27.0%, 85.1% 34.6%);
+  }
+  #eg-{{ section.id }} .eg-petal--2 .eg-petal-text {
+    left: 39.3%;
+    top: 21.2%;
+    width: 37.6%;
+    height: 37.7%;
+  }
+  /* metal / purple — Path 27.png */
+  #eg-{{ section.id }} .eg-petal--3 {
+    width: 59.68%;
+    left: 36.00%;
+    top: 49.36%;
+    clip-path: polygon(90.4% 48.2%, 90.6% 57.8%, 87.6% 66.6%, 82.7% 74.6%, 76.7% 81.1%, 69.4% 86.8%, 60.9% 89.8%, 52.2% 87.9%, 45.2% 81.8%, 40.3% 74.3%, 37.1% 67.5%, 34.7% 61.2%, 32.4% 54.8%, 30.6% 48.2%, 28.6% 40.5%, 26.4% 30.5%, 24.2% 16.0%, 31.2% 7.2%, 43.9% 11.5%, 52.8% 14.9%, 59.7% 18.1%, 65.6% 21.2%, 70.8% 24.9%, 76.5% 28.5%, 81.9% 33.3%, 87.0% 39.8%);
+  }
+  #eg-{{ section.id }} .eg-petal--3 .eg-petal-text {
+    left: 42.2%;
+    top: 32.8%;
+    width: 38.0%;
+    height: 42.7%;
+  }
+  /* fire / pink — Path 24.png */
+  #eg-{{ section.id }} .eg-petal--4 {
+    width: 53.14%;
+    left: 28.55%;
+    top: -5.39%;
+    clip-path: polygon(73.2% 45.8%, 70.9% 52.0%, 68.1% 57.4%, 64.9% 62.9%, 61.4% 69.5%, 56.3% 76.8%, 48.7% 87.2%, 36.7% 92.9%, 28.3% 80.2%, 23.5% 71.1%, 19.5% 64.2%, 16.8% 58.1%, 14.7% 52.0%, 13.1% 45.8%, 11.7% 39.1%, 11.9% 31.6%, 14.4% 23.5%, 20.5% 17.1%, 28.8% 12.9%, 38.3% 11.2%, 48.0% 10.8%, 58.0% 11.6%, 67.2% 15.1%, 73.9% 21.8%, 76.2% 30.6%, 75.1% 38.9%);
+  }
+  #eg-{{ section.id }} .eg-petal--4 .eg-petal-text {
+    left: 19.1%;
+    top: 19.5%;
+    width: 48.1%;
+    height: 38.4%;
+  }
+  /* wood / green — Path 28.png */
+  #eg-{{ section.id }} .eg-petal--5 {
+    width: 52.36%;
+    left: -0.90%;
+    top: 19.39%;
+    clip-path: polygon(82.4% 56.0%, 92.6% 72.0%, 88.2% 86.8%, 73.6% 91.0%, 63.0% 92.9%, 54.6% 94.1%, 46.9% 94.4%, 40.0% 94.4%, 32.6% 93.5%, 24.7% 91.3%, 16.3% 87.4%, 8.9% 79.6%, 4.3% 68.7%, 3.6% 56.0%, 4.7% 43.6%, 7.7% 31.5%, 12.1% 20.1%, 19.6% 11.0%, 29.1% 7.1%, 39.1% 9.2%, 47.4% 14.6%, 53.9% 20.1%, 59.5% 25.8%, 64.6% 31.5%, 69.7% 38.2%, 75.5% 45.7%);
+  }
+  #eg-{{ section.id }} .eg-petal--5 .eg-petal-text {
+    left: 12.8%;
+    top: 25.8%;
+    width: 45.6%;
+    height: 54.0%;
+  }
+
+  /* ---- petal text ----
+     Real text over the artwork so it can be translated, read by screen readers
+     and indexed as the link's anchor text. */
+  #eg-{{ section.id }} .eg-petal-art { position: relative; display: block; }
+  #eg-{{ section.id }} .eg-petal-art img { display: block; width: 100%; height: auto; }
+  #eg-{{ section.id }} .eg-petal-text {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    pointer-events: none;
+    color: {{ section.settings.petal_text_color }};
+  }
+  #eg-{{ section.id }} .eg-petal-text > span {
+    display: block;
+    width: 100%;
+    line-height: 1.22;
+    /* Replaced by the fitted size on load; this is what shows if JS never runs. */
+    font-size: {{ section.settings.petal_text_min }}px;
+    /* Hyphenation was breaking "seek-ing" on four of the five petals and,
+       measured at 320/375/414/460px, bought exactly zero extra font size —
+       the boxes are near-square, so the fit is limited by height, not by
+       whether a long word can be split. */
+    -webkit-hyphens: none;
+    hyphens: none;
+    text-wrap: balance;
+  }
+
+  #eg-{{ section.id }} {
+    --eg-gap: {{ section.settings.gap }}px;
+  }
+
+  #eg-{{ section.id }} .eg-head {
+    text-align: center;
+    max-width: 54ch;
+    margin: 0 auto var(--eg-gap);
+  }
+
+  #eg-{{ section.id }} .essence-chat-mount {
+    display: block;
+    margin-bottom: var(--eg-gap);
+  }
+
+  #eg-{{ section.id }} .eg-head .eg-title {
+    margin: 0 0 6px;
+  }
+
+  #eg-{{ section.id }} .eg-head .eg-sub {
+    margin: 0;
+  }
+
+  /* The chat reserves 680px of height on its own; inside this section it sits
+     with the flower, so give it only what it needs. */
+  #eg-{{ section.id }} .ec-stage {
+    min-height: {{ section.settings.chat_height }}px !important;
+    padding: 0 !important;
+  }
+
+  /* ---------- the glow ----------
+     The widget sets its shadow inline, so this needs !important to win. */
+  {%- if section.settings.glow_strength > 0 -%}
+    #eg-{{ section.id }} .ec-hero form {
+      box-shadow:
+        0 0 0 1px {{ glow_ring }},
+        0 8px 26px {{ glow_near }},
+        0 0 {{ glow_blur }}px {{ glow_far }} !important;
+      transition: box-shadow .3s ease;
+    }
+
+    #eg-{{ section.id }} .ec-hero form:focus-within {
+      box-shadow:
+        0 0 0 2px {{ glow_ring }},
+        0 10px 30px {{ glow_near }},
+        0 0 {{ glow_blur | plus: 20 }}px {{ glow_near }} !important;
+    }
+
+    #eg-{{ section.id }} .ec-panel {
+      box-shadow:
+        0 0 0 1px {{ glow_ring }},
+        0 14px 40px {{ glow_near }},
+        0 0 {{ glow_blur }}px {{ glow_far }} !important;
+    }
+  {%- endif -%}
+
+  /* ---------- the seam ---------- */
+  #eg-{{ section.id }} .eg-seam {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    margin-bottom: var(--eg-gap);
+    user-select: none;
+  }
+
+  #eg-{{ section.id }} .eg-seam__line {
+    width: {{ section.settings.seam_line_width }}px;
+    height: {{ section.settings.seam_length }}px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0), {{ seam_color }});
+    transition: height {{ dur_seam }}ms cubic-bezier(.16, 1, .3, 1);
+  }
+
+  #eg-{{ section.id }} .eg-seam__line--b {
+    background: linear-gradient(180deg, {{ seam_color }}, rgba(0, 0, 0, 0));
+  }
+
+  #eg-{{ section.id }} .eg-seam__chip {
+    margin: 8px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .08);
+    border-radius: 999px;
+    padding: .62em 1.35em;
+    font-size: {{ section.settings.seam_text_size }}px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: {{ seam_text_color }};
+    box-shadow: 0 8px 20px rgba(18, 48, 63, .08);
+    transition:
+      opacity {{ dur_fade }}ms ease {{ chip_delay }}ms,
+      transform {{ dur_fade }}ms cubic-bezier(.16, 1, .3, 1) {{ chip_delay }}ms;
+  }
+
+  #eg-{{ section.id }} .eg-seam__arrow {
+    display: block;
+    width: {{ section.settings.seam_line_width | times: 8 }}px;
+    height: auto;
+    /* The arms start 3 units down the viewBox, so pulling up by exactly the line
+       width puts them on the line's end. Round caps overlap the last pixel. */
+    margin-top: -{{ section.settings.seam_line_width }}px;
+  }
+
+  #eg-{{ section.id }} .eg-seam__dot {
+    width: .58em;
+    height: .58em;
+    border-radius: 50%;
+    background: {{ seam_color }};
+    display: block;
+  }
+
+  /* ---------- animation ----------
+     Nothing hides until JS adds .eg-anim, so a blocked script or an old browser
+     can never leave the flower invisible. */
+  #eg-{{ section.id }}.eg-anim .eg-petal__link,
+  #eg-{{ section.id }}.eg-anim .eg-flower__hub img {
+    opacity: 0;
+  }
+
+  #eg-{{ section.id }}.eg-anim .eg-petal__link {
+    transform: translate(var(--eg-dx, 0), var(--eg-dy, 0)) scale(.55);
+    transition: opacity {{ dur_fade }}ms ease, transform {{ dur_move }}ms cubic-bezier(.34, 1.32, .5, 1);
+  }
+
+  /* The centre lands last, so the flower reads as opening. */
+  #eg-{{ section.id }}.eg-anim .eg-flower__hub img {
+    transform: scale(.4);
+    transition:
+      opacity {{ dur_fade }}ms ease {{ stagger5 }}ms,
+      transform {{ dur_move }}ms cubic-bezier(.34, 1.32, .5, 1) {{ stagger5 }}ms;
+  }
+
+  #eg-{{ section.id }}.eg-anim.eg-bloom .eg-petal__link,
+  #eg-{{ section.id }}.eg-anim.eg-bloom .eg-flower__hub img {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Petals open outward from the centre, clockwise from the top. */
+  #eg-{{ section.id }}.eg-anim .eg-petal--4 .eg-petal__link { --eg-dx: 0;     --eg-dy: 32px;  transition-delay: 0ms; }
+  #eg-{{ section.id }}.eg-anim .eg-petal--2 .eg-petal__link { --eg-dx: -26px; --eg-dy: 16px;  transition-delay: {{ stagger }}ms; }
+  #eg-{{ section.id }}.eg-anim .eg-petal--3 .eg-petal__link { --eg-dx: -24px; --eg-dy: -20px; transition-delay: {{ stagger2 }}ms; }
+  #eg-{{ section.id }}.eg-anim .eg-petal--1 .eg-petal__link { --eg-dx: 26px;  --eg-dy: -22px; transition-delay: {{ stagger3 }}ms; }
+  #eg-{{ section.id }}.eg-anim .eg-petal--5 .eg-petal__link { --eg-dx: 28px;  --eg-dy: 14px;  transition-delay: {{ stagger4 }}ms; }
+
+  #eg-{{ section.id }}.eg-seam-anim .eg-seam__line { height: 0; }
+  #eg-{{ section.id }}.eg-seam-anim .eg-seam__chip { opacity: 0; transform: scale(.9); }
+  #eg-{{ section.id }}.eg-seam-anim .eg-seam__arrow { opacity: 0; transition: opacity {{ dur_fade }}ms ease {{ chip_delay }}ms; }
+  #eg-{{ section.id }}.eg-seam-anim.eg-seam-in .eg-seam__line { height: {{ section.settings.seam_length }}px; }
+  #eg-{{ section.id }}.eg-seam-anim.eg-seam-in .eg-seam__chip { opacity: 1; transform: none; }
+  #eg-{{ section.id }}.eg-seam-anim.eg-seam-in .eg-seam__arrow { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #eg-{{ section.id }} .eg-petal__link,
+    #eg-{{ section.id }} .eg-flower__hub img,
+    #eg-{{ section.id }} .eg-seam__chip,
+    #eg-{{ section.id }} .eg-seam__arrow {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+    #eg-{{ section.id }} .eg-seam__line { height: {{ section.settings.seam_length }}px !important; }
+  }
+{% endstyle %}
+
+<div id="eg-{{ section.id }}" class="eg color-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+
+    {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+      <div class="eg-head">
+        {%- if section.settings.title != blank -%}
+          <h2 class="eg-title title {{ section.settings.heading_size }}">{{ section.settings.title | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <div class="eg-sub rte">{{ section.settings.subtitle }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 1. the chat {%- endcomment -%}
+    <div id="essence-chat-{{ section.id }}" class="essence-chat-mount"></div>
+
+    {%- comment -%} 2. the seam {%- endcomment -%}
+    {%- if section.settings.show_seam -%}
+      <div class="eg-seam">
+        <span class="eg-seam__line"></span>
+        {%- if section.settings.seam_label != blank -%}
+          <span class="eg-seam__chip"><span class="eg-seam__dot"></span>{{ section.settings.seam_label | escape }}</span>
+        {%- endif -%}
+        <span class="eg-seam__line eg-seam__line--b"></span>
+        <svg class="eg-seam__arrow" viewBox="0 0 24 16" fill="none" aria-hidden="true" focusable="false">
+          <path d="M3 3 L12 13 L21 3" stroke="{{ seam_color }}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 3. the flower {%- endcomment -%}
+    <div class="flower-menu-wrapper">
+      {%- if section.settings.flower_title != blank or section.settings.flower_subtitle != blank -%}
+        <div class="title-wrapper-with-link title-wrapper--self-padded-tablet-down">
+          {%- if section.settings.flower_title != blank -%}
+            <h3 class="title {{ section.settings.heading_size }}">{{ section.settings.flower_title | escape }}</h3>
+          {%- endif -%}
+          {%- if section.settings.flower_subtitle != blank -%}
+            <div class="flower-menu__subtitle rte">{{ section.settings.flower_subtitle }}</div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="eg-flower" style="--section-height: {{ section.settings.section_height }}px;">
+        {%- for block in section.blocks -%}
+          <div class="eg-petal eg-petal--{{ forloop.index }}" {{ block.shopify_attributes }}>
+            {%- comment -%}
+              The petal text is the link's visible label, so it is already the
+              link's accessible name. A duplicate aria-label would only override
+              it, and would hide the words from search engines as anchor text.
+            {%- endcomment -%}
+            <a
+              href="{{ block.settings.collection_link.url | default: '#' }}"
+              class="eg-petal__link"
+            >
+              {%- if block.settings.petal_image != blank -%}
+                <span class="eg-petal-art">
+                  <img
+                    src="{{ block.settings.petal_image | image_url: width: 500 }}"
+                    alt="{{ block.settings.petal_image.alt | escape }}"
+                  >
+                  {%- if block.settings.petal_label != blank -%}
+                    <span class="eg-petal-text">
+                      <span>{{ block.settings.petal_label | escape }}</span>
+                    </span>
+                  {%- endif -%}
+                </span>
+              {%- else -%}
+                <div class="placeholder-image" style="width: 100%; height: auto;">
+                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+              {%- endif -%}
+            </a>
+          </div>
+        {%- endfor -%}
+
+        {%- if section.settings.centerpiece_image != blank -%}
+          <div class="eg-flower__hub">
+            <img
+              src="{{ section.settings.centerpiece_image | image_url: width: 300 }}"
+              alt="{{ section.settings.centerpiece_image.alt | escape }}"
+            >
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+</div>
+{%- comment -%}
+  The typing phrases live in the storefront locale files rather than in a section
+  setting, because Shopify only exposes certain setting types to Translate & Adapt
+  and a textarea is not one of them. Keys live at
+  locales/en.default.json -> sections.essence_guide.type_phrase_1 .. _8.
+  Missing or blank keys are skipped, so the list can be any length up to 8.
+{%- endcomment -%}
+{%- capture type_phrases -%}
+{%- for i in (1..8) -%}
+{%- assign phrase_key = 'sections.essence_guide.type_phrase_' | append: i -%}
+{%- assign phrase = phrase_key | t -%}
+{%- unless phrase contains 'Translation missing' or phrase == blank %}
+{{ phrase }}
+{%- endunless -%}
+{%- endfor -%}
+{%- endcapture -%}
+
+{%- comment -%} The chat widget. Unmodified; only fed settings. {%- endcomment -%}
+<script
+  src="{{ 'essence-chat.js' | asset_url }}"
+  data-mount="#essence-chat-{{ section.id }}"
+  data-endpoint="{{ section.settings.endpoint | escape }}"
+  data-accent="{{ accent }}"
+  data-placeholder="{{ section.settings.placeholder | escape }}"
+  defer
+></script>
+
+<script id="eg-script-{{ section.id }}"
+  data-version="petals-plain-3"
+  data-animate="{{ section.settings.animate }}"
+  data-trigger="{{ section.settings.anim_trigger }}"
+  data-type="{{ section.settings.type_effect }}"
+  data-type-speed="{{ section.settings.type_speed }}"
+  data-type-hold="{{ section.settings.type_hold }}"
+  data-placeholder="{{ section.settings.placeholder | escape }}"
+  data-phrases="{{ type_phrases }}"
+  data-petal-size="{{ section.settings.petal_text_size }}"
+  data-petal-min="{{ section.settings.petal_text_min }}"
+>
+  (function () {
+    "use strict";
+
+    var root = document.getElementById("eg-{{ section.id }}");
+    var script = document.getElementById("eg-script-{{ section.id }}");
+    if (!root || !script) return;
+
+    var ANIMATE = script.getAttribute("data-animate") === "true";
+    var TRIGGER = parseInt(script.getAttribute("data-trigger"), 10);
+    if (isNaN(TRIGGER) || TRIGGER < 5 || TRIGGER > 95) TRIGGER = 50;
+
+    // ---------- shared scroll trigger ----------
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var canObserve = "IntersectionObserver" in window;
+
+    // An observer reports once as soon as it starts watching, intersecting or
+    // not. Hearing that proves it works, so the fallback can stand down — a
+    // blind timer would fire before anyone scrolled to it.
+    function watch(target, options, onReveal) {
+      var heard = false;
+      var io = new IntersectionObserver(function (entries) {
+        heard = true;
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          onReveal();
+          io.disconnect();
+        });
+      }, options);
+      io.observe(target);
+      setTimeout(function () { if (!heard) onReveal(); }, 3000);
+    }
+
+    // ---------- typing effect in the chat box ----------
+    // The widget fills its mount on a deferred script, so the textarea does not
+    // exist yet when this runs. Wait for it rather than assuming.
+    function whenChatReady(cb) {
+      var tries = 0;
+      (function poll() {
+        var ta = root.querySelector(".ec-hero textarea");
+        if (ta) return cb(ta);
+        if (++tries > 100) return; // give up after ~10s
+        setTimeout(poll, 100);
+      })();
+    }
+
+    function typewriter(ta, phrases, speed, hold, resting) {
+      var stopped = false, timer, index = 0;
+
+      // The moment someone means to type, get out of their way.
+      function stop() {
+        if (stopped) return;
+        stopped = true;
+        clearTimeout(timer);
+        ta.setAttribute("placeholder", resting);
+      }
+      ta.addEventListener("focus", stop);
+      ta.addEventListener("input", stop);
+
+      function typeIn(text, done) {
+        var n = 0;
+        (function step() {
+          if (stopped) return;
+          ta.setAttribute("placeholder", text.slice(0, ++n));
+          timer = setTimeout(n < text.length ? step : done, n < text.length ? speed : hold);
+        })();
+      }
+
+      function typeOut(text, done) {
+        var n = text.length;
+        (function step() {
+          if (stopped) return;
+          ta.setAttribute("placeholder", text.slice(0, --n));
+          timer = setTimeout(n > 0 ? step : done, n > 0 ? Math.max(16, speed / 2) : 300);
+        })();
+      }
+
+      (function loop() {
+        if (stopped) return;
+        var text = phrases[index % phrases.length];
+        typeIn(text, function () {
+          if (phrases.length < 2) return; // a single phrase types once and stays
+          typeOut(text, function () { index++; loop(); });
+        });
+      })();
+    }
+
+    var TYPE = script.getAttribute("data-type") === "true";
+    var RESTING = script.getAttribute("data-placeholder") || "";
+    var PHRASES = (script.getAttribute("data-phrases") || "")
+      .split("\n")
+      .map(function (t) { return t.trim(); })
+      .filter(function (t) { return t.length > 0; });
+    var TYPE_SPEED = parseInt(script.getAttribute("data-type-speed"), 10) || 55;
+    var TYPE_HOLD = parseInt(script.getAttribute("data-type-hold"), 10) || 1600;
+
+    if (TYPE && PHRASES.length && !reduced) {
+      whenChatReady(function (ta) {
+        var stage = root.querySelector(".ec-stage") || root;
+        if (!canObserve) return typewriter(ta, PHRASES, TYPE_SPEED, TYPE_HOLD, RESTING);
+        watch(stage, { threshold: 0.35 }, function () {
+          typewriter(ta, PHRASES, TYPE_SPEED, TYPE_HOLD, RESTING);
+        });
+      });
+    }
+
+    // ---------- petal text ----------
+    // Sized to fit rather than set outright, because a translation can run 30%
+    // longer than the English and the box does not grow with it.
+    (function () {
+      var boxes = [].slice.call(root.querySelectorAll(".eg-petal-text"));
+      if (!boxes.length) return;
+
+      var MAX_PCT = parseFloat(script.getAttribute("data-petal-size")) || 11;
+      var MIN_PX = parseFloat(script.getAttribute("data-petal-min")) || 11;
+
+      function fitOne(box) {
+        var span = box.firstElementChild;
+        var art = box.parentNode;
+        if (!span || !art.clientWidth) return null;
+
+        // The ceiling tracks the petal, so the text scales with the artwork.
+        var hi = Math.max(MIN_PX, (art.clientWidth * MAX_PCT) / 100);
+        var lo = MIN_PX, best = MIN_PX, mid, i;
+
+        for (i = 0; i < 12; i++) {
+          mid = (lo + hi) / 2;
+          span.style.fontSize = mid + "px";
+          if (span.scrollHeight <= box.clientHeight + 0.5 &&
+              span.scrollWidth <= box.clientWidth + 0.5) {
+            best = mid;
+            lo = mid;
+          } else {
+            hi = mid;
+          }
+        }
+        // Below the floor the label stops being readable, so it stays at the
+        // floor and the box gets widened instead.
+        span.style.fontSize = best + "px";
+        return best;
+      }
+
+      // Two passes: find what each petal could take on its own, then give all
+      // five the smallest of those. Fitting each independently leaves the
+      // labels at five different sizes, which reads as five separate things
+      // rather than one set.
+      function fitAll() {
+        var smallest = Infinity;
+        boxes.forEach(function (box) {
+          var size = fitOne(box);
+          if (typeof size === "number" && size < smallest) smallest = size;
+        });
+        if (smallest === Infinity) return;
+        boxes.forEach(function (box) {
+          var span = box.firstElementChild;
+          if (span) span.style.fontSize = smallest + "px";
+        });
+      }
+
+      fitAll();
+
+      // Both the artwork and the webfont change the measurements underneath us.
+      [].slice.call(root.querySelectorAll(".eg-petal-art img")).forEach(function (img) {
+        if (!img.complete) img.addEventListener("load", fitAll);
+      });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+
+      var resizeTimer;
+      window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(fitAll, 120);
+      });
+    })();
+
+    // ---------- the flower ----------
+    if (!ANIMATE || !canObserve || reduced) return;
+
+    var petals = root.querySelector(".eg-flower");
+    var seam = root.querySelector(".eg-seam");
+    if (!petals) return;
+
+    root.classList.add("eg-anim");
+    if (seam) root.classList.add("eg-seam-anim");
+
+    if (seam) {
+      watch(seam, { threshold: 0.9 }, function () { root.classList.add("eg-seam-in"); });
+    }
+
+    // Collapsing the root to a single line across the screen makes "the middle
+    // of the viewport" exact: the bloom fires as the petals cross that line.
+    watch(
+      petals,
+      { threshold: 0, rootMargin: "-" + TRIGGER + "% 0px -" + (100 - TRIGGER) + "% 0px" },
+      function () { root.classList.add("eg-bloom"); }
+    );
+
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Essence guide",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "How are you feeling?" },
+    { "type": "richtext", "id": "subtitle", "label": "Sub-heading", "default": "<p>Tell the Essence Guide in your own words, and it will help you find the right essence.</p>" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Medium" },
+        { "value": "h1", "label": "Large" },
+        { "value": "h0", "label": "Extra large" }
+      ],
+      "default": "h1"
+    },
+
+    { "type": "header", "content": "Chat" },
+    {
+      "type": "text",
+      "id": "endpoint",
+      "label": "Backend endpoint URL",
+      "default": "/apps/essence-chat/chat-v2",
+      "info": "Routes through the Shopify App Proxy. Leave as-is."
+    },
+    { "type": "text", "id": "placeholder", "label": "Input placeholder", "default": "I'm feeling..." },
+    { "type": "color", "id": "accent", "label": "Chat accent colour", "default": "#2A87B9" },
+    { "type": "color", "id": "glow_color", "label": "Chat glow colour", "default": "#43a6db" },
+    {
+      "type": "range",
+      "id": "glow_strength",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Chat glow strength",
+      "default": 45,
+      "info": "0 turns the glow off and restores the widget's own shadow."
+    },
+    {
+      "type": "range",
+      "id": "chat_height",
+      "min": 0,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "label": "Extra chat height",
+      "default": 0,
+      "info": "0 fits the box exactly. Raise it to give the resting chat more room before anyone types."
+    },
+
+    { "type": "header", "content": "Typing effect" },
+    {
+      "type": "checkbox",
+      "id": "type_effect",
+      "label": "Type the placeholder out",
+      "default": true,
+      "info": "Types example phrases into the chat box when the section scrolls into view. Stops the moment someone clicks in."
+    },
+    {
+      "type": "paragraph",
+      "content": "The phrases themselves are edited in locales/en.default.json under sections.essence_guide.type_phrase_1 to _8, so that they can be translated in Translate & Adapt (Theme > Default theme content)."
+    },
+    {
+      "type": "range",
+      "id": "type_speed",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "ms",
+      "label": "Typing speed",
+      "default": 55,
+      "info": "Milliseconds per character. Lower is faster."
+    },
+    {
+      "type": "range",
+      "id": "type_hold",
+      "min": 500,
+      "max": 4000,
+      "step": 100,
+      "unit": "ms",
+      "label": "Hold each phrase",
+      "default": 1600
+    },
+
+    { "type": "header", "content": "Divider" },
+    { "type": "checkbox", "id": "show_seam", "label": "Show the divider", "default": true },
+    { "type": "text", "id": "seam_label", "label": "Divider label", "default": "or point to what fits" },
+    {
+      "type": "range",
+      "id": "seam_text_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Divider text size",
+      "default": 15,
+      "info": "The bubble grows with the text."
+    },
+    {
+      "type": "range",
+      "id": "seam_line_width",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "label": "Divider line thickness",
+      "default": 3
+    },
+    { "type": "color", "id": "seam_color", "label": "Divider line colour", "default": "#2a87b9" },
+    { "type": "color", "id": "seam_text_color", "label": "Divider label colour", "default": "#4d7387" },
+    { "type": "range", "id": "seam_length", "min": 8, "max": 90, "step": 2, "unit": "px", "label": "Line length", "default": 26 },
+
+    { "type": "header", "content": "Flower menu" },
+    { "type": "text", "id": "flower_title", "label": "Flower heading" },
+    { "type": "richtext", "id": "flower_subtitle", "label": "Flower sub-heading" },
+    { "type": "range", "id": "section_height", "min": 200, "max": 1000, "step": 20, "unit": "px", "label": "Flower height", "default": 500 },
+    {
+      "type": "range",
+      "id": "flower_text_gap",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Space under the flower text",
+      "default": 32,
+      "info": "Gap between the sentence above the flower and the top petal."
+    },
+    { "type": "image_picker", "id": "centerpiece_image", "label": "Centerpiece image" },
+
+
+    { "type": "header", "content": "Petal text" },
+    { "type": "paragraph", "content": "Each petal's wording comes from its own Petal text field, further down. Leave that field empty to draw nothing on a petal." },
+    { "type": "color", "id": "petal_text_color", "label": "Petal text colour", "default": "#16242c" },
+    {
+      "type": "range",
+      "id": "petal_text_size",
+      "min": 5,
+      "max": 20,
+      "step": 1,
+      "unit": "%",
+      "label": "Petal text size",
+      "default": 11,
+      "info": "Percentage of a petal's width, so the text scales with the flower. All five petals take the size of whichever label fits most tightly."
+    },
+    {
+      "type": "range",
+      "id": "petal_text_min",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Smallest petal text",
+      "default": 11,
+      "info": "Text never shrinks past this."
+    },
+
+    { "type": "header", "content": "Animation" },
+    {
+      "type": "checkbox",
+      "id": "animate",
+      "label": "Animate when scrolled into view",
+      "default": true,
+      "info": "The line draws, the label lands, then the petals open. Runs once. Reduced-motion visitors see the finished state."
+    },
+    {
+      "type": "range",
+      "id": "anim_trigger",
+      "min": 20,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Open the flower at this point on screen",
+      "default": 65,
+      "info": "Measured from the top of the screen. Higher fires sooner as you scroll down; 50% is the middle of the viewport."
+    },
+    {
+      "type": "range",
+      "id": "anim_speed",
+      "min": 50,
+      "max": 220,
+      "step": 10,
+      "unit": "%",
+      "label": "Animation duration",
+      "default": 140,
+      "info": "100% is about 1.2 seconds for the petals. Higher is slower and more gradual."
+    },
+
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Space between the parts",
+      "default": 32,
+      "info": "Gap between the heading, the chat, the divider and the flower."
+    },
+
+    { "type": "header", "content": "Section style" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "background-1" },
+    { "type": "color", "id": "band_start", "label": "Background top colour", "default": "#f7fbfd" },
+    { "type": "color", "id": "band_end", "label": "Background bottom colour", "default": "#f2f8f5" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Padding top", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Padding bottom", "default": 40 }
+  ],
+  "blocks": [
+    {
+      "type": "petal",
+      "name": "Petal",
+      "limit": 5,
+      "settings": [
+        { "type": "image_picker", "id": "petal_image", "label": "Petal image" },
+        { "type": "collection", "id": "collection_link", "label": "Collection link" },
+        { "type": "text", "id": "petal_label", "label": "Petal text", "info": "The words drawn on this petal. e.g. Experiencing Fear, Seeking Courage" },
+        { "type": "paragraph", "content": "This petal's size, its place on the flower, and where its words sit are measured from the artwork and set in the section's CSS. Nothing to position here." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Essence guide",
+      "blocks": [
+        { "type": "petal" },
+        { "type": "petal" },
+        { "type": "petal" },
+        { "type": "petal" },
+        { "type": "petal" }
+      ]
+    }
+  ]
+}
+{% endschema %}

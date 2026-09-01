@@ -1,0 +1,70 @@
+{% schema %}
+{
+  "name": "Collection Button Group",
+  "class": "collection-buttons-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Buttons are managed via collection metafields. Add metafields with the keys 'button_1_text', 'button_1_url', etc."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Button Group",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+{% comment %} Get the current collection {% endcomment %}
+{% assign collection = collections[collection.handle] %}
+
+{% comment %} Check if any buttons exist before rendering the section {% endcomment %}
+{% assign button_count = 0 %}
+{% for i in (1..4) %}
+  {% assign text_key = 'button_' | append: i | append: '_text' %}
+  {% assign url_key = 'button_' | append: i | append: '_url' %}
+  {% if collection.metafields.custom[text_key] != blank and collection.metafields.custom[url_key] != blank %}
+    {% assign button_count = button_count | plus: 1 %}
+  {% endif %}
+{% endfor %}
+
+{% if button_count > 0 %}
+<div class="collection-buttons">
+  {% for i in (1..4) %}
+    {% assign text_key = 'button_' | append: i | append: '_text' %}
+    {% assign url_key = 'button_' | append: i | append: '_url' %}
+    
+    {% if collection.metafields.custom[text_key] != blank and collection.metafields.custom[url_key] != blank %}
+      <a href="{{ collection.metafields.custom[url_key] }}" class="collection-button">
+        {{ collection.metafields.custom[text_key] }}
+      </a>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<style>
+  .collection-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+    justify-content: center;
+  }
+  
+  .collection-button {
+    padding: 12px 24px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+  
+  .collection-button:hover {
+    opacity: 0.8;
+  }
+</style>
+{% endif %}

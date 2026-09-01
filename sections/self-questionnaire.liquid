@@ -1,0 +1,552 @@
+<pacific-essences-quiz class="pacific-essences-quiz section-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="paq__container page-width">
+
+    <div class="paq__screen" id="PAQIntro-{{ section.id }}">
+      <h2 class="paq__heading">Pacific Essences<sup>®</sup></h2>
+      <p class="paq__subtitle">Energy Medicine® from Nature &mdash; Self Selection Questionnaire</p>
+      <div class="paq__intro-body">
+        <p>There are many ways to choose essences for ourselves. One of the ways is to ask yourself questions so that you can focus in more easily on what you are really willing and able to shift or change at this particular point in time.</p>
+        <p>Check off all the statements which you spontaneously and immediately think or feel apply to you. When you are done, click <strong>Find My Essence</strong> to discover which essence is most useful to you right now.</p>
+      </div>
+      <button type="button" class="paq__button button" id="PAQStartBtn-{{ section.id }}">Begin Questionnaire</button>
+    </div>
+
+    <div class="paq__screen paq__screen--hidden" id="PAQQuiz-{{ section.id }}">
+      <h2 class="paq__heading">Check all that apply to you</h2>
+      <p class="paq__quiz-note">Be spontaneous &mdash; go with your first instinct.</p>
+      <div class="paq__questions-list" id="PAQQuestions-{{ section.id }}"></div>
+      <div class="paq__submit-area">
+        <button type="button" class="paq__button button" id="PAQSubmitBtn-{{ section.id }}">Find My Essence</button>
+      </div>
+    </div>
+
+    <div class="paq__screen paq__screen--hidden" id="PAQResult-{{ section.id }}">
+      <p class="paq__result-label">Your recommended essence</p>
+      <div class="paq__result-inner" id="PAQResultInner-{{ section.id }}"></div>
+      <button type="button" class="paq__button paq__button--ghost button" id="PAQRetryBtn-{{ section.id }}">Retake the Quiz</button>
+    </div>
+
+  </div>
+</pacific-essences-quiz>
+
+<script id="PAQShopifyData-{{ section.id }}" type="application/json">
+{
+  "1":  {% if section.settings.product_1  != blank %}{"url":{{ section.settings.product_1.url  | json }},"image":{{ section.settings.product_1.featured_image  | image_url: width: 400 | json }},"price":{{ section.settings.product_1.price  | money | json }},"title":{{ section.settings.product_1.title  | json }}}{% else %}null{% endif %},
+  "2":  {% if section.settings.product_2  != blank %}{"url":{{ section.settings.product_2.url  | json }},"image":{{ section.settings.product_2.featured_image  | image_url: width: 400 | json }},"price":{{ section.settings.product_2.price  | money | json }},"title":{{ section.settings.product_2.title  | json }}}{% else %}null{% endif %},
+  "3":  {% if section.settings.product_3  != blank %}{"url":{{ section.settings.product_3.url  | json }},"image":{{ section.settings.product_3.featured_image  | image_url: width: 400 | json }},"price":{{ section.settings.product_3.price  | money | json }},"title":{{ section.settings.product_3.title  | json }}}{% else %}null{% endif %},
+  "4":  {% if section.settings.product_4  != blank %}{"url":{{ section.settings.product_4.url  | json }},"image":{{ section.settings.product_4.featured_image  | image_url: width: 400 | json }},"price":{{ section.settings.product_4.price  | money | json }},"title":{{ section.settings.product_4.title  | json }}}{% else %}null{% endif %},
+  "5":  {% if section.settings.product_5  != blank %}{"url":{{ section.settings.product_5.url  | json }},"image":{{ section.settings.product_5.featured_image  | image_url: width: 400 | json }},"price":{{ section.settings.product_5.price  | money | json }},"title":{{ section.settings.product_5.title  | json }}}{% else %}null{% endif %},
+  "6":  {% if section.settings.product_6  != blank %}{"url":{{ section.settings.product_6.url  | json }},"image":{{ section.settings.product_6.featured_image  | image_url: width: 400 | json }},"price":{{ section.settings.product_6.price  | money | json }},"title":{{ section.settings.product_6.title  | json }}}{% else %}null{% endif %},
+  "7":  {% if section.settings.product_7  != blank %}{"url":{{ section.settings.product_7.url  | json }},"image":{{ section.settings.product_7.featured_image  | image_url: width: 400 | json }},"price":{{ section.settings.product_7.price  | money | json }},"title":{{ section.settings.product_7.title  | json }}}{% else %}null{% endif %},
+  "8":  {% if section.settings.product_8  != blank %}{"url":{{ section.settings.product_8.url  | json }},"image":{{ section.settings.product_8.featured_image  | image_url: width: 400 | json }},"price":{{ section.settings.product_8.price  | money | json }},"title":{{ section.settings.product_8.title  | json }}}{% else %}null{% endif %},
+  "9":  {% if section.settings.product_9  != blank %}{"url":{{ section.settings.product_9.url  | json }},"image":{{ section.settings.product_9.featured_image  | image_url: width: 400 | json }},"price":{{ section.settings.product_9.price  | money | json }},"title":{{ section.settings.product_9.title  | json }}}{% else %}null{% endif %},
+  "10": {% if section.settings.product_10 != blank %}{"url":{{ section.settings.product_10.url | json }},"image":{{ section.settings.product_10.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_10.price | money | json }},"title":{{ section.settings.product_10.title | json }}}{% else %}null{% endif %},
+  "11": {% if section.settings.product_11 != blank %}{"url":{{ section.settings.product_11.url | json }},"image":{{ section.settings.product_11.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_11.price | money | json }},"title":{{ section.settings.product_11.title | json }}}{% else %}null{% endif %},
+  "12": {% if section.settings.product_12 != blank %}{"url":{{ section.settings.product_12.url | json }},"image":{{ section.settings.product_12.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_12.price | money | json }},"title":{{ section.settings.product_12.title | json }}}{% else %}null{% endif %},
+  "13": {% if section.settings.product_13 != blank %}{"url":{{ section.settings.product_13.url | json }},"image":{{ section.settings.product_13.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_13.price | money | json }},"title":{{ section.settings.product_13.title | json }}}{% else %}null{% endif %},
+  "14": {% if section.settings.product_14 != blank %}{"url":{{ section.settings.product_14.url | json }},"image":{{ section.settings.product_14.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_14.price | money | json }},"title":{{ section.settings.product_14.title | json }}}{% else %}null{% endif %},
+  "15": {% if section.settings.product_15 != blank %}{"url":{{ section.settings.product_15.url | json }},"image":{{ section.settings.product_15.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_15.price | money | json }},"title":{{ section.settings.product_15.title | json }}}{% else %}null{% endif %},
+  "16": {% if section.settings.product_16 != blank %}{"url":{{ section.settings.product_16.url | json }},"image":{{ section.settings.product_16.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_16.price | money | json }},"title":{{ section.settings.product_16.title | json }}}{% else %}null{% endif %},
+  "17": {% if section.settings.product_17 != blank %}{"url":{{ section.settings.product_17.url | json }},"image":{{ section.settings.product_17.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_17.price | money | json }},"title":{{ section.settings.product_17.title | json }}}{% else %}null{% endif %},
+  "18": {% if section.settings.product_18 != blank %}{"url":{{ section.settings.product_18.url | json }},"image":{{ section.settings.product_18.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_18.price | money | json }},"title":{{ section.settings.product_18.title | json }}}{% else %}null{% endif %},
+  "19": {% if section.settings.product_19 != blank %}{"url":{{ section.settings.product_19.url | json }},"image":{{ section.settings.product_19.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_19.price | money | json }},"title":{{ section.settings.product_19.title | json }}}{% else %}null{% endif %},
+  "20": {% if section.settings.product_20 != blank %}{"url":{{ section.settings.product_20.url | json }},"image":{{ section.settings.product_20.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_20.price | money | json }},"title":{{ section.settings.product_20.title | json }}}{% else %}null{% endif %},
+  "21": {% if section.settings.product_21 != blank %}{"url":{{ section.settings.product_21.url | json }},"image":{{ section.settings.product_21.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_21.price | money | json }},"title":{{ section.settings.product_21.title | json }}}{% else %}null{% endif %},
+  "22": {% if section.settings.product_22 != blank %}{"url":{{ section.settings.product_22.url | json }},"image":{{ section.settings.product_22.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_22.price | money | json }},"title":{{ section.settings.product_22.title | json }}}{% else %}null{% endif %},
+  "23": {% if section.settings.product_23 != blank %}{"url":{{ section.settings.product_23.url | json }},"image":{{ section.settings.product_23.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_23.price | money | json }},"title":{{ section.settings.product_23.title | json }}}{% else %}null{% endif %},
+  "24": {% if section.settings.product_24 != blank %}{"url":{{ section.settings.product_24.url | json }},"image":{{ section.settings.product_24.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_24.price | money | json }},"title":{{ section.settings.product_24.title | json }}}{% else %}null{% endif %},
+  "25": {% if section.settings.product_25 != blank %}{"url":{{ section.settings.product_25.url | json }},"image":{{ section.settings.product_25.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_25.price | money | json }},"title":{{ section.settings.product_25.title | json }}}{% else %}null{% endif %},
+  "26": {% if section.settings.product_26 != blank %}{"url":{{ section.settings.product_26.url | json }},"image":{{ section.settings.product_26.featured_image | image_url: width: 400 | json }},"price":{{ section.settings.product_26.price | money | json }},"title":{{ section.settings.product_26.title | json }}}{% else %}null{% endif %}
+}
+</script>
+
+<style>
+  .pacific-essences-quiz {
+    padding: var(--spacing-section-vertical, 60px) 0;
+    background-color: var(--color-background, #ffffff);
+    color: var(--color-foreground, #333333);
+    text-align: center;
+  }
+  .paq__container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-page-horizontal, 20px);
+  }
+  .paq__screen--hidden {
+    display: none !important;
+  }
+  .paq__heading {
+    font-size: 2.6rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, rgb(33, 160, 244), rgb(237, 49, 247));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+  }
+  .paq__heading sup {
+    font-size: 1rem;
+  }
+  .paq__subtitle {
+    font-size: 1rem;
+    color: #888;
+    margin-bottom: 30px;
+  }
+  .paq__intro-body {
+    max-width: 620px;
+    margin: 0 auto 35px;
+    text-align: left;
+    line-height: 1.7;
+  }
+  .paq__intro-body p + p {
+    margin-top: 14px;
+  }
+  .paq__button {
+    display: inline-block;
+    padding: 14px 36px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid #43A6DB;
+    background-color: #43A6DB;
+    color: #ffffff;
+    border-radius: 50px;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    text-decoration: none;
+  }
+  .paq__button:hover {
+    background-color: #ffffff;
+    color: #43A6DB;
+    border-color: #43A6DB;
+  }
+  .paq__button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  .paq__button--ghost {
+    background-color: transparent;
+    color: #43A6DB;
+    border-color: #43A6DB;
+  }
+  .paq__button--ghost:hover {
+    background-color: #43A6DB;
+    color: #ffffff;
+  }
+  .paq__quiz-note {
+    font-size: 0.95rem;
+    color: #888;
+    margin-bottom: 30px;
+    font-style: italic;
+  }
+  .paq__questions-list {
+    text-align: left;
+    margin-bottom: 40px;
+  }
+  .paq__question {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.15s ease;
+    line-height: 1.55;
+  }
+  .paq__question:nth-child(even) {
+    background-color: #f7f9fc;
+  }
+  .paq__question:hover {
+    background-color: #edf4fb;
+  }
+  .paq__question input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1px;
+    position: relative;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+  .paq__question input[type="checkbox"]:checked {
+    background-color: #43A6DB;
+    border-color: #43A6DB;
+  }
+  .paq__question input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 7px;
+    height: 11px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+  }
+  .paq__question-text {
+    font-size: 0.97rem;
+    color: #333;
+  }
+  .paq__submit-area {
+    padding-top: 10px;
+  }
+  .paq__result-label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #aaa;
+    margin-bottom: 10px;
+  }
+  .paq__result-inner {
+    margin-bottom: 36px;
+  }
+  .paq__essence-number {
+    font-size: 0.95rem;
+    color: #aaa;
+    margin-bottom: 4px;
+  }
+  .paq__essence-name {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #222;
+  }
+  .paq__affirmation {
+    font-size: 1.05rem;
+    font-style: italic;
+    color: #555;
+    margin-bottom: 30px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+  .paq__product-card {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 280px;
+    width: 100%;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .paq__product-card:hover {
+    box-shadow: 0 8px 28px rgba(0,0,0,0.14);
+    transform: translateY(-3px);
+  }
+  .paq__product-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+  }
+  .paq__product-info {
+    padding: 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .paq__product-title {
+    display: block;
+    font-weight: 600;
+    font-size: 0.98rem;
+    margin-bottom: 6px;
+    color: #222;
+  }
+  .paq__product-price {
+    display: block;
+    color: #43A6DB;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .paq__product-cta {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #888;
+  }
+  .paq__no-results {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+  }
+  @media (max-width: 600px) {
+    .paq__heading {
+      font-size: 2rem;
+    }
+    .paq__question {
+      padding: 12px 12px;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  const PAQ_QUESTIONS = [
+    { text: "I feel like I missed out on being a kid – playing, having fun, no cares, no worries.", essence: 1 },
+    { text: "I tend to look for authority outside myself instead of trusting that my body/mind knows exactly what it needs and when it needs it.", essence: 3 },
+    { text: "I have a strong tendency to need to control things and people.", essence: 7 },
+    { text: "I have lots of doubts and fears.", essence: 4 },
+    { text: "My work is something I have to do to pay the bills.", essence: 24 },
+    { text: "I have a tendency to overthink and worry.", essence: 12 },
+    { text: "I find it difficult to make commitments, especially to myself.", essence: 11 },
+    { text: "I am so busy taking care of survival stuff that there is no time or energy for creative expression or to sing my heart song.", essence: 14 },
+    { text: "Under stressful situations I either lash out at others or withdraw and become non-communicative.", essence: 16 },
+    { text: "I am chronically tired and my body feels sluggish.", essence: 19 },
+    { text: "I often feel depressed and/or frustrated.", essence: 18 },
+    { text: "I tend to be opinionated and judgemental.", essence: 15 },
+    { text: "My mind is cluttered with perceptions of people and events that have no relevance to what’s happening for me in this moment.", essence: 21 },
+    { text: "My mind is always busy and rarely curious.", essence: 25 },
+    { text: "I have virtually no libido (sex drive).", essence: 20 },
+    { text: "I do not trust in the infinite possibilities of the universe.", essence: 6 },
+    { text: "I have little or no energy to greet a new day.", essence: 5 },
+    { text: "I was taught that it is egotistical and shallow to show others what I’m good at.", essence: 2 },
+    { text: "I tend to be rigid and unforgiving of myself and others.", essence: 17 },
+    { text: "I tend to pick up every “bug” that goes around.", essence: 8 },
+    { text: "I feel “stuck” in some area of my life.", essence: 23 },
+    { text: "Others perceive me as passionate and impatient.", essence: 10 },
+    { text: "I have some other kinds of learning disability – can’t concentrate, can’t focus, no memory, hyperactivity, etc.", essence: 13 },
+    { text: "I am afraid of being harmed by environmental toxins.", essence: 22 },
+    { text: "I have no stamina or endurance in physical activity.", essence: 20 },
+    { text: "I have difficulty evaluating if the values I hold are serving me.", essence: 17 },
+    { text: "If bad stuff is going to happen it will happen to me.", essence: 14 },
+    { text: "I sometimes feel like the ugly duckling or a stranger in a strange land.", essence: 1 },
+    { text: "Other people seem to avoid me.", essence: 5 },
+    { text: "I often feel like the world is just getting to be a worse and worse place.", essence: 26 },
+    { text: "I feel disconnected from and unappreciative of the abundance in my life.", essence: 6 },
+    { text: "I feel really bitter and resentful about some of my life experiences.", essence: 21 },
+    { text: "I often feel discouragement and despair in relation to my physical challenges.", essence: 3 },
+    { text: "I feel like I am not using my full potential.", essence: 18 },
+    { text: "I find it difficult to get out of bed in the morning.", essence: 24 },
+    { text: "I have a tendency to hang on to “old stuff” mentally, emotionally and physically.", essence: 19 },
+    { text: "I lack enthusiasm and passion in my life.", essence: 10 },
+    { text: "There is a little voice inside me that is constantly telling me that I’m just not good enough.", essence: 9 },
+    { text: "I seem to make the same mistakes over and over again.", essence: 13 },
+    { text: "I work in an environment where there are lots of EFTS – computers etc.", essence: 22 },
+    { text: "My view of people and events tends to be quite black and white.", essence: 15 },
+    { text: "I am always thinking and planning ahead.", essence: 25 },
+    { text: "I tend to over empathize with other people’s issues and pain.", essence: 12 },
+    { text: "I often feel unsafe and/or unprotected.", essence: 8 },
+    { text: "I think I have to do it all instead of just letting the light shine through me.", essence: 2 },
+    { text: "I feel like a prisoner of my past programming.", essence: 23 },
+    { text: "I am unaware of signals in my body. If I could feel them and interpret them I may be able to maintain balance and harmony more easily.", essence: 16 },
+    { text: "In stressful situations I become overexcited and respond inappropriately.", essence: 10 },
+    { text: "I often feel self conscious and shy.", essence: 9 },
+    { text: "I usually see a glass as half empty.", essence: 14 },
+    { text: "I am living with some chronic disease.", essence: 19 },
+    { text: "I have no sense of purpose or knowing what might make me happy and fulfilled.", essence: 26 },
+    { text: "I have never felt loved enough by my parents.", essence: 1 },
+    { text: "It is difficult for me to trust.", essence: 4 },
+    { text: "I resist change.", essence: 7 },
+    { text: "I suffer from tight shoulders, headaches, locked jaw, upset stomach, constipation or diarrhea.", essence: 16 },
+    { text: "I have been exposed to radiation and other toxic electrical substances.", essence: 22 },
+    { text: "I have little energy or enthusiasm for new projects or adventures.", essence: 20 },
+    { text: "Life is a struggle.", essence: 6 },
+    { text: "I am uncomfortable in silence.", essence: 25 },
+    { text: "I often feel stuck/paralyzed and don’t know how to move forward.", essence: 4 },
+    { text: "I have a memory like an elephant for remembering all the really miserable stuff that’s happened in my life as well as all my own failures.", essence: 21 },
+    { text: "I feel vulnerable to psychic attack.", essence: 8 },
+    { text: "Others see me as indecisive in the face of obstacles.", essence: 11 },
+    { text: "My brain does not move easily between the literal and the symbolic or between the rational and the intuitive.", essence: 13 },
+    { text: "My heart feels like a heavy stone in my chest or I can’t even feel my heart.", essence: 5 },
+    { text: "I want to trust inner guidance and connect with Spirit.", essence: 23 },
+    { text: "I am still searching for my passion and joy. I have no idea what would make my life meaningful.", essence: 3 },
+    { text: "I tend to get angry in the face of obstacles.", essence: 18 },
+    { text: "I have little or no compassion for how someone arrived at a difficult place in their life.", essence: 15 },
+    { text: "I am afraid of death, life, success, failure, happiness.", essence: 7 },
+    { text: "It is difficult for me to digest experience.", essence: 12 },
+    { text: "I worry about what my legacy might be and what people will think of me when I am gone.", essence: 24 },
+    { text: "I compare myself to others.", essence: 9 },
+    { text: "I have experienced a lot of loss in my life and often feel sad.", essence: 17 },
+    { text: "My mind is always focused in the past or in the future and never fully present in the moment.", essence: 26 },
+    { text: "I have no sense of being connected to a part of me which is eternal and infinitely wise.", essence: 2 },
+    { text: "I can see who I could be but can’t see the path to get there.", essence: 11 }
+  ];
+
+  const PAQ_ESSENCES = {
+    1:  { name: "Kids' Stuff",                 affirmation: "I am free and happy." },
+    2:  { name: "Radiant Beauty",              affirmation: "I am luminous, generous and en-lighted." },
+    3:  { name: "Cellular Memory",             affirmation: "I am healthy and whole. I can rely on the innate intelligence of my body/mind to tell me exactly what it needs in each moment." },
+    4:  { name: "Water",                       affirmation: "I trust the flow of life." },
+    5:  { name: "Heart Spirit",                affirmation: "I am compassionate to myself and others." },
+    6:  { name: "Abundance Stabilizer",        affirmation: "I am available to receive all the blessings of the universe." },
+    7:  { name: "Fearlessness",                affirmation: "I am in the flow and I rely on my inner guidance to take care of me in all situations." },
+    8:  { name: "Optimal Immunity",            affirmation: "I am safe." },
+    9:  { name: "Being True Worth",            affirmation: "I feel good. I am magnificent." },
+    10: { name: "Fire",                        affirmation: "I am vibrant." },
+    11: { name: "New Attitudes",               affirmation: "I am free." },
+    12: { name: "Earth",                       affirmation: "I am present." },
+    13: { name: "Optimal Learning",            affirmation: "I trust in my ability to be open to new learning." },
+    14: { name: "Abundance",                   affirmation: "I am always in the right place at the right time to take maximum benefit of opportunities which lead me to greater fulfillment at all levels of my life." },
+    15: { name: "Being Peace",                 affirmation: "I am the root of compassion." },
+    16: { name: "Balancer",                    affirmation: "I can always find the calm centre of my being." },
+    17: { name: "Metal",                       affirmation: "I let go of all limiting thoughts and feelings." },
+    18: { name: "Wood",                        affirmation: "I am living my purpose." },
+    19: { name: "Detox",                       affirmation: "I am clear and filled with light." },
+    20: { name: "Super Vitality",              affirmation: "I am strong and full of energy." },
+    21: { name: "Forgiving",                   affirmation: "I am free from all thoughts and feelings that prevent me from being who I can be." },
+    22: { name: "Shielding",                   affirmation: "I am protected from all harmful energies." },
+    23: { name: "Twelve Gems",                 affirmation: "I trust my inner knowing." },
+    24: { name: "Essence of Success",          affirmation: "I enjoy every moment of this precious life." },
+    25: { name: "Infinite Potential",          affirmation: "I am able to find guidance in stillness." },
+    26: { name: "A New World of Hope (Ibuki)", affirmation: "I am living my heart song and inspire others to do the same." }
+  };
+
+  class PacificEssencesQuiz extends HTMLElement {
+    connectedCallback() {
+      this.sid = this.dataset.sectionId;
+      this.introScreen  = this.querySelector(`#PAQIntro-${this.sid}`);
+      this.quizScreen   = this.querySelector(`#PAQQuiz-${this.sid}`);
+      this.resultScreen = this.querySelector(`#PAQResult-${this.sid}`);
+      this.questionsEl  = this.querySelector(`#PAQQuestions-${this.sid}`);
+      this.resultInner  = this.querySelector(`#PAQResultInner-${this.sid}`);
+
+      const dataEl = document.getElementById(`PAQShopifyData-${this.sid}`);
+      this.shopifyProducts = dataEl ? JSON.parse(dataEl.textContent) : {};
+
+      this.querySelector(`#PAQStartBtn-${this.sid}`).addEventListener('click', () => this.showQuiz());
+      this.querySelector(`#PAQSubmitBtn-${this.sid}`).addEventListener('click', () => this.calculateResult());
+      this.querySelector(`#PAQRetryBtn-${this.sid}`).addEventListener('click', () => this.reset());
+
+      this.renderQuestions();
+    }
+
+    renderQuestions() {
+      this.questionsEl.innerHTML = PAQ_QUESTIONS.map((q, i) => `
+        <label class="paq__question">
+          <input type="checkbox" class="paq__checkbox" data-essence="${q.essence}" id="paq-q${i}-${this.sid}">
+          <span class="paq__question-text">${q.text}</span>
+        </label>
+      `).join('');
+    }
+
+    scrollToTop() {
+      const top = this.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+
+    showQuiz() {
+      this.introScreen.classList.add('paq__screen--hidden');
+      this.quizScreen.classList.remove('paq__screen--hidden');
+      this.scrollToTop();
+    }
+
+    calculateResult() {
+      const scores = {};
+      for (let i = 1; i <= 26; i++) scores[i] = 0;
+
+      this.querySelectorAll('.paq__checkbox:checked').forEach(cb => {
+        scores[parseInt(cb.dataset.essence)]++;
+      });
+
+      let maxScore = 0;
+      let winnerId = 1;
+      for (let i = 1; i <= 26; i++) {
+        if (scores[i] > maxScore) {
+          maxScore = scores[i];
+          winnerId = i;
+        }
+      }
+
+      this.showResult(winnerId, maxScore);
+    }
+
+    showResult(id, score) {
+      const essence  = PAQ_ESSENCES[id];
+      const shopify  = this.shopifyProducts[String(id)];
+
+      let html = '';
+
+      if (score === 0) {
+        html = `<p class="paq__no-results">You didn’t check any statements — you may be in a wonderful state of balance! Explore our full range of Pacific Essences to find what resonates with you.</p>`;
+      } else {
+        html += `
+          <p class="paq__essence-number">Essence #${id}</p>
+          <h3 class="paq__essence-name">${essence.name}</h3>
+          <p class="paq__affirmation">“${essence.affirmation}”</p>
+        `;
+
+        if (shopify) {
+          html += `
+            <a href="${shopify.url}" class="paq__product-card">
+              ${shopify.image ? `<img src="${shopify.image}" alt="${essence.name}" class="paq__product-image" loading="lazy">` : ''}
+              <div class="paq__product-info">
+                <span class="paq__product-title">${shopify.title}</span>
+                <span class="paq__product-price">${shopify.price}</span>
+                <span class="paq__product-cta">Tap to view product &rarr;</span>
+              </div>
+            </a>
+          `;
+        }
+      }
+
+      this.resultInner.innerHTML = html;
+      this.quizScreen.classList.add('paq__screen--hidden');
+      this.resultScreen.classList.remove('paq__screen--hidden');
+      this.scrollToTop();
+    }
+
+    reset() {
+      this.querySelectorAll('.paq__checkbox').forEach(cb => cb.checked = false);
+      this.resultScreen.classList.add('paq__screen--hidden');
+      this.introScreen.classList.remove('paq__screen--hidden');
+      this.scrollToTop();
+    }
+  }
+
+  if (!customElements.get('pacific-essences-quiz')) {
+    customElements.define('pacific-essences-quiz', PacificEssencesQuiz);
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Self Selection Quiz",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "header", "content": "Map each essence number to a Shopify product" },
+    { "type": "product", "id": "product_1",  "label": "1. Kids' Stuff" },
+    { "type": "product", "id": "product_2",  "label": "2. Radiant Beauty" },
+    { "type": "product", "id": "product_3",  "label": "3. Cellular Memory" },
+    { "type": "product", "id": "product_4",  "label": "4. Water" },
+    { "type": "product", "id": "product_5",  "label": "5. Heart Spirit" },
+    { "type": "product", "id": "product_6",  "label": "6. Abundance Stabilizer" },
+    { "type": "product", "id": "product_7",  "label": "7. Fearlessness" },
+    { "type": "product", "id": "product_8",  "label": "8. Optimal Immunity" },
+    { "type": "product", "id": "product_9",  "label": "9. Being True Worth" },
+    { "type": "product", "id": "product_10", "label": "10. Fire" },
+    { "type": "product", "id": "product_11", "label": "11. New Attitudes" },
+    { "type": "product", "id": "product_12", "label": "12. Earth" },
+    { "type": "product", "id": "product_13", "label": "13. Optimal Learning" },
+    { "type": "product", "id": "product_14", "label": "14. Abundance" },
+    { "type": "product", "id": "product_15", "label": "15. Being Peace" },
+    { "type": "product", "id": "product_16", "label": "16. Balancer" },
+    { "type": "product", "id": "product_17", "label": "17. Metal" },
+    { "type": "product", "id": "product_18", "label": "18. Wood" },
+    { "type": "product", "id": "product_19", "label": "19. Detox" },
+    { "type": "product", "id": "product_20", "label": "20. Super Vitality" },
+    { "type": "product", "id": "product_21", "label": "21. Forgiving" },
+    { "type": "product", "id": "product_22", "label": "22. Shielding" },
+    { "type": "product", "id": "product_23", "label": "23. Twelve Gems" },
+    { "type": "product", "id": "product_24", "label": "24. Essence of Success" },
+    { "type": "product", "id": "product_25", "label": "25. Infinite Potential" },
+    { "type": "product", "id": "product_26", "label": "26. A New World of Hope (Ibuki)" }
+  ],
+  "presets": [
+    {
+      "name": "Self Selection Quiz"
+    }
+  ]
+}
+{% endschema %}

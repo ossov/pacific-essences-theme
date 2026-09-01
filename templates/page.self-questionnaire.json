@@ -1,0 +1,140 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "custom_css": [],
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 0
+      }
+    },
+    "rich_text_WkwGVd": {
+      "type": "rich-text",
+      "blocks": {
+        "text_byX9yK": {
+          "type": "text",
+          "settings": {
+            "text": "<p>There are many ways to choose essences for ourselves. One of the ways is to ask yourself questions so that you can focus in more easily on what you are really willing and able to shift or change at this particular point in time.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_byX9yK"
+      ],
+      "custom_css": [
+        "p {font-size: 1.7rem;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 16,
+        "padding_bottom": 8
+      }
+    },
+    "multirow_FfegMY": {
+      "type": "multirow",
+      "blocks": {
+        "row_YLUDPA": {
+          "type": "row",
+          "settings": {
+            "caption": "",
+            "heading": "Our Blogs",
+            "text": "",
+            "button_label": "Learn More",
+            "button_link": "shopify://blogs/pacific-essences-blog"
+          }
+        },
+        "row_LxkmLG": {
+          "type": "row",
+          "settings": {
+            "caption": "",
+            "heading": "Our Story",
+            "text": "",
+            "button_label": "Read More",
+            "button_link": "shopify://pages/the-pacific-essences-story"
+          }
+        },
+        "row_cpwXxY": {
+          "type": "row",
+          "settings": {
+            "caption": "",
+            "heading": "Frequently Asked Questions",
+            "text": "",
+            "button_label": "Read More",
+            "button_link": "shopify://pages/about-pacific-essences"
+          }
+        },
+        "row_imNnAb": {
+          "type": "row",
+          "settings": {
+            "caption": "",
+            "heading": "Learning Resources",
+            "text": "",
+            "button_label": "Learn More",
+            "button_link": "shopify://pages/resources"
+          }
+        }
+      },
+      "block_order": [
+        "row_YLUDPA",
+        "row_LxkmLG",
+        "row_cpwXxY",
+        "row_imNnAb"
+      ],
+      "disabled": true,
+      "custom_css": [
+        ".multirow .button::after {display: none !important;}"
+      ],
+      "name": "t:sections.multirow.presets.name",
+      "settings": {
+        "image_height": "medium",
+        "desktop_image_width": "medium",
+        "image_layout": "alternate-right",
+        "heading_size": "h1",
+        "text_style": "body",
+        "button_style": "primary",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "center",
+        "mobile_content_alignment": "center",
+        "section_color_scheme": "",
+        "row_color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "essence_quiz_6DPPAw": {
+      "type": "essence-quiz",
+      "name": "Essence Quiz Step",
+      "settings": {
+        "heading": "Self Selection Questionnaire",
+        "subheading": "Answer yes or no to the following statements based on what you spontaneously and immediately think or feel.",
+        "accent_start": "#43a6db",
+        "accent_end": "#2f8fc9",
+        "progress_end": "#58c9d6",
+        "wash_start": "#e7f3fb",
+        "wash_end": "#cfe9f0",
+        "text_color": "#12384c",
+        "max_width": 700,
+        "padding": 60
+      }
+    }
+  },
+  "order": [
+    "main",
+    "rich_text_WkwGVd",
+    "multirow_FfegMY",
+    "essence_quiz_6DPPAw"
+  ]
+}

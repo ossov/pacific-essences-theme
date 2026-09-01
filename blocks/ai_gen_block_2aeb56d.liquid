@@ -1,0 +1,841 @@
+{% doc %}
+  @prompt
+    Dismissible promotional popup for a Dawn-based Shopify theme, styled as a two-panel
+    "Specials Card": a teal-to-blue art panel carrying the month name beside the offer.
+    Appears after a delay, closes with the X / Escape / overlay click, and sets a cookie
+    so it stays away for a set number of days. All text, colours and the button URL are
+    editable in the theme editor.
+{% enddoc %}
+
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{%- comment -%} Month shown on the art panel: manual override, otherwise the current month. {%- endcomment -%}
+{%- assign auto_month = 'now' | date: '%B' -%}
+{%- assign panel_month = block.settings.month_label | default: auto_month -%}
+
+{%- comment -%} Falls back to the specials collection if the link is left blank in the editor. {%- endcomment -%}
+{%- assign cta_url = block.settings.button_url | default: '/collections/specials' -%}
+
+{% style %}
+  .ai-promo-popup-{{ ai_gen_id }} {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .ai-promo-popup-{{ ai_gen_id }}.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ai-promo-popup-overlay-{{ ai_gen_id }} {
+    /* An app stylesheet on this store hides empty <div>s (div:empty { display: none }),
+       which silently killed this overlay. Forced on, and given a child below, so no
+       :empty rule can hide it again. */
+    display: block !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(9, 34, 48, {{ block.settings.overlay_opacity }});
+    cursor: pointer;
+    {% if block.settings.overlay_blur > 0 %}
+      -webkit-backdrop-filter: blur({{ block.settings.overlay_blur }}px) saturate(0.9);
+      backdrop-filter: blur({{ block.settings.overlay_blur }}px) saturate(0.9);
+    {% endif %}
+  }
+
+  /* ---------- the card ---------- */
+  .ai-promo-popup-modal-{{ ai_gen_id }} {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.94);
+    width: 90%;
+    max-width: {{ block.settings.modal_width }}px;
+    display: grid;
+    grid-template-columns: {{ block.settings.panel_width }}px 1fr;
+    /* The card paints no background of its own: each half paints its own, so there is
+       no white underneath the panel's antialiased corner to bleed through. */
+    background-color: transparent;
+    font-family: var(--font-body-family, inherit);
+    border-radius: {{ block.settings.border_radius }}px;
+    overflow: hidden;
+    box-shadow: 0 26px 60px rgba(11, 45, 64, 0.32);
+    opacity: 0;
+    transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.42s ease;
+  }
+
+  .ai-promo-popup-{{ ai_gen_id }}.active .ai-promo-popup-modal-{{ ai_gen_id }} {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+
+  /* ---------- art panel ---------- */
+  .ai-promo-popup-art-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+    /* Match the card's left corners. Without this the card clips the panel and a
+       hairline of white background shows along the curve. */
+    border-radius: {{ block.settings.border_radius }}px 0 0 {{ block.settings.border_radius }}px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 22px 16px;
+    text-align: center;
+    color: {{ block.settings.panel_text_color }};
+    background: linear-gradient(155deg, {{ block.settings.panel_color_start }} 0%, {{ block.settings.panel_color_end }} 100%);
+  }
+
+  .ai-promo-popup-art-{{ ai_gen_id }}::after {
+    content: '';
+    position: absolute;
+    left: -50px;
+    bottom: -80px;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    pointer-events: none;
+  }
+
+  .ai-promo-popup-eyebrow-{{ ai_gen_id }} {
+    position: relative;
+    margin: 0;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .ai-promo-popup-month-{{ ai_gen_id }} {
+    position: relative;
+    margin: 0;
+    font-size: {{ block.settings.month_size }}px;
+    line-height: 1.15;
+    font-family: var(--font-heading-family, inherit);
+    font-style: var(--font-heading-style, normal);
+    font-weight: var(--font-heading-weight, 700);
+  }
+
+  /* ---------- body ---------- */
+  .ai-promo-popup-body-{{ ai_gen_id }} {
+    position: relative;
+    padding: {{ block.settings.padding }}px;
+    background-color: {{ block.settings.background_color }};
+    border-radius: 0 {{ block.settings.border_radius }}px {{ block.settings.border_radius }}px 0;
+  }
+
+  .ai-promo-popup-close-{{ ai_gen_id }} {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    line-height: 0;
+    color: {{ block.settings.message_color }};
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+
+  .ai-promo-popup-close-{{ ai_gen_id }}:hover {
+    opacity: 1;
+  }
+
+  .ai-promo-popup-close-{{ ai_gen_id }} svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+
+  .ai-promo-popup-headline-{{ ai_gen_id }} {
+    margin: 0 0 8px;
+    padding-right: 24px;
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.headline_size }}px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    font-family: var(--font-heading-family, inherit);
+    font-style: var(--font-heading-style, normal);
+    font-weight: var(--font-heading-weight, 700);
+  }
+
+  .ai-promo-popup-message-{{ ai_gen_id }} {
+    margin: 0 0 18px;
+    color: {{ block.settings.message_color }};
+    font-size: {{ block.settings.message_size }}px;
+    line-height: 1.55;
+  }
+
+  .ai-promo-popup-message-{{ ai_gen_id }} p {
+    margin: 0 0 8px;
+  }
+
+  .ai-promo-popup-message-{{ ai_gen_id }} p:last-child {
+    margin-bottom: 0;
+  }
+
+  .ai-promo-popup-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 13px 24px;
+    background-color: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border: none;
+    border-radius: {{ block.settings.button_radius }}px;
+    font-size: {{ block.settings.button_size }}px;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    {% if block.settings.button_uppercase %}
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    {% endif %}
+  }
+
+  .ai-promo-popup-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_color }};
+    color: {{ block.settings.button_text_color }};
+  }
+
+  .ai-promo-popup-{{ ai_gen_id }} :focus-visible {
+    outline: 2px solid {{ block.settings.button_color }};
+    outline-offset: 3px;
+  }
+
+  /* ---------- phones: stack the panel above the message ---------- */
+  @media screen and (max-width: 620px) {
+    .ai-promo-popup-modal-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+
+    .ai-promo-popup-art-{{ ai_gen_id }} {
+      flex-direction: row;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px;
+      border-radius: {{ block.settings.border_radius }}px {{ block.settings.border_radius }}px 0 0;
+    }
+
+    .ai-promo-popup-art-{{ ai_gen_id }}::after {
+      display: none;
+    }
+
+    .ai-promo-popup-month-{{ ai_gen_id }} {
+      font-size: {{ block.settings.month_size | times: 0.85 | round }}px;
+    }
+
+    .ai-promo-popup-body-{{ ai_gen_id }} {
+      padding: {{ block.settings.padding | times: 0.75 | round }}px;
+      border-radius: 0 0 {{ block.settings.border_radius }}px {{ block.settings.border_radius }}px;
+    }
+
+    .ai-promo-popup-headline-{{ ai_gen_id }} {
+      font-size: {{ block.settings.headline_size | times: 0.85 | round }}px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-promo-popup-{{ ai_gen_id }},
+    .ai-promo-popup-modal-{{ ai_gen_id }} {
+      transition: none;
+    }
+
+    .ai-promo-popup-modal-{{ ai_gen_id }} {
+      transform: translate(-50%, -50%);
+    }
+  }
+{% endstyle %}
+
+<promo-popup-{{ ai_gen_id }}
+  class="ai-promo-popup-{{ ai_gen_id }}"
+  data-delay="{{ block.settings.delay_seconds }}"
+  data-cookie-days="{{ block.settings.cookie_days }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-promo-popup-overlay-{{ ai_gen_id }}" data-popup-overlay>
+    <span aria-hidden="true" style="display: block; width: 1px; height: 1px;"></span>
+  </div>
+
+  <div
+    class="ai-promo-popup-modal-{{ ai_gen_id }}"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="promo-popup-heading-{{ ai_gen_id }}"
+  >
+    <div class="ai-promo-popup-art-{{ ai_gen_id }}">
+      {% if block.settings.eyebrow != blank %}
+        <p class="ai-promo-popup-eyebrow-{{ ai_gen_id }}">{{ block.settings.eyebrow }}</p>
+      {% endif %}
+      {% if panel_month != blank %}
+        <p class="ai-promo-popup-month-{{ ai_gen_id }}">{{ panel_month }}</p>
+      {% endif %}
+    </div>
+
+    <div class="ai-promo-popup-body-{{ ai_gen_id }}">
+      <button
+        class="ai-promo-popup-close-{{ ai_gen_id }}"
+        type="button"
+        aria-label="Close"
+        data-popup-close
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      {% if block.settings.headline != blank %}
+        <h2 class="ai-promo-popup-headline-{{ ai_gen_id }}" id="promo-popup-heading-{{ ai_gen_id }}">
+          {{ block.settings.headline }}
+        </h2>
+      {% endif %}
+
+      {% if block.settings.message != blank %}
+        <div class="ai-promo-popup-message-{{ ai_gen_id }}">
+          {{ block.settings.message }}
+        </div>
+      {% endif %}
+
+      {% if block.settings.button_label != blank %}
+        <a
+          href="{{ cta_url }}"
+          class="ai-promo-popup-button-{{ ai_gen_id }}"
+          data-popup-cta
+        >
+          {{ block.settings.button_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</promo-popup-{{ ai_gen_id }}>
+
+<script>
+  (function () {
+    class PromoPopup{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.cookieName = 'promo_popup_dismissed_{{ ai_gen_id }}';
+        this.delay = parseInt(this.dataset.delay, 10) * 1000;
+        this.cookieDays = parseInt(this.dataset.cookieDays, 10);
+        this.onKeydown = this.onKeydown.bind(this);
+        this.gapAfterOtherPopup = 5000;   // breather once another popup closes
+        this.maxWaitForOtherPopup = 60000; // give up waiting and show anyway
+        this.otherPopupGrace = 15000;      // hold this long for a slower popup to appear
+      }
+
+      connectedCallback() {
+        // A parent with transform / filter / overflow breaks position:fixed, which leaves
+        // the overlay covering only its container. Move to <body> so nothing can clip it.
+        if (this.parentElement !== document.body) {
+          // Drop any copy left behind by a previous theme-editor re-render.
+          document.querySelectorAll('promo-popup-{{ ai_gen_id }}').forEach((node) => {
+            if (node !== this && node.parentElement === document.body) node.remove();
+          });
+
+          this.relocating = true;
+          document.body.appendChild(this);
+          this.relocating = false;
+          return;
+        }
+
+        if (this.initialized) return;
+        this.initialized = true;
+
+        // In the theme editor, always show it so the merchant can style it.
+        this.isEditor = Boolean(window.Shopify && window.Shopify.designMode);
+
+        if (!this.isEditor && this.getCookie(this.cookieName)) return;
+
+        this.modal = this.querySelector('[role="dialog"]');
+        this.overlay = this.querySelector('[data-popup-overlay]');
+        this.closeButton = this.querySelector('[data-popup-close]');
+        this.cta = this.querySelector('[data-popup-cta]');
+
+        this.closeButton.addEventListener('click', () => this.closePopup());
+        this.overlay.addEventListener('click', () => this.closePopup());
+
+        // Clicking through to the specials counts as seen - don't ask again tomorrow.
+        if (this.cta) {
+          this.cta.addEventListener('click', () => this.remember());
+        }
+
+        this.timer = setTimeout(
+          () => (this.isEditor ? this.showPopup() : this.showWhenClear()),
+          this.isEditor ? 0 : this.delay
+        );
+      }
+
+      disconnectedCallback() {
+        if (this.relocating) return;
+        clearTimeout(this.timer);
+        clearInterval(this.watcher);
+        document.removeEventListener('keydown', this.onKeydown);
+        document.body.style.overflow = '';
+      }
+
+      // Don't stack on top of another popup (the Mailchimp signup, for example).
+      // If one is on screen when our delay elapses, wait for it to close first.
+      showWhenClear() {
+        // Mailchimp's popup is set to fire 8 seconds after landing. If our own delay is
+        // shorter we would win the race and it would land on top of us, so hold briefly
+        // for a slower popup to turn up before deciding the coast is clear.
+        if (!this.otherPopupVisible()) {
+          if (this.otherPopupsPossible() && performance.now() < this.otherPopupGrace) {
+            this.timer = setTimeout(() => this.showWhenClear(), 1000);
+            return;
+          }
+          this.showPopup();
+          return;
+        }
+
+        const startedAt = Date.now();
+
+        this.watcher = setInterval(() => {
+          const waitedLongEnough = Date.now() - startedAt > this.maxWaitForOtherPopup;
+          if (this.otherPopupVisible() && !waitedLongEnough) return;
+
+          clearInterval(this.watcher);
+          this.watcher = null;
+          this.timer = setTimeout(() => this.showPopup(), this.gapAfterOtherPopup);
+        }, 1000);
+      }
+
+      // Is a Mailchimp form on this page at all?
+      otherPopupsPossible() {
+        return Boolean(
+          window.mailchimpFormsSettings || document.querySelector('[class*="mcforms" i]')
+        );
+      }
+
+      otherPopupVisible() {
+        // Current Mailchimp forms render as div.mcforms-wrapper with their contents in a
+        // shadow root; the older integration used #mc-modal / .mc-modal.
+        const selectors = [
+          '.mcforms-wrapper',
+          '[class*="mcforms" i]',
+          '[id*="mcforms" i]',
+          '#mc-modal',
+          '.mc-modal',
+          '#mailchimp-popup',
+          '[id*="mailchimp" i]',
+          '[class*="mailchimp" i]',
+          '[id*="mc_embed" i]'
+        ];
+
+        for (const selector of selectors) {
+          let matches;
+          try {
+            matches = document.querySelectorAll(selector);
+          } catch (error) {
+            continue;
+          }
+          for (const el of matches) {
+            if (el.shadowRoot ? this.shadowHasPopup(el) : this.isPopupSized(el)) return true;
+          }
+        }
+
+        // Catch-all: any other large fixed layer covering the page, whatever app made it.
+        for (const el of document.querySelectorAll('body > *, body > * > *')) {
+          if (getComputedStyle(el).position !== 'fixed') continue;
+          if (!this.isOnScreen(el)) continue;
+          const rect = el.getBoundingClientRect();
+          if (rect.width >= window.innerWidth * 0.55 && rect.height >= window.innerHeight * 0.4) {
+            return true;
+          }
+        }
+
+        return false;
+      }
+
+      // The wrapper itself can measure zero, so look at what is inside its shadow root.
+      shadowHasPopup(host) {
+        for (const el of host.shadowRoot.querySelectorAll('*')) {
+          if (this.isPopupSized(el)) return true;
+        }
+        return false;
+      }
+
+      isPopupSized(el) {
+        if (!this.isOnScreen(el)) return false;
+        const rect = el.getBoundingClientRect();
+        return rect.width >= 150 && rect.height >= 100;
+      }
+
+      isOnScreen(el) {
+        if (!el || el === this || this.contains(el) || el.contains(this)) return false;
+        const cs = getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0) {
+          return false;
+        }
+        const rect = el.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0;
+      }
+
+      showPopup() {
+        this.lastFocused = document.activeElement;
+        this.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        document.addEventListener('keydown', this.onKeydown);
+        this.closeButton.focus();
+      }
+
+      closePopup() {
+        this.classList.remove('active');
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', this.onKeydown);
+        this.remember();
+        if (this.lastFocused && typeof this.lastFocused.focus === 'function') {
+          this.lastFocused.focus();
+        }
+      }
+
+      remember() {
+        if (this.isEditor) return;
+        this.setCookie(this.cookieName, 'true', this.cookieDays);
+      }
+
+      // Escape closes; Tab stays inside the dialog while it is open.
+      onKeydown(event) {
+        if (!this.classList.contains('active')) return;
+
+        if (event.key === 'Escape') {
+          this.closePopup();
+          return;
+        }
+
+        if (event.key !== 'Tab') return;
+
+        const focusable = this.modal.querySelectorAll(
+          'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (!focusable.length) return;
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+
+      setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie =
+          name + '=' + value + ';expires=' + date.toUTCString() + ';path=/;SameSite=Lax';
+      }
+
+      getCookie(name) {
+        const nameEQ = name + '=';
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          let cookie = cookies[i];
+          while (cookie.charAt(0) === ' ') cookie = cookie.substring(1);
+          if (cookie.indexOf(nameEQ) === 0) return cookie.substring(nameEQ.length);
+        }
+        return null;
+      }
+    }
+
+    if (!customElements.get('promo-popup-{{ ai_gen_id }}')) {
+      customElements.define('promo-popup-{{ ai_gen_id }}', PromoPopup{{ ai_gen_id }});
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Promotional popup",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "eyebrow",
+      "label": "Panel label",
+      "default": "Specials",
+      "info": "Small uppercase line above the month, on the coloured panel."
+    },
+    {
+      "type": "text",
+      "id": "month_label",
+      "label": "Month",
+      "info": "Leave blank to show the current month automatically."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "headline",
+      "label": "Headline",
+      "default": "This month's essences"
+    },
+    {
+      "type": "richtext",
+      "id": "message",
+      "label": "Message",
+      "default": "<p>A small, rotating selection at a reduced price. New picks on the first of every month.</p>"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop specials"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button link",
+      "info": "Leave blank to link to /collections/specials."
+    },
+    {
+      "type": "header",
+      "content": "Timing"
+    },
+    {
+      "type": "range",
+      "id": "delay_seconds",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "s",
+      "label": "Delay before showing",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "cookie_days",
+      "min": 1,
+      "max": 90,
+      "step": 1,
+      "unit": "d",
+      "label": "Days to suppress after dismissal",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "range",
+      "id": "modal_width",
+      "min": 300,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Message padding",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Headline colour",
+      "default": "#17322b"
+    },
+    {
+      "type": "color",
+      "id": "message_color",
+      "label": "Message colour",
+      "default": "#55716a"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Overlay darkness",
+      "default": 0.7
+    },
+    {
+      "type": "range",
+      "id": "overlay_blur",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Background blur",
+      "default": 4,
+      "info": "Blurs the store behind the popup. Set to 0 to turn it off."
+    },
+    {
+      "type": "header",
+      "content": "Colour panel"
+    },
+    {
+      "type": "range",
+      "id": "panel_width",
+      "min": 110,
+      "max": 240,
+      "step": 2,
+      "unit": "px",
+      "label": "Panel width",
+      "default": 158
+    },
+    {
+      "type": "color",
+      "id": "panel_color_start",
+      "label": "Gradient start",
+      "default": "#108474"
+    },
+    {
+      "type": "color",
+      "id": "panel_color_end",
+      "label": "Gradient end",
+      "default": "#2a87b9"
+    },
+    {
+      "type": "color",
+      "id": "panel_text_color",
+      "label": "Panel text colour",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "month_size",
+      "min": 14,
+      "max": 34,
+      "step": 1,
+      "unit": "px",
+      "label": "Month size",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "headline_size",
+      "min": 16,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Headline size",
+      "default": 23
+    },
+    {
+      "type": "range",
+      "id": "message_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Message size",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "range",
+      "id": "button_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Button text size",
+      "default": 13
+    },
+    {
+      "type": "checkbox",
+      "id": "button_uppercase",
+      "label": "Uppercase button text",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Button corner radius",
+      "default": 6
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button background",
+      "default": "#108474"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover",
+      "default": "#0c6a5c"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promotional popup"
+    }
+  ]
+}
+{% endschema %}

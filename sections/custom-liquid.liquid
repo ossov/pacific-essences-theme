@@ -1,0 +1,147 @@
+{% if product.gift_card? %}
+<style>
+  .custom-gc-grid {
+    display: grid;
+    /* Reduced the minimum width slightly for better mobile fit */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    
+    /* Added max-width and auto margins to prevent the cards from getting too huge on desktop */
+    max-width: 900px; 
+    margin: 2rem auto; 
+  }
+  
+  .custom-gc-card {
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    border-radius: 12px;
+    padding: 1.5rem; /* Slightly reduced padding to tighten the card size */
+    text-align: center;
+    background-color: rgb(var(--color-background));
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .custom-gc-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  }
+  
+  .custom-gc-image-wrapper {
+    margin-bottom: 1.5rem;
+    /* Removed the wrapper border-radius so it doesn't clip your artwork */
+    overflow: hidden;
+  }
+  
+  .custom-gc-image {
+    width: 100%;
+    height: auto;
+    /* Changed from 'cover' to 'contain' so the whole oval fits perfectly */
+    object-fit: contain; 
+    display: block;
+  }
+  
+  .custom-gc-price {
+    font-size: 1.8rem; /* Scaled the text down slightly to match the smaller cards */
+    font-weight: bold;
+    color: #0072af; 
+    margin-bottom: 1.5rem;
+  }
+</style>
+
+<div class="custom-gc-grid">
+  {% for variant in product.variants %}
+    <div class="custom-gc-card">
+      
+      <div class="custom-gc-image-wrapper">
+        {% assign image = variant.image | default: product.featured_image %}
+        {% if image %}
+          <img 
+            src="{{ image | image_url: width: 400 }}" 
+            alt="{{ variant.title }} Gift Card"
+            class="custom-gc-image"
+            loading="lazy"
+            width="400"
+            height="{{ 400 | divided_by: image.aspect_ratio | round }}"
+          >
+        {% endif %}
+      </div>
+      
+      <div class="custom-gc-price">
+        {{ variant.price | money }}
+      </div>
+      
+      <product-form>
+        <div class="product-form__error-message-wrapper" role="alert" hidden>
+          <span class="product-form__error-message"></span>
+        </div>
+        
+        {%- assign variant_form_id = 'product-form-' | append: section.id | append: '-' | append: variant.id -%}
+        {%- form 'product', product, id: variant_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+          
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          
+          <button 
+            type="submit" 
+            name="add" 
+            class="product-form__submit button button--primary button--full-width" 
+            style="border-radius: 50px; font-weight: bold; padding: 1rem 2rem; min-height: unset;"
+            {% unless variant.available %}disabled{% endunless %}
+          >
+            <span>
+              {% if variant.available %}
+                Add to Cart
+              {% else %}
+                Sold Out
+              {% endif %}
+            </span>
+            
+            <div class="loading__spinner loading-overlay__spinner hidden">
+              <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+              </svg>
+            </div>
+            
+          </button>
+          
+        {%- endform -%}
+      </product-form>
+      
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Find all 4 of your custom Add to Cart buttons
+    const customAddButtons = document.querySelectorAll('.custom-gc-card button[type="submit"]');
+    
+    customAddButtons.forEach(function(button) {
+      // Listen for the exact moment the customer clicks the button
+      button.addEventListener('click', function(event) {
+        const activeForm = button.closest('form');
+        const giftCheckbox = document.querySelector('.gift-card-standalone-block input[type="checkbox"]');
+        
+        // Clean up any old hidden properties just in case they clicked multiple times
+        activeForm.querySelectorAll('.copied-gift-prop').forEach(el => el.remove());
+        
+        // If the "Send as a gift" button is active, copy the fields!
+        if (giftCheckbox && giftCheckbox.checked) {
+          const giftInputs = document.querySelectorAll('.gift-card-standalone-block input[name^="properties"], .gift-card-standalone-block textarea[name^="properties"]');
+          
+          giftInputs.forEach(function(input) {
+            // Only copy the data if it's a typed field or a checked box
+            if (input.type !== 'checkbox' || input.checked) {
+              let hiddenInput = document.createElement('input');
+              hiddenInput.type = 'hidden';
+              hiddenInput.name = input.name;
+              hiddenInput.value = input.value;
+              hiddenInput.classList.add('copied-gift-prop'); // Tag it so the code remembers it
+              activeForm.appendChild(hiddenInput);
+            }
+          });
+        }
+      });
+    });
+  });
+</script>

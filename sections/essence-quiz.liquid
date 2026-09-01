@@ -1,0 +1,686 @@
+<div class="essence-quiz-section page-width section-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div id="quiz-intro-{{ section.id }}" class="essence-quiz__intro text-center">
+    <h2>{{ section.settings.heading }}</h2>
+    <p>{{ section.settings.subheading }}</p>
+    <button type="button" class="button essence-quiz__start-btn" id="start-quiz-{{ section.id }}">
+      Start Questionnaire
+    </button>
+  </div>
+
+  <div id="quiz-container-{{ section.id }}" class="essence-quiz__container" style="display: none;">
+    <div class="essence-quiz__progress-container">
+      <span id="quiz-progress-text-{{ section.id }}" class="essence-quiz__progress-text">Question 1 of 52</span>
+      <div class="essence-quiz__progress-bar">
+        <div id="quiz-progress-fill-{{ section.id }}" class="essence-quiz__progress-fill" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <div class="essence-quiz__question-card">
+      <h3 id="current-question-text-{{ section.id }}" class="essence-quiz__question-text">Loading question...</h3>
+
+      <div class="essence-quiz__actions">
+        <button type="button" class="essence-quiz__answer-btn no-btn" data-answer="no">No</button>
+        <button type="button" class="essence-quiz__answer-btn yes-btn" data-answer="yes">Yes</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-results-{{ section.id }}" class="essence-quiz__results" style="display: none;">
+    <h3 id="results-heading-{{ section.id }}">Your Recommended Essence</h3>
+
+    <div id="recommended-product-wrapper-{{ section.id }}"></div>
+
+    <button type="button" class="essence-quiz__retake" id="retake-quiz-{{ section.id }}">
+      Retake Quiz
+    </button>
+  </div>
+</div>
+
+{% style %}
+  /* ---------- Still Water ----------
+     The card floats on a soft blue wash; the progress bar carries a slow shine;
+     answers are pill buttons that lift. Colours come from the settings below. */
+  .section-{{ section.id }} {
+    --eq-accent-a: {{ section.settings.accent_start | default: '#43a6db' }};
+    --eq-accent-b: {{ section.settings.accent_end | default: '#2f8fc9' }};
+    --eq-wash-a: {{ section.settings.wash_start | default: '#e7f3fb' }};
+    --eq-wash-b: {{ section.settings.wash_end | default: '#cfe9f0' }};
+    --eq-ink: {{ section.settings.text_color | default: '#12384c' }};
+    --eq-ink-soft: #4a728a;
+
+    max-width: {{ section.settings.max_width }}px;
+    margin: 0 auto;
+    padding: {{ section.settings.padding }}px 20px;
+    font-family: inherit;
+    color: var(--eq-ink);
+  }
+
+  .section-{{ section.id }} .text-center { text-align: center; }
+
+  /* the wash behind everything */
+  .section-{{ section.id }} .essence-quiz__intro,
+  .section-{{ section.id }} .essence-quiz__container,
+  .section-{{ section.id }} .essence-quiz__results {
+    background: linear-gradient(158deg, var(--eq-wash-a) 0%, var(--eq-wash-b) 100%);
+    border-radius: 24px;
+    padding: 34px 26px 38px;
+  }
+
+  /* ---------- intro ---------- */
+  .section-{{ section.id }} .essence-quiz__intro h2 {
+    margin: 0 0 12px;
+    font-size: clamp(2rem, 5vw, 3.1rem);
+    line-height: 1.12;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--eq-ink);
+  }
+
+  .section-{{ section.id }} .essence-quiz__intro p {
+    margin: 0 auto 28px;
+    max-width: 44ch;
+    font-size: 1.05rem;
+    color: var(--eq-ink-soft);
+  }
+
+  /* ---------- buttons ---------- */
+  .section-{{ section.id }} .essence-quiz__start-btn,
+  .section-{{ section.id }} .essence-quiz__answer-btn.yes-btn,
+  .section-{{ section.id }} .essence-product-card__cta {
+    border: 0;
+    border-radius: 999px;
+    padding: 15px 40px;
+    font-family: inherit;
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, var(--eq-accent-a), var(--eq-accent-b));
+    box-shadow: 0 10px 22px rgba(43, 140, 196, 0.36);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .section-{{ section.id }} .essence-quiz__start-btn:hover,
+  .section-{{ section.id }} .essence-quiz__answer-btn.yes-btn:hover,
+  .section-{{ section.id }} .essence-product-card__cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 26px rgba(43, 140, 196, 0.44);
+  }
+
+  .section-{{ section.id }} .essence-quiz__answer-btn.no-btn {
+    border: 0;
+    border-radius: 999px;
+    padding: 15px 40px;
+    font-family: inherit;
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: #2b6c8c;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: inset 0 0 0 1.5px rgba(67, 166, 219, 0.45);
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.2s ease;
+  }
+
+  .section-{{ section.id }} .essence-quiz__answer-btn.no-btn:hover {
+    background: #fff;
+    transform: translateY(-2px);
+  }
+
+  .section-{{ section.id }} .essence-quiz__answer-btn:active { transform: scale(0.97); }
+
+  .section-{{ section.id }} button:focus-visible,
+  .section-{{ section.id }} a:focus-visible {
+    outline: 3px solid var(--eq-accent-b);
+    outline-offset: 3px;
+  }
+
+  /* ---------- progress ---------- */
+  .section-{{ section.id }} .essence-quiz__progress-container { margin-bottom: 22px; }
+
+  .section-{{ section.id }} .essence-quiz__progress-text {
+    display: block;
+    margin-bottom: 8px;
+    text-align: right;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--eq-ink-soft);
+  }
+
+  .section-{{ section.id }} .essence-quiz__progress-bar {
+    width: 100%;
+    height: 9px;
+    border-radius: 999px;
+    background: rgba(18, 56, 76, 0.12);
+    overflow: hidden;
+  }
+
+  .section-{{ section.id }} .essence-quiz__progress-fill {
+    /* An app stylesheet on this store hides empty <div>s (div:empty { display: none }).
+       The fill is an empty div, so without this it never renders — the same reason
+       the original CSS carried "display: block !important". */
+    display: block !important;
+    position: relative;
+    height: 100%;
+    min-width: 10px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--eq-accent-a) 0%, {{ section.settings.progress_end | default: '#58c9d6' }} 100%);
+    transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .section-{{ section.id }} .essence-quiz__progress-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: eq-sheen-{{ section.id }} 2.4s linear infinite;
+  }
+
+  @keyframes eq-sheen-{{ section.id }} {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+
+  /* ---------- question card ---------- */
+  .section-{{ section.id }} .essence-quiz__question-card {
+    background: rgba(255, 255, 255, 0.72);
+    -webkit-backdrop-filter: blur(9px);
+    backdrop-filter: blur(9px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 22px;
+    padding: 38px 28px 30px;
+    text-align: center;
+    box-shadow: 0 18px 42px rgba(21, 84, 117, 0.14);
+  }
+
+  .section-{{ section.id }} .essence-quiz__question-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.6em;
+    margin: 0 0 30px;
+    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+    font-weight: 600;
+    line-height: 1.45;
+    text-wrap: balance;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+
+  .section-{{ section.id }} .essence-quiz__question-card.is-turning .essence-quiz__question-text {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  .section-{{ section.id }} .essence-quiz__actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+  }
+
+  .section-{{ section.id }} .essence-quiz__actions .essence-quiz__answer-btn {
+    flex: 1;
+    max-width: 200px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  /* ---------- results ---------- */
+  .section-{{ section.id }} .essence-quiz__results { text-align: center; }
+
+  .section-{{ section.id }} .essence-quiz__results h3 {
+    margin: 0 0 6px;
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+  }
+
+  .section-{{ section.id }} .essence-product-card {
+    width: min(300px, 100%);
+    margin: 22px auto 0;
+    padding: 22px 24px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    box-shadow: 0 16px 34px rgba(21, 84, 117, 0.16);
+    text-align: center;
+  }
+
+  .section-{{ section.id }} .essence-product-card a { text-decoration: none; color: inherit; }
+
+  .section-{{ section.id }} .essence-product-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin-bottom: 14px;
+  }
+
+  .section-{{ section.id }} .essence-product-card h4 {
+    margin: 0 0 6px;
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .section-{{ section.id }} .essence-product-card__resonance {
+    margin: 0 0 14px;
+    font-size: 1rem;
+    color: #6d8b9b;
+  }
+
+  .section-{{ section.id }} .essence-product-card__cta {
+    padding: 11px 26px;
+    font-size: 0.95rem;
+  }
+
+  .section-{{ section.id }} .essence-quiz__retake {
+    margin-top: 26px;
+    border: 0;
+    border-radius: 999px;
+    padding: 12px 30px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #2b6c8c;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: inset 0 0 0 1.5px rgba(67, 166, 219, 0.45);
+    cursor: pointer;
+  }
+
+  .section-{{ section.id }} .essence-quiz__retake:hover { background: #fff; }
+
+  .section-{{ section.id }} .essence-product-card__fallback {
+    padding: 20px;
+    border: 2px dashed #ff4c4c;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.8);
+    margin-top: 20px;
+  }
+
+  @media screen and (max-width: 600px) {
+    .section-{{ section.id }} .essence-quiz__intro,
+    .section-{{ section.id }} .essence-quiz__container,
+    .section-{{ section.id }} .essence-quiz__results { padding: 26px 16px 30px; }
+    .section-{{ section.id }} .essence-quiz__question-card { padding: 28px 18px 24px; }
+    .section-{{ section.id }} .essence-quiz__actions .essence-quiz__answer-btn { padding: 14px 8px; font-size: 0.98rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section-{{ section.id }} .essence-quiz__progress-fill::after { animation: none; }
+    .section-{{ section.id }} .essence-quiz__question-text,
+    .section-{{ section.id }} .essence-quiz__progress-fill,
+    .section-{{ section.id }} .essence-quiz__start-btn,
+    .section-{{ section.id }} .essence-quiz__answer-btn { transition: none; }
+  }
+{% endstyle %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const sectionId = '{{ section.id }}';
+
+    // UI Elements
+    const introView = document.getElementById(`quiz-intro-${sectionId}`);
+    const activeView = document.getElementById(`quiz-container-${sectionId}`);
+    const resultsView = document.getElementById(`quiz-results-${sectionId}`);
+
+    const startBtn = document.getElementById(`start-quiz-${sectionId}`);
+    const retakeBtn = document.getElementById(`retake-quiz-${sectionId}`);
+    const answerBtns = document.querySelectorAll(`#quiz-container-${sectionId} .essence-quiz__answer-btn`);
+
+    const questionTextElement = document.getElementById(`current-question-text-${sectionId}`);
+    const progressTextElement = document.getElementById(`quiz-progress-text-${sectionId}`);
+    const progressFillElement = document.getElementById(`quiz-progress-fill-${sectionId}`);
+    const resultsHeading = document.getElementById(`results-heading-${sectionId}`);
+    const resultsWrapper = document.getElementById(`recommended-product-wrapper-${sectionId}`);
+
+    // Your exact mapped URL handles
+    const productHandles = [
+      'kids-stuff',
+      'radiant-beauty',
+      'cellular-memory',
+      'water',
+      'heart-spirit-essence',
+      'abundance-stabilizer',
+      'fearlessness',
+      'optimal-immunity',
+      'being-true-worth',
+      'fire',
+      'new-attitudes',
+      'earth',
+      'optimal-learning',
+      'abundance-essence',
+      'being-peace',
+      'balancer-essence',
+      'metal',
+      'wood',
+      'detox',
+      'super-vitality',
+      'forgiving',
+      'shielding',
+      'twelve-gems',
+      'essence-of-success',
+      'infinite-potential',
+      'cherry-blossom-flower-essence',
+    ];
+
+    // Map of your custom.resonance metafields for the 26 products
+    const resonanceData = {
+      "kids-stuff": "Joyfulness",
+      "radiant-beauty": "Be Beautiful",
+      "cellular-memory": "Creative Cellular Intelligence",
+      "water": "Restore Vital Energy",
+      "heart-spirit-essence": "Love",
+      "abundance-stabilizer": "Stability",
+      "fearlessness": "Cultivating Courage",
+      "optimal-immunity": "Protect Your Well-being",
+      "being-true-worth": "Self-referral",
+      "fire": "Tap Into Your Potential",
+      "new-attitudes": "Making positive change",
+      "earth": "Become Grounded",
+      "optimal-learning": "Utilize Both Hemispheres of Your Brain",
+      "abundance-essence": "",
+      "being-peace": "Peace",
+      "balancer-essence": "Be in The Present Moment",
+      "metal": "Tap into Your Instinct",
+      "wood": "Be a Pioneer",
+      "detox": "Purity",
+      "super-vitality": "Vitality",
+      "forgiving": "Inner Peace",
+      "shielding": "Adaptability",
+      "twelve-gems": "Treasure Chest",
+      "essence-of-success": "Celebration",
+      "infinite-potential": "Achieve Stillness",
+      "cherry-blossom-flower-essence": "Inspiration"
+    };
+
+    // 52 questions - two per essence (one question per essence was removed
+    // from the original 78, matching the crossed-out lines on the pamphlet).
+    const questionsData = [
+      { id: 1, text: 'I feel like I missed out on being a kid - playing, having fun, no cares, no worries.' },
+      {
+        id: 3,
+        text: 'I tend to look for authority outside myself instead of trusting that my body/mind knows exactly what it needs and when it needs it.',
+      },
+      { id: 7, text: 'I have a strong tendency to need to control things and people.' },
+      { id: 4, text: 'I have lots of doubts and fears.' },
+      { id: 24, text: 'My work is something I have to do to pay the bills.' },
+      { id: 12, text: 'I have a tendency to overthink and worry.' },
+      { id: 11, text: 'I find it difficult to make commitments, especially to myself.' },
+      {
+        id: 16,
+        text: 'Under stressful situations I either lash out at others or withdraw and become non-communicative.',
+      },
+      { id: 19, text: 'I am chronically tired and my body feels sluggish.' },
+      { id: 18, text: 'I often feel depressed and/or frustrated.' },
+      { id: 15, text: 'I tend to be opinionated and judgemental.' },
+      { id: 25, text: 'My mind is always busy and rarely curious.' },
+      { id: 6, text: 'I do not trust in the infinite possibilities of the universe.' },
+      { id: 2, text: "I was taught that it is egotistical and shallow to show others what I'm good at." },
+      { id: 17, text: 'I tend to be rigid and unforgiving of myself and others.' },
+      { id: 8, text: "I tend to pick up every 'bug' that goes around." },
+      { id: 23, text: "I feel 'stuck' in some area of my life." },
+      {
+        id: 13,
+        text: "I have some other kinds of learning disability - can't concentrate, can't focus, no memory, hyperactivity, etc.",
+      },
+      { id: 20, text: 'I have no stamina or endurance in physical activity.' },
+      { id: 14, text: 'If bad stuff is going to happen it will happen to me.' },
+      { id: 5, text: 'Other people seem to avoid me.' },
+      { id: 26, text: 'I often feel like the world is just getting to be a worse and worse place.' },
+      { id: 21, text: 'I feel really bitter and resentful about some of my life experiences.' },
+      { id: 24, text: 'I find it difficult to get out of bed in the morning.' },
+      { id: 19, text: "I have a tendency to hang on to 'old stuff' mentally, emotionally and physically." },
+      { id: 10, text: 'I lack enthusiasm and passion in my life.' },
+      { id: 9, text: "There is a little voice inside me that is constantly telling me that I'm just not good enough." },
+      { id: 13, text: 'I seem to make the same mistakes over and over again.' },
+      { id: 22, text: 'I work in an environment where there are lots of EFTS - computers etc.' },
+      { id: 12, text: "I tend to over empathize with other people's issues and pain." },
+      { id: 8, text: 'I often feel unsafe and/or unprotected.' },
+      { id: 10, text: 'In stressful situations I become overexcited and respond inappropriately.' },
+      { id: 9, text: 'I often feel self conscious and shy.' },
+      { id: 14, text: 'I usually see a glass as half empty.' },
+      { id: 26, text: 'I have no sense of purpose or knowing what might make me happy and fulfilled.' },
+      { id: 1, text: 'I have never felt loved enough by my parents.' },
+      { id: 7, text: 'I resist change.' },
+      {
+        id: 16,
+        text: 'I suffer from tight shoulders, headaches, locked jaw, upset stomach, constipation or diarrhea.',
+      },
+      { id: 22, text: 'I have been exposed to radiation and other toxic electrical substances.' },
+      { id: 20, text: 'I have little energy or enthusiasm for new projects or adventures.' },
+      { id: 6, text: 'Life is a struggle.' },
+      { id: 25, text: 'I am uncomfortable in silence.' },
+      { id: 4, text: "I often feel stuck/paralyzed and don't know how to move forward." },
+      {
+        id: 21,
+        text: "I have a memory like an elephant for remembering all the really miserable stuff that's happened in my life as well as all my own failures.",
+      },
+      { id: 11, text: 'Others see me as indecisive in the face of obstacles.' },
+      { id: 5, text: "My heart feels like a heavy stone in my chest or I can't even feel my heart." },
+      { id: 23, text: 'I want to trust inner guidance and connect with Spirit.' },
+      {
+        id: 3,
+        text: 'I am still searching for my passion and joy. I have no idea what would make my life meaningful.',
+      },
+      { id: 18, text: 'I tend to get angry in the face of obstacles.' },
+      { id: 15, text: 'I have little or no compassion for how someone arrived at a difficult place in their life.' },
+      { id: 17, text: 'I have experienced a lot of loss in my life and often feel sad.' },
+      { id: 2, text: 'I have no sense of being connected to a part of me which is eternal and infinitely wise.' },
+    ];
+
+    // Quiz State
+    let currentIndex = 0;
+    let essenceScores = {};
+    let isTurning = false;
+    const questionCard = document.querySelector(`#quiz-container-${sectionId} .essence-quiz__question-card`);
+
+    function initQuiz() {
+      currentIndex = 0;
+      essenceScores = {};
+      introView.style.display = 'none';
+      resultsView.style.display = 'none';
+      activeView.style.display = 'block';
+      resultsWrapper.innerHTML = '';
+      isTurning = false;
+      questionCard.classList.remove('is-turning');
+      renderQuestion();
+    }
+
+    // Helper function to dynamically resize Shopify API images
+    function getSizedImageUrl(src, size) {
+      if (!src) return '';
+      const [url, query] = src.split('?');
+      const extension = url.split('.').pop();
+      const pathWithoutExtension = url.slice(0, -(extension.length + 1));
+      return `${pathWithoutExtension}_${size}.${extension}${query ? '?' + query : ''}`;
+    }
+
+    function renderQuestion() {
+      if (currentIndex >= questionsData.length) {
+        calculateAndShowResults();
+        return;
+      }
+
+      renderProgress();
+      questionTextElement.textContent = questionsData[currentIndex].text;
+    }
+
+    // Kept separate so the bar can move the instant someone answers, while the
+    // question text waits for the fade.
+    function renderProgress() {
+      const currentNumber = currentIndex + 1;
+      const totalQuestions = questionsData.length;
+      progressTextElement.textContent = `Question ${currentNumber} of ${totalQuestions}`;
+      progressFillElement.style.width = `${(currentNumber / totalQuestions) * 100}%`;
+    }
+
+    function handleAnswer(e) {
+      if (isTurning) return; // ignore double taps mid-transition
+      const answer = e.currentTarget.getAttribute('data-answer');
+      const currentQId = questionsData[currentIndex].id;
+
+      if (answer === 'yes') {
+        essenceScores[currentQId] = (essenceScores[currentQId] || 0) + 1;
+      }
+
+      currentIndex++;
+
+      // Fade the current question out, swap the text, let it slide back in.
+      if (prefersReducedMotion() || currentIndex >= questionsData.length) {
+        renderQuestion();
+        return;
+      }
+
+      isTurning = true;
+      renderProgress();
+      questionCard.classList.add('is-turning');
+      setTimeout(function () {
+        renderQuestion();
+        questionCard.classList.remove('is-turning');
+        isTurning = false;
+      }, 220);
+    }
+
+    function prefersReducedMotion() {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    function calculateAndShowResults() {
+      activeView.style.display = 'none';
+      resultsView.style.display = 'block';
+      resultsWrapper.innerHTML = '<p>Loading your recommended essences...</p>';
+
+      let maxScore = 0;
+      for (const score of Object.values(essenceScores)) {
+        if (score > maxScore) maxScore = score;
+      }
+
+      if (maxScore === 0) {
+        resultsHeading.textContent = "We couldn't find an exact match for you.";
+        resultsWrapper.innerHTML = '<p>Please try the questionnaire again.</p>';
+        return;
+      }
+
+      const winningEssenceIds = Object.keys(essenceScores)
+        .filter(id => essenceScores[id] === maxScore)
+        .slice(0, 3);
+
+      if (winningEssenceIds.length > 1) {
+        resultsHeading.textContent = 'Your Recommended Essences';
+      } else {
+        resultsHeading.textContent = 'Your Recommended Essence';
+      }
+
+      // Dynamically fetch the winning products bypassing the Liquid limit
+      Promise.all(
+        winningEssenceIds.map((id) => {
+          const handle = productHandles[id - 1]; // Map ID back to handle array
+          return fetch(`/products/${handle}.js`)
+            .then((res) => (res.ok ? res.json() : null))
+            .then((product) => ({ handle, product }));
+        })
+      ).then((results) => {
+        resultsWrapper.innerHTML = ''; // Clear loading text
+
+        results.forEach((result) => {
+          if (result.product) {
+            const price = (result.product.price / 100).toFixed(2);
+            // Use the new helper to force a fast, 400px wide image
+            const optimizedImage = getSizedImageUrl(result.product.featured_image, '400x');
+
+            const resonanceText = resonanceData[result.handle] || "";
+            const resonanceHtml = resonanceText ? `<p class="essence-product-card__resonance">${resonanceText}</p>` : "";
+
+            resultsWrapper.innerHTML += `
+              <div class="essence-product-card">
+                <a href="${result.product.url}" class="essence-product-card__link" target="_blank" rel="noopener noreferrer">
+                  <img src="${optimizedImage}" alt="${result.product.title}" loading="lazy">
+                  <h4>${result.product.title}</h4>
+                  ${resonanceHtml}
+
+                  <span class="essence-product-card__cta">View Product</span>                </a>
+              </div>
+            `;
+          } else {
+            resultsWrapper.innerHTML += `
+              <div class="essence-product-card__fallback" style="padding: 20px; border: 2px dashed #ff4c4c; border-radius: 8px;">
+                <h4 style="color: #ff4c4c;">Product Not Found</h4>
+                <p>Could not load URL handle: <strong>${result.handle}</strong></p>
+                <p style="font-size: 0.9em; color: #666;">Please check the product URL in your Shopify admin.</p>
+              </div>
+            `;
+          }
+        });
+      });
+
+      window.scrollTo({ top: resultsView.offsetTop - 50, behavior: 'smooth' });
+    }
+
+    // Event Listeners
+    startBtn.addEventListener('click', initQuiz);
+    retakeBtn.addEventListener('click', () => {
+      introView.style.display = 'block';
+      resultsView.style.display = 'none';
+      window.scrollTo({ top: introView.offsetTop - 50, behavior: 'smooth' });
+    });
+
+    answerBtns.forEach((btn) => {
+      btn.addEventListener('click', handleAnswer);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Essence Quiz Step",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Self Selection Questionnaire"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Instructions",
+      "default": "Answer yes or no to the following statements based on what you spontaneously and immediately think or feel."
+    },
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "accent_start", "label": "Button gradient start", "default": "#43a6db" },
+    { "type": "color", "id": "accent_end", "label": "Button gradient end", "default": "#2f8fc9" },
+    { "type": "color", "id": "progress_end", "label": "Progress bar end", "default": "#58c9d6" },
+    { "type": "color", "id": "wash_start", "label": "Background top", "default": "#e7f3fb" },
+    { "type": "color", "id": "wash_end", "label": "Background bottom", "default": "#cfe9f0" },
+    { "type": "color", "id": "text_color", "label": "Text colour", "default": "#12384c" },
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 500,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding above and below",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "Essence Quiz Step",
+      "category": "Custom Forms"
+    }
+  ]
+}
+{% endschema %}

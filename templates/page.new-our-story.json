@@ -1,0 +1,321 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "custom_css": [],
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "image_with_text_wMVQYe": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_TniAnD": {
+          "type": "heading",
+          "settings": {
+            "heading": "<strong>The Pacific Essences® Story</strong>",
+            "heading_size": "h2"
+          }
+        },
+        "text_FbDnxV": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Pacific Essences® was born in the early 1980s on Vancouver Island. We are the first company dedicated to exploring the therapeutic values of the<strong> vibrational energy of indigenous flowers and plants of the Pacific Northwest. </strong></p><p>Our <a href=\"/collections/sea-essences\" title=\"Sea Essences\"><strong>Sea Essences</strong></a> - made from plants and creatures of the Pacific Ocean - were a first in the vibrational pharmacopia, and have proven to be a <strong>valuable new frequency</strong> in the repertory of vibrational medicine. </p><p>We’ve stayed true to our core beliefs and commitment to offer exceptional Essences for the benefit of our community: patrons, students, ambassadors, distributors and friends alike. We owe a huge thanks to our community for joining us on this awesome journey, and <strong>we hope that you will continue to be part of our story.</strong></p>",
+            "text_style": "body"
+          }
+        },
+        "button_X3rRqU": {
+          "type": "button",
+          "settings": {
+            "button_label": "SHOP | ESSENCES",
+            "button_link": "shopify://collections/flower-tree-essences",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_TniAnD",
+        "text_FbDnxV",
+        "button_X3rRqU"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/FAQ_Feature_Image_2.png",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-5",
+        "padding_top": 4,
+        "padding_bottom": 32
+      }
+    },
+    "178094909861b4ddb0": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_cc07af1_rTjpUj": {
+          "type": "ai_gen_block_cc07af1",
+          "settings": {
+            "main_title": "The Evolution of Pacific Essences®",
+            "title_font_size": 36,
+            "title_color": "#121212",
+            "title_alignment": "center",
+            "title_bottom_spacing": 40,
+            "desktop_width_percent": 80,
+            "max_width": 1200,
+            "section_padding": 40,
+            "item_spacing": 60,
+            "content_gap": 40,
+            "background_color": "#ffffff",
+            "content_bg_color": "#f9f9f9",
+            "line_color": "#2a87b9",
+            "dot_color": "#2a87b9",
+            "dot_border_color": "#ffffff",
+            "line_width": 3,
+            "dot_size": 16,
+            "dot_border_width": 3,
+            "content_padding": 25,
+            "content_border_radius": 8,
+            "image_width": 400,
+            "image_height": 250,
+            "image_border_radius": 8,
+            "date_font_size": 24,
+            "date_color": "#2a87b9",
+            "heading_font_size": 22,
+            "heading_color": "#121212",
+            "text_font_size": 18,
+            "text_color": "#121212",
+            "link_color": "#2a87b9",
+            "link_hover_color": "#1a5f7f",
+            "event_1_enabled": true,
+            "event_1_date": "1977",
+            "event_1_heading": "Our Beginning",
+            "event_1_text": "<p>Where it all started: Michael and Sabina felt guided to go 'back to the land' and began connecting with the plant devas. Read more about how this remarkable journey began <a href=\"/blogs/pacific-essences-blog/healing-journey\" title=\"Light from Darkness – A Healing Journey with Infinite Vibrations\"><strong>here</strong></a>. </p>",
+            "event_1_image": "shopify://shop_images/Our_Story_Graphics.png",
+            "event_2_enabled": true,
+            "event_2_date": "1981",
+            "event_2_heading": "Created First Canadian West Coast Flower Essence",
+            "event_2_text": "<p><a href=\"https://pacificessences.com/products/blue-camas-flower-essence\" title=\"https://pacificessences.com/products/blue-camas-flower-essence\"><strong>Blue Camas</strong></a> was the very first West Coast flower which called to Sabina, and became what would be the inaugural Pacific Essence.</p>",
+            "event_2_image": "shopify://shop_images/Our_Story_Graphics_1.png",
+            "event_3_enabled": true,
+            "event_3_date": "1983",
+            "event_3_heading": "Established Pacific Essences®",
+            "event_3_text": "<p>Sabina began research on the Essences with various methods such as kinesiology, proving, and scanning.</p>",
+            "event_3_image": "shopify://shop_images/Our_Story_Graphics_2.png",
+            "event_4_enabled": true,
+            "event_4_date": "1985",
+            "event_4_heading": "Making the First Sea Essence",
+            "event_4_text": "<p>Pacific Essences® pioneered the research on Essences from the ocean environment and created the world's first Sea Essence. Watch Sabina share how these Essences were created, and the transformative effect they can have, in this <a href=\"https:// https://youtu.be/ygFjDUvomlc\" title=\"https:// https://youtu.be/ygFjDUvomlc\"><strong>video</strong>.</a></p>",
+            "event_4_image": "shopify://shop_images/1_7e1d8ce6-71ed-43b0-8aa3-953c70b06bf3.png",
+            "event_5_enabled": true,
+            "event_5_date": "1986",
+            "event_5_heading": "Discovered Abundance Essence",
+            "event_5_text": "<p>Hear the origin story of this amazing Essence Combination that inspires 'abundance consciousness,' the willingness to receive and participate in the universal flow, in this <a href=\"https://youtu.be/eb6Pa0rEg3c?si=s_N4ek2uztQjlH4l\" target=\"_blank\" title=\"https://youtu.be/eb6Pa0rEg3c?si=s_N4ek2uztQjlH4l\"><strong>video</strong></a>.</p>",
+            "event_5_image": "shopify://shop_images/2_bc7cc2ba-e166-4e35-96d7-e56c2513846f.png",
+            "event_6_enabled": true,
+            "event_6_date": "1988",
+            "event_6_heading": "Created the First 60 Gem Essences",
+            "event_6_text": "<p>Many cultures have used gems in healing applications for centuries - we were inspired to take our personal collection and create <a href=\"https://pacificessences.com/collections/gem-and-crystal-essences\" title=\"https://pacificessences.com/collections/gem-and-crystal-essences\"><strong>Essences</strong></a> to give more people access to this vibrational healing.</p>",
+            "event_6_image": "shopify://shop_images/Our_Story_Graphics_3.png",
+            "event_7_enabled": true,
+            "event_7_date": "1989",
+            "event_7_heading": "Discovered Balancer Essence",
+            "event_7_text": "<p>Hear the story of the remarkable way in which we discovered our flagship Balancer Essence Combination, which offers harmony in the midst of turmoil, in this short <a href=\"https://youtu.be/etkLRql9mb4?si=M9epnTtRunkBRkGE\" target=\"_blank\" title=\"https://youtu.be/etkLRql9mb4?si=M9epnTtRunkBRkGE\"><strong>video</strong></a>.</p>",
+            "event_7_image": "shopify://shop_images/3_eb4f3b8a-057b-41d1-9a23-6fa817bb599e.png",
+            "event_8_enabled": true,
+            "event_8_date": "1990",
+            "event_8_heading": "Created the First 9 Goddess Essences",
+            "event_8_text": "<p>Creating these divine Essences was a serendipitous and magical experience - the moon, the sun, gemstones, and waterfalls! Hear the whole story in this short <a href=\"https://youtu.be/uyUA7p2RCPw?si=6RdtoikR5yeLqdgM\" target=\"_blank\" title=\"https://youtu.be/uyUA7p2RCPw?si=6RdtoikR5yeLqdgM\"><strong>video</strong></a>. </p>",
+            "event_8_image": "shopify://shop_images/Our_Story_Graphics_4.png",
+            "event_9_enabled": true,
+            "event_9_date": "1992",
+            "event_9_heading": "Launched the 22 Day Abundance Program",
+            "event_9_text": "<p>The Abundance Program comes to transform consciousness and open a field of infinite possibilities. Discover the impact of this program as told through the story of one Japanese client in this <a href=\"https://youtu.be/jv1OpuzIvdI?si=pFW1-VXDs2TCYx2M\" target=\"_blank\" title=\"https://youtu.be/jv1OpuzIvdI?si=pFW1-VXDs2TCYx2M\"><strong>video</strong></a>. </p>",
+            "event_9_image": "shopify://shop_images/4_416fd3d7-7d3a-46b3-b8b5-feadc506be7a.png",
+            "event_10_enabled": true,
+            "event_10_date": "1993",
+            "event_10_heading": "Published Energy Medicine: Healing from the Kingdoms of Nature",
+            "event_10_text": "<p>This repertory and reference <a href=\"https://pacificessences.com/products/energy-medicine-healing-from-the-kingdoms-of-nature-book\" title=\"https://pacificessences.com/products/energy-medicine-healing-from-the-kingdoms-of-nature-book\"><strong>manual</strong></a> is an essential tool for Essence practitioners, containing information on the healing qualities of individual Essences and the benefits of vibrational medicine. </p><p></p><p>1999 brought an expanded 2nd Edition with more Sea and Flower Essences, while 2007 welcomed translated texts in Japanese and French. It is now available in Portuguese and Spanish as well. </p>",
+            "event_10_image": "shopify://shop_images/Our_Story_Graphics_5.png",
+            "event_11_enabled": true,
+            "event_11_date": "1995",
+            "event_11_heading": "The Birth of Heart Spirit",
+            "event_11_text": "<p><a href=\"https://pacificessences.com/products/heart-spirit-essence\" title=\"https://pacificessences.com/products/heart-spirit-essence\"><strong>Heart Spirit</strong></a> is an Essence Combination that dissolves old heart pain and encourages us to embrace the spirit of the heart. Learn how a patient discovered this powerful Essence formula in this <a href=\"https://youtu.be/c25ezkZqREU?si=s2KyethBaGc4ZmjO\" target=\"_blank\" title=\"https://youtu.be/c25ezkZqREU?si=s2KyethBaGc4ZmjO\"><strong>video</strong></a>.</p>",
+            "event_11_image": "shopify://shop_images/Youtube_Thumbnails_1.png",
+            "event_12_enabled": true,
+            "event_12_date": "1995",
+            "event_12_heading": "First Energy Medicine® Practitioner Training",
+            "event_12_text": "<p>Pacific Essences offered the inaugural 'Circle of Healing' training for individuals wishing to incorporate Essences as a healing modality in their practice. This training has become a popular annual offering. </p>",
+            "event_13_enabled": true,
+            "event_13_date": "1996",
+            "event_13_heading": "New Sea Essences Introduced",
+            "event_13_text": "<p>These 12 new <a href=\"https://pacificessences.com/collections/sea-essences\" title=\"https://pacificessences.com/collections/sea-essences\"><strong>Sea Essences</strong></a> welcomed a new dimension of vibrational healing, each resonating with a particular meridian in Chinese Medicine.</p>",
+            "event_13_image": "shopify://shop_images/Our_Story_Graphics_6.png",
+            "event_14_enabled": false,
+            "event_14_date": "",
+            "event_14_heading": "",
+            "event_14_text": "",
+            "event_15_enabled": false,
+            "event_15_date": "",
+            "event_15_heading": "",
+            "event_15_text": "",
+            "event_16_enabled": false,
+            "event_16_date": "",
+            "event_16_heading": "",
+            "event_16_text": "",
+            "event_17_enabled": false,
+            "event_17_date": "",
+            "event_17_heading": "",
+            "event_17_text": "",
+            "event_18_enabled": false,
+            "event_18_date": "",
+            "event_18_heading": "",
+            "event_18_text": "",
+            "event_19_enabled": false,
+            "event_19_date": "",
+            "event_19_heading": "",
+            "event_19_text": "",
+            "event_20_enabled": false,
+            "event_20_date": "",
+            "event_20_heading": "",
+            "event_20_text": "",
+            "event_21_enabled": false,
+            "event_21_date": "",
+            "event_21_heading": "",
+            "event_21_text": "",
+            "event_22_enabled": false,
+            "event_22_date": "",
+            "event_22_heading": "",
+            "event_22_text": "",
+            "event_23_enabled": false,
+            "event_23_date": "",
+            "event_23_heading": "",
+            "event_23_text": "",
+            "event_24_enabled": false,
+            "event_24_date": "",
+            "event_24_heading": "",
+            "event_24_text": "",
+            "event_25_enabled": false,
+            "event_25_date": "",
+            "event_25_heading": "",
+            "event_25_text": "",
+            "event_26_enabled": false,
+            "event_26_date": "",
+            "event_26_heading": "",
+            "event_26_text": "",
+            "event_27_enabled": false,
+            "event_27_date": "",
+            "event_27_heading": "",
+            "event_27_text": "",
+            "event_28_enabled": false,
+            "event_28_date": "",
+            "event_28_heading": "",
+            "event_28_text": "",
+            "event_29_enabled": false,
+            "event_29_date": "",
+            "event_29_heading": "",
+            "event_29_text": "",
+            "event_30_enabled": false,
+            "event_30_date": "",
+            "event_30_heading": "",
+            "event_30_text": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_cc07af1_rTjpUj"
+      ],
+      "settings": {}
+    },
+    "1780947315939c904c": {
+      "type": "_blocks",
+      "settings": {}
+    },
+    "collection_list_mbrqUX": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_rYWX9z": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "flower-tree-essences"
+          }
+        },
+        "featured_collection_9U38iz": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "sea-essences"
+          }
+        },
+        "featured_collection_7wmTLk": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gem-and-crystal-essences"
+          }
+        },
+        "featured_collection_dWTA8a": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "goddess-essences"
+          }
+        },
+        "featured_collection_UdNpgA": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "flower-essence-combinations"
+          }
+        },
+        "featured_collection_qT3jBY": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "essences-for-animals"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_rYWX9z",
+        "featured_collection_9U38iz",
+        "featured_collection_7wmTLk",
+        "featured_collection_dWTA8a",
+        "featured_collection_UdNpgA",
+        "featured_collection_qT3jBY"
+      ],
+      "name": "t:sections.collection-list.presets.name",
+      "settings": {
+        "title": "Featured Collections",
+        "heading_size": "h1",
+        "image_ratio": "square",
+        "columns_desktop": 3,
+        "color_scheme": "",
+        "show_view_all": false,
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "image_with_text_wMVQYe",
+    "178094909861b4ddb0",
+    "1780947315939c904c",
+    "collection_list_mbrqUX"
+  ]
+}

@@ -1,0 +1,468 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "slideshow_Gpzwdz": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_fQt6Tg": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Optimal_Learning_-_Shopify_Banner_Image.png",
+            "image_overlay_opacity": 10,
+            "heading": "Optimal Learning",
+            "heading_size": "h2",
+            "subheading": "Igniting Our Cellular Intelligence",
+            "button_label": "READ MORE",
+            "link": "shopify://blogs/pacific-essences-blog/optimal-learning",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        },
+        "slide_rJb4Hp": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Pacific_Essences_Essential_Oils.jpg",
+            "image_overlay_opacity": 10,
+            "heading": "How Do Essences Work?",
+            "heading_size": "h1",
+            "subheading": "The body, mind and spirit connection.",
+            "button_label": "Learn More",
+            "link": "shopify://blogs/pacific-essences-blog/how-do-essences-work",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-5"
+          }
+        },
+        "slide_ffARQf": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Quiz_Promo_Shopify_Banner_Image.jpg",
+            "image_overlay_opacity": 10,
+            "heading": "Good Vibrations Quiz",
+            "heading_size": "h1",
+            "subheading": "Discover which Essence Combination is right for you!",
+            "button_label": "Take the Quiz",
+            "link": "shopify://pages/essence-combination-quiz",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-5"
+          }
+        }
+      },
+      "block_order": [
+        "slide_fQt6Tg",
+        "slide_rJb4Hp",
+        "slide_ffARQf"
+      ],
+      "custom_css": [
+        ".slideshow__media img {width: 100% !important; height: 100% !important; object-fit: cover !important;}",
+        ".banner__box {border-radius: 50px; background: rgba(255, 255, 255, 1) !important; padding: 12px 30px !important; margin: 0 25px !important;}",
+        "div#Slide-template--19587008921845__slideshow_Gpzwdz-1 > div:nth-of-type(2) > div {border-radius: 50px;}"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "medium",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 7,
+        "image_behavior": "ambient",
+        "show_text_below": false,
+        "accessibility_info": "Slideshow about our brand"
+      }
+    },
+    "essence_guide_GaLKeK": {
+      "type": "essence-guide",
+      "blocks": {
+        "petal_mTBd4R": {
+          "type": "petal",
+          "settings": {
+            "petal_image": "shopify://shop_images/Path_26_af961679-687a-42b9-8e50-b70041d52307.png",
+            "collection_link": "water",
+            "petal_label": "Experiencing fear, seeking courage"
+          }
+        },
+        "petal_cbrFwb": {
+          "type": "petal",
+          "settings": {
+            "petal_image": "shopify://shop_images/Path_25_2864f52f-b7ee-417e-adc7-615044053a5c.png",
+            "collection_link": "earth",
+            "petal_label": "Experiencing anxiety, seeking ease"
+          }
+        },
+        "petal_WUM77d": {
+          "type": "petal",
+          "settings": {
+            "petal_image": "shopify://shop_images/Path_27_0470fc26-c734-47f6-9b7b-17ed28808a62.png",
+            "collection_link": "metal",
+            "petal_label": "Experiencing grief, seeking gratitude"
+          }
+        },
+        "petal_FAFjnJ": {
+          "type": "petal",
+          "settings": {
+            "petal_image": "shopify://shop_images/Path_24_e8c43d8e-9057-41f4-9905-db6a8f693de0.png",
+            "collection_link": "fire",
+            "petal_label": "Experiencing trauma, seeking joy"
+          }
+        },
+        "petal_yDwBtb": {
+          "type": "petal",
+          "settings": {
+            "petal_image": "shopify://shop_images/Path_28_2ee20a53-0c2c-414c-a2d2-352b4e49b957.png",
+            "collection_link": "wood",
+            "petal_label": "Experiencing anger, seeking creativity"
+          }
+        }
+      },
+      "block_order": [
+        "petal_mTBd4R",
+        "petal_cbrFwb",
+        "petal_WUM77d",
+        "petal_FAFjnJ",
+        "petal_yDwBtb"
+      ],
+      "custom_css": [
+        ".eg-title {font-size: 4.7rem !important; font-weight: bold; background: linear-gradient(90deg, #5dbdfc, #975af2, #f45dfc); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;}",
+        ".eg-sub {color: #666666; font-size: 20px;}",
+        ".flower-menu-wrapper .flower-menu__subtitle {color: #666666; font-size: 20px;}",
+        ".flower-menu-wrapper .title-wrapper-with-link {flex-direction: column; gap: 1rem; justify-content: center !important; text-align: center;}"
+      ],
+      "name": "Essence guide",
+      "settings": {
+        "title": "How are you feeling?",
+        "subtitle": "<p>Tell the Essence Guide in your own words, and it will help you find the right essence.</p>",
+        "heading_size": "h1",
+        "endpoint": "/apps/essence-chat/chat-v2",
+        "placeholder": "I'm feeling...",
+        "accent": "#2a87b9",
+        "glow_color": "#43a6db",
+        "glow_strength": 45,
+        "chat_height": 0,
+        "type_effect": true,
+        "type_speed": 55,
+        "type_hold": 1600,
+        "show_seam": true,
+        "seam_label": "or point to what fits",
+        "seam_text_size": 15,
+        "seam_line_width": 3,
+        "seam_color": "#2a87b9",
+        "seam_text_color": "#4d7387",
+        "seam_length": 26,
+        "flower_title": "",
+        "flower_subtitle": "<p>You can also select one of the petals for a curated list of Essences!</p>",
+        "section_height": 1000,
+        "flower_text_gap": 32,
+        "centerpiece_image": "shopify://shop_images/Ellipse_40.png",
+        "petal_text_color": "#16242c",
+        "petal_text_size": 11,
+        "petal_text_min": 11,
+        "animate": true,
+        "anim_trigger": 80,
+        "anim_speed": 80,
+        "gap": 32,
+        "color_scheme": "scheme-1",
+        "band_start": "#f7fbfd",
+        "band_end": "#f2f8f5",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "custom_flower_menu_VNqmpa": {
+      "type": "custom-flower-menu",
+      "blocks": {
+        "petal_mTBd4R": {
+          "type": "petal",
+          "settings": {
+            "petal_image": "shopify://shop_images/Group_152.png",
+            "collection_link": "water",
+            "image_width": 190
+          }
+        },
+        "petal_cbrFwb": {
+          "type": "petal",
+          "settings": {
+            "petal_image": "shopify://shop_images/Group_132.png",
+            "collection_link": "earth",
+            "image_width": 230
+          }
+        },
+        "petal_WUM77d": {
+          "type": "petal",
+          "settings": {
+            "petal_image": "shopify://shop_images/Group_142.png",
+            "collection_link": "metal",
+            "image_width": 190
+          }
+        },
+        "petal_FAFjnJ": {
+          "type": "petal",
+          "settings": {
+            "petal_image": "shopify://shop_images/Group_122.png",
+            "collection_link": "fire",
+            "image_width": 160
+          }
+        },
+        "petal_yDwBtb": {
+          "type": "petal",
+          "settings": {
+            "petal_image": "shopify://shop_images/Group_1132.png",
+            "collection_link": "wood",
+            "image_width": 230
+          }
+        }
+      },
+      "block_order": [
+        "petal_mTBd4R",
+        "petal_cbrFwb",
+        "petal_WUM77d",
+        "petal_FAFjnJ",
+        "petal_yDwBtb"
+      ],
+      "disabled": true,
+      "custom_css": [
+        ".flower-menu-wrapper .title-wrapper-with-link {flex-direction: column; gap: 1rem; justify-content: center !important; text-align: center; margin-top: -150px; margin-bottom: 50px;}",
+        ".flower-menu-wrapper .title {font-size: 4.7rem !important;}",
+        ".flower-menu-wrapper .flower-menu__subtitle {color: #666666; font-size: 20px;}",
+        ".title-wrapper-with-link .title {color: #5dbdfc; font-weight: bold; background: linear-gradient(90deg, #5dbdfc, #975af2, #f45dfc); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;}"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "section_height": 1000,
+        "title": "How are you feeling?",
+        "subtitle": "<p>Not sure where to start? Select one of the petals below for a curated list of Essences!</p>",
+        "centerpiece_image": "shopify://shop_images/Ellipse_40.png"
+      }
+    },
+    "image_with_text_7XwEaf": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_EmLYp4": {
+          "type": "heading",
+          "settings": {
+            "heading": "<strong>Celebrate Mother's Day with Us!</strong>",
+            "heading_size": "h2"
+          }
+        },
+        "text_4LTc7C": {
+          "type": "text",
+          "settings": {
+            "text": "<p>May is the month where we celebrate Mother energy in all its forms. Consider <strong>gifting your mum (or a special mother figure in your life) a Pacific Essences Gift Certificate for Mother’s Day!</strong></p>",
+            "text_style": "body"
+          }
+        },
+        "button_FwwAU8": {
+          "type": "button",
+          "settings": {
+            "button_label": "SHOP | Gift Certificates",
+            "button_link": "shopify://products/pacific-essences-gift-card",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_EmLYp4",
+        "text_4LTc7C",
+        "button_FwwAU8"
+      ],
+      "disabled": true,
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/PE_GC_-_Mother_s_Day.png",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "image_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "scheme-5",
+        "color_scheme": "",
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    },
+    "image_with_text_TwygQK": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_zMgw6W": {
+          "type": "heading",
+          "settings": {
+            "heading": "Come to Magic School!",
+            "heading_size": "h1"
+          }
+        },
+        "text_dqHcpk": {
+          "type": "text",
+          "settings": {
+            "text": "<p>We are thrilled to offer a <strong>seven-night retreat in May 2026</strong> to explore the five elements of traditional Chinese medicine, and the flower and sea Essences which resonate with them. </p><p>This retreat also provides training for participants to become Energy Medicine® Practitioners if they choose. Our course is approved for <strong>50 CEUs by the NCCAOM</strong> for Acupuncture and Oriental Medicine Practitioners.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_CTANXg": {
+          "type": "button",
+          "settings": {
+            "button_label": "LEARN MORE | REGISTER NOW",
+            "button_link": "shopify://pages/retreat",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_zMgw6W",
+        "text_dqHcpk",
+        "button_CTANXg"
+      ],
+      "disabled": true,
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/5_Elements_Retreat_-_Website_Homepage.png",
+        "height": "medium",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_collection_NGddmY": {
+      "type": "featured-collection",
+      "custom_css": [
+        "h2 {text-align: center; font-weight: bold; background: linear-gradient( 100deg, #830af5, #ffbff2 ); /* Use the background to \"clip\" the text, making the text itself the gradient */ -webkit-background-clip: text; background-clip: text; /* Make the original text color transparent so the background shows through */ -webkit-text-fill-color: transparent; font-weight: bold;}",
+        ".button:after {box-shadow: none !important; box-color: #559edb !important;}"
+      ],
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "specials",
+        "products_to_show": 3,
+        "title": "SHOP NOW | Monthly Specials",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 3,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-3d21394a-8fd5-4ac8-9186-b4d08632972e",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_blog_fC9Xh7": {
+      "type": "featured-blog",
+      "custom_css": [
+        ".title-wrapper-with-link {justify-content: center;}"
+      ],
+      "name": "t:sections.featured-blog.presets.name",
+      "settings": {
+        "blog": "pacific-essences-blog",
+        "post_limit": 3,
+        "heading": "Wisdom from Pacific Essences",
+        "heading_size": "h1",
+        "columns_desktop": 3,
+        "show_view_all": true,
+        "show_image": true,
+        "show_date": true,
+        "show_author": false,
+        "color_scheme": "scheme-5",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "17876670097e2973bc": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_2aeb56d_cJbGVX": {
+          "type": "ai_gen_block_2aeb56d",
+          "settings": {
+            "eyebrow": "Specials",
+            "month_label": "",
+            "headline": "<strong>Monthly Specials!</strong>",
+            "message": "<p>Checkout our specials for this month!</p>",
+            "button_label": "Shop Specials",
+            "button_url": "shopify://collections/specials",
+            "delay_seconds": 45,
+            "cookie_days": 15,
+            "modal_width": 500,
+            "padding": 40,
+            "border_radius": 20,
+            "background_color": "#ffffff",
+            "text_color": "#121212",
+            "message_color": "#000000",
+            "overlay_opacity": 0.1,
+            "overlay_blur": 3,
+            "panel_width": 158,
+            "panel_color_start": "#fe93e8",
+            "panel_color_end": "#2a87b9",
+            "panel_text_color": "#ffffff",
+            "month_size": 20,
+            "headline_size": 28,
+            "message_size": 16,
+            "button_size": 16,
+            "button_uppercase": true,
+            "button_radius": 20,
+            "button_color": "#2a87b9",
+            "button_hover_color": "#1f6a94",
+            "button_text_color": "#ffffff"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_2aeb56d_cJbGVX"
+      ],
+      "settings": {}
+    },
+    "random_card_selector_XrXiM4": {
+      "type": "random-card-selector",
+      "name": "t:sections.random_card_selector.name",
+      "settings": {}
+    }
+  },
+  "order": [
+    "slideshow_Gpzwdz",
+    "essence_guide_GaLKeK",
+    "custom_flower_menu_VNqmpa",
+    "image_with_text_7XwEaf",
+    "image_with_text_TwygQK",
+    "featured_collection_NGddmY",
+    "featured_blog_fC9Xh7",
+    "17876670097e2973bc",
+    "random_card_selector_XrXiM4"
+  ]
+}

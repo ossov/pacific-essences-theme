@@ -1,0 +1,126 @@
+<link rel="stylesheet" href="{{ 'custom-flower-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<div class="flower-menu-wrapper color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width">
+    {%- if section.settings.title != blank -%}
+      <div class="title-wrapper-with-link title-wrapper--self-padded-tablet-down">
+        <h2 class="title {{ section.settings.heading_size }}">
+          {{ section.settings.title | escape }}
+        </h2>
+        {%- if section.settings.subtitle != blank -%}
+          <div class="flower-menu__subtitle rte">
+            {{ section.settings.subtitle }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <div class="flower-menu__container" style="--section-height: {{ section.settings.section_height }}px;">
+      {%- for block in section.blocks -%}
+        <div class="flower-menu__petal petal--{{ forloop.index }}">
+          <a href="{{ block.settings.collection_link.url | default: '#' }}" class="flower-menu__link">
+            {%- if block.settings.petal_image != blank -%}
+              <img
+                src="{{ block.settings.petal_image | image_url: width: 400 }}"
+                alt="{{ block.settings.petal_image.alt | escape }}"
+                width="{{ block.settings.image_width }}"
+              >
+            {%- else -%}
+              <div class="placeholder-image" style="width: {{ block.settings.image_width }}px; height: auto;">
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+            {%- endif -%}
+          </a>
+        </div>
+      {%- endfor -%}
+
+      {%- if section.settings.centerpiece_image != blank -%}
+        <div class="flower-menu__centerpiece">
+          <img
+            src="{{ section.settings.centerpiece_image | image_url: width: 300 }}"
+            alt="{{ section.settings.centerpiece_image.alt | escape }}"
+            width="150"
+          >
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Flower Menu",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "min": 200,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "label": "Section height",
+      "default": 500
+    },
+
+    {
+  "type": "text",
+  "id": "title",
+  "label": "Heading",
+  "default": "Our Essences"
+    },
+
+    {
+  "type": "richtext",
+  "id": "subtitle",
+  "label": "Sub-heading"
+    },
+    
+    {
+      "type": "image_picker",
+      "id": "centerpiece_image",
+      "label": "Centerpiece Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "petal",
+      "name": "Petal",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "petal_image",
+          "label": "Petal Image"
+        },
+        {
+          "type": "collection",
+          "id": "collection_link",
+          "label": "Collection Link"
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "min": 50,
+          "max": 500,
+          "step": 10,
+          "unit": "px",
+          "label": "Image Width",
+          "default": 200
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Flower Menu"
+    }
+  ]
+}
+{% endschema %}

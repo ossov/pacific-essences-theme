@@ -1,0 +1,33 @@
+{%- liquid
+  assign header_image = collection.metafields.custom.collection_image.value
+-%}
+
+{%- if header_image != blank -%}
+  <div class="collection-header-image__wrapper section-{{ section.id }}-padding">
+    <div class="page-width">
+      <img 
+        src="{{ header_image | image_url: width: 1600 }}"
+        sizes="(min-width: 750px) 50vw, 100vw"
+        alt="{{ header_image.alt | default: collection.title | escape }}"
+        loading="lazy"
+        width="{{ header_image.width }}"
+        height="{{ header_image.height }}"
+        style="width: 100%; height: auto; border-radius: 12px;"
+      >
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Collection Header Image",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Collection Header Image"
+    }
+  ]
+}
+{% endschema %}

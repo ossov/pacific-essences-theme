@@ -1,0 +1,144 @@
+.flower-menu-wrapper {
+  padding: 15rem 0;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+  margin-top: 5rem; /* This is the line that pushes the section down */
+}
+
+.flower-menu__container {
+  height: 460px !important;
+  width: 460px !important;
+  margin: 0 auto;
+  position: relative;
+  margin-bottom: -100px;
+}
+
+.flower-menu__petal {
+  position: absolute;
+  transition: transform 0.3s ease;
+}
+
+.flower-menu__petal:hover {
+  transform: scale(1.05);
+}
+
+/* Add this new rule to fix inconsistent image sizes */
+.flower-menu__link img {
+  max-width: none; /* This overrides the theme's default responsive style */
+}
+
+/* --- Positioning for each petal --- */
+/* You can adjust these top/left/right/bottom values to perfect the layout */
+
+/* Blue Petal */
+.petal--1 {
+  top: 231px;
+  left: 45px;
+  clip-path: polygon(54% 14%, 100% 0, 100% 27%, 93% 62%, 77% 93%, 61% 100%, 35% 100%, 1% 78%, 0 56%, 13% 38%);
+}
+
+/* Yellow Petal */
+.petal--2 {
+  top: 100px;
+  left: 220px;
+  clip-path: polygon(56% 1%, 81% 0, 98% 26%, 100% 73%, 91% 100%, 43% 100%, 29% 98%, 0 86%, 7% 67%, 22% 37%);
+}
+
+/* Purple Petal */
+.petal--3 {
+  top: 241px;
+  left: 225px;
+  clip-path: polygon(34% 6%, 79% 24%, 99% 43%, 100% 68%, 78% 94%, 59% 100%, 39% 99%, 17% 75%, 5% 39%, 0 0);
+}
+
+/* Red Petal */
+.petal--4 {
+  top: -20px;
+  left: 155px;
+  clip-path: polygon(39% 0, 100% 0, 100% 38%, 73% 79%, 61% 88%, 43% 100%, 28% 86%, 19% 74%, 0 44%, 0 0);
+}
+
+/* Green Petal */
+.petal--5 {
+  top: 86px;
+  left: 1px;
+  clip-path: polygon(28% 0, 50% 6%, 76% 39%, 100% 81%, 100% 93%, 50% 100%, 27% 100%, 1% 88%, 0 44%, 8% 7%);
+}
+
+.flower-menu__centerpiece {
+  position: absolute;
+  top: 150px;
+  left: 158px;
+  z-index: 2; /* This ensures it sits on top of the petals */
+}
+
+/* =================================================================== */
+/* FLOWER MENU - MOBILE STYLES (STATIC PIXEL POSITIONING)            */
+/* =================================================================== */
+
+@media screen and (max-width: 749px) {
+
+  /* 1. Sets the static size of our canvas */
+  .flower-menu__container {
+    width: 360px !important;
+    height: 360px !important;
+    margin: 0 auto !important; /* Centers the canvas */
+    margin-bottom: -100px !important;
+  }
+
+  /* 2. Set static pixel positions for each petal */
+  /* These are starting points - you will need to adjust them */
+/* Blue Petal */
+  .petal--1 {
+    top: 169px !important;
+    left: 36px !important;
+  }
+/* Yellow Petal */
+  .petal--2 {
+    top: 69px !important;
+    left: 174px !important; /* Centered in a 320px box */
+  }
+/* Purple Petal */
+  .petal--3 {
+    top: 174px !important;
+    left: 175px !important; /* Important to reset 'left' when using 'right' */
+  }
+/* Red Petal */
+  .petal--4 {
+    top: -10px !important;
+    left: 119px !important;
+  }
+/* Green Petal */
+  .petal--5 {
+    top: 68px !important;
+    left: 5px !important;
+  }
+
+  .flower-menu__centerpiece {
+    top: 121px !important;
+    left: 132px !important; /* (320px - 75px) / 2 */
+    z-index: 2 !important;
+  }
+
+  .flower-menu__centerpiece img {
+    width: 90px !important;
+  }
+
+  /* --- MANUAL SIZING FOR EACH PETAL ON MOBILE --- */
+/* Add this block inside your @media (max-width: 749px) rule */
+
+.petal--1 img {
+  width: 145px !important; /* Adjust size for petal 1 */
+}
+.petal--2 img {
+  width: 180px !important; /* Adjust size for petal 2 */
+}
+.petal--3 img {
+  width: 148px !important; /* Adjust size for petal 3 */
+}
+.petal--4 img {
+  width: 120px !important; /* Adjust size for petal 4 */
+}
+.petal--5 img {
+  width: 169px !important; /* Adjust size for petal 5 */
+}
+}

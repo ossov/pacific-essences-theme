@@ -1,0 +1,77 @@
+{%- assign images = product.metafields.custom.combination_alternate_images.value -%}
+{%- if images != blank -%}
+<div class="gallery-12-container">
+  <div class="gallery-12-grid">
+    {%- for image in images limit: 12 -%}
+      <div class="gallery-12-item">
+        <img src="{{ image | img_url: '400x' }}" 
+             loading="lazy"
+             width="400"
+             height="{{ 400 | divided_by: image.aspect_ratio | round }}"
+             alt="{{ image.alt | escape }}">
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+<style>
+  .gallery-12-container {
+    max-width: 1400px;
+    margin: 60px auto;
+    padding: 0 20px;
+  }
+
+  .gallery-12-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 325px)); /* ONLY CHANGED LINE */
+    justify-content: center;
+    gap: 20px;
+  }
+
+  /* Keep ALL other existing rules exactly the same */
+  .gallery-12-item {
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    position: relative;
+    border-radius: 4px;
+  }
+
+  .gallery-12-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  /* Tablet */
+  @media (max-width: 1200px) {
+    .gallery-12-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 750px) {
+    .gallery-12-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(6, minmax(0, 1fr));
+      gap: 15px;
+    }
+  }
+</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "12-Image Product Gallery",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "12-Image Product Gallery"
+    }
+  ]
+}
+{% endschema %}

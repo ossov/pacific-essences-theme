@@ -1,0 +1,1522 @@
+{% doc %}
+  @prompt
+    Create a timeline layout where we can highlight key moments in our business journey from past to present-day, with options to include a key image beside each timeline point alternating sides of the page, as well as a date field, header field, and paragraph text that accepts rich text including hyperlinks. There should be at least 30 timeline event entries possible, that can be turned inactive if not needed, and the timeline should be fully customizable in terms of font size and color., Add a customizable Title field to the very top of the timeline
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-timeline-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding }}px 20px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-timeline-main-title-{{ ai_gen_id }} {
+    text-align: {{ block.settings.title_alignment }};
+    font-size: {{ block.settings.title_font_size }}px;
+    color: {{ block.settings.title_color }};
+    font-weight: 700;
+    margin: 0 0 {{ block.settings.title_bottom_spacing }}px 0;
+    line-height: 1.2;
+  }
+
+  .ai-timeline-container-{{ ai_gen_id }} {
+    position: relative;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-timeline-line-{{ ai_gen_id }} {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: {{ block.settings.line_width }}px;
+    background-color: {{ block.settings.line_color }};
+    transform: translateX(-50%);
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }} {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: {{ block.settings.item_spacing }}px;
+    gap: {{ block.settings.content_gap }}px;
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }}:last-child {
+    margin-bottom: 0;
+  }
+
+  .ai-timeline-item-left-{{ ai_gen_id }} {
+    flex-direction: row-reverse;
+  }
+
+  .ai-timeline-item-right-{{ ai_gen_id }} {
+    flex-direction: row;
+  }
+
+  .ai-timeline-content-{{ ai_gen_id }} {
+    flex: 1;
+    padding: {{ block.settings.content_padding }}px;
+    background-color: {{ block.settings.content_bg_color }};
+    border-radius: {{ block.settings.content_border_radius }}px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-timeline-item-left-{{ ai_gen_id }} .ai-timeline-content-{{ ai_gen_id }} {
+    text-align: right;
+  }
+
+  .ai-timeline-item-right-{{ ai_gen_id }} .ai-timeline-content-{{ ai_gen_id }} {
+    text-align: left;
+  }
+
+  .ai-timeline-date-{{ ai_gen_id }} {
+    font-size: {{ block.settings.date_font_size }}px;
+    color: {{ block.settings.date_color }};
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .ai-timeline-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_font_size }}px;
+    color: {{ block.settings.heading_color }};
+    font-weight: 700;
+    margin: 0 0 12px 0;
+    line-height: 1.3;
+  }
+
+  .ai-timeline-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.text_font_size }}px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .ai-timeline-text-{{ ai_gen_id }} a {
+    color: {{ block.settings.link_color }};
+    text-decoration: underline;
+  }
+
+  .ai-timeline-text-{{ ai_gen_id }} a:hover {
+    color: {{ block.settings.link_hover_color }};
+  }
+
+  .ai-timeline-dot-{{ ai_gen_id }} {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: {{ block.settings.dot_size }}px;
+    height: {{ block.settings.dot_size }}px;
+    background-color: {{ block.settings.dot_color }};
+    border: {{ block.settings.dot_border_width }}px solid {{ block.settings.dot_border_color }};
+    border-radius: 50%;
+    z-index: 2;
+  }
+
+  .ai-timeline-image-{{ ai_gen_id }} {
+    flex: 0 0 {{ block.settings.image_width }}px;
+    width: {{ block.settings.image_width }}px;
+    height: {{ block.settings.image_height }}px;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    overflow: hidden;
+  }
+
+  .ai-timeline-image-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-timeline-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-timeline-image-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-timeline-main-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_font_size | times: 0.8 }}px;
+    }
+
+    .ai-timeline-line-{{ ai_gen_id }} {
+      left: 20px;
+    }
+
+    .ai-timeline-item-{{ ai_gen_id }},
+    .ai-timeline-item-left-{{ ai_gen_id }},
+    .ai-timeline-item-right-{{ ai_gen_id }} {
+      flex-direction: column;
+      align-items: flex-start;
+      padding-left: 50px;
+    }
+
+    .ai-timeline-content-{{ ai_gen_id }},
+    .ai-timeline-item-left-{{ ai_gen_id }} .ai-timeline-content-{{ ai_gen_id }},
+    .ai-timeline-item-right-{{ ai_gen_id }} .ai-timeline-content-{{ ai_gen_id }} {
+      text-align: left;
+    }
+
+    .ai-timeline-dot-{{ ai_gen_id }} {
+      left: 20px;
+      top: 30px;
+    }
+
+    .ai-timeline-image-{{ ai_gen_id }} {
+      width: 100%;
+      flex: 1 1 auto;
+    }
+
+    .ai-timeline-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_font_size | times: 0.85 }}px;
+    }
+
+    .ai-timeline-date-{{ ai_gen_id }} {
+      font-size: {{ block.settings.date_font_size | times: 0.9 }}px;
+    }
+
+    .ai-timeline-text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_font_size | times: 0.9 }}px;
+    }
+  }
+{% endstyle %}
+
+<business-timeline-{{ ai_gen_id }} class="ai-timeline-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.main_title != blank %}
+    <h2 class="ai-timeline-main-title-{{ ai_gen_id }}">{{ block.settings.main_title }}</h2>
+  {% endif %}
+
+  <div class="ai-timeline-container-{{ ai_gen_id }}">
+    <div class="ai-timeline-line-{{ ai_gen_id }}"></div>
+
+    {% for i in (1..30) %}
+      {% liquid
+        assign enabled_key = 'event_' | append: i | append: '_enabled'
+        assign date_key = 'event_' | append: i | append: '_date'
+        assign heading_key = 'event_' | append: i | append: '_heading'
+        assign text_key = 'event_' | append: i | append: '_text'
+        assign image_key = 'event_' | append: i | append: '_image'
+
+        assign enabled = block.settings[enabled_key]
+        assign date = block.settings[date_key]
+        assign heading = block.settings[heading_key]
+        assign text = block.settings[text_key]
+        assign image = block.settings[image_key]
+
+        assign remainder = i | modulo: 2
+        if remainder == 1
+          assign position = 'left'
+        else
+          assign position = 'right'
+        endif
+      %}
+
+      {% if enabled %}
+        <div class="ai-timeline-item-{{ ai_gen_id }} ai-timeline-item-{{ position }}-{{ ai_gen_id }}">
+          <div class="ai-timeline-content-{{ ai_gen_id }}">
+            {% if date != blank %}
+              <div class="ai-timeline-date-{{ ai_gen_id }}">{{ date }}</div>
+            {% endif %}
+
+            {% if heading != blank %}
+              <h3 class="ai-timeline-heading-{{ ai_gen_id }}">{{ heading }}</h3>
+            {% endif %}
+
+            {% if text != blank %}
+              <div class="ai-timeline-text-{{ ai_gen_id }}">{{ text }}</div>
+            {% endif %}
+          </div>
+
+          <div class="ai-timeline-dot-{{ ai_gen_id }}"></div>
+
+          <div class="ai-timeline-image-{{ ai_gen_id }}">
+            {% if image %}
+              <img
+                src="{{ image | image_url: width: 800 }}"
+                alt="{{ heading | escape }}"
+                loading="lazy"
+                width="{{ block.settings.image_width }}"
+                height="{{ block.settings.image_height }}"
+              >
+            {% else %}
+              <div class="ai-timeline-image-placeholder-{{ ai_gen_id }}">
+                {{ 'image' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</business-timeline-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class BusinessTimeline{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.adjustTimelineHeight();
+      }
+
+      adjustTimelineHeight() {
+        const line = this.querySelector('.ai-timeline-line-{{ ai_gen_id }}');
+        const items = this.querySelectorAll('.ai-timeline-item-{{ ai_gen_id }}');
+        
+        if (items.length > 0 && line) {
+          const firstItem = items[0];
+          const lastItem = items[items.length - 1];
+          const containerRect = this.querySelector('.ai-timeline-container-{{ ai_gen_id }}').getBoundingClientRect();
+          const firstRect = firstItem.getBoundingClientRect();
+          const lastRect = lastItem.getBoundingClientRect();
+          
+          const topOffset = firstRect.top - containerRect.top + 30;
+          const bottomOffset = lastRect.bottom - containerRect.top - 30;
+          
+          line.style.top = topOffset + 'px';
+          line.style.bottom = 'auto';
+          line.style.height = (bottomOffset - topOffset) + 'px';
+        }
+      }
+    }
+
+    customElements.define('business-timeline-{{ ai_gen_id }}', BusinessTimeline{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Business timeline",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Main title"
+    },
+    {
+      "type": "text",
+      "id": "main_title",
+      "label": "Title"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Font size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#121212"
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "title_bottom_spacing",
+      "label": "Bottom spacing",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 800,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "label": "Space between items",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "content_gap",
+      "label": "Gap between content and image",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "content_bg_color",
+      "label": "Content background",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Timeline line",
+      "default": "#2a87b9"
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Timeline dot",
+      "default": "#2a87b9"
+    },
+    {
+      "type": "color",
+      "id": "dot_border_color",
+      "label": "Dot border",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Timeline line"
+    },
+    {
+      "type": "range",
+      "id": "line_width",
+      "label": "Line width",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "dot_size",
+      "label": "Dot size",
+      "min": 10,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "dot_border_width",
+      "label": "Dot border width",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "unit": "px",
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Content box"
+    },
+    {
+      "type": "range",
+      "id": "content_padding",
+      "label": "Content padding",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "content_border_radius",
+      "label": "Content border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Image width",
+      "min": 200,
+      "max": 500,
+      "step": 20,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Image height",
+      "min": 150,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "label": "Image border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Date typography"
+    },
+    {
+      "type": "range",
+      "id": "date_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "date_color",
+      "label": "Color",
+      "default": "#2a87b9"
+    },
+    {
+      "type": "header",
+      "content": "Heading typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Font size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Text typography"
+    },
+    {
+      "type": "range",
+      "id": "text_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#2a87b9"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Link hover color",
+      "default": "#1a5f7f"
+    },
+    {
+      "type": "header",
+      "content": "Event 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_1_enabled",
+      "label": "Enable event 1",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "event_1_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_1_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_1_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_2_enabled",
+      "label": "Enable event 2",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "event_2_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_2_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_2_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_3_enabled",
+      "label": "Enable event 3",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "event_3_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_3_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_3_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_4_enabled",
+      "label": "Enable event 4",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_4_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_4_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_4_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_5_enabled",
+      "label": "Enable event 5",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_5_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_5_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_5_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_6_enabled",
+      "label": "Enable event 6",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_6_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_6_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_6_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 7"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_7_enabled",
+      "label": "Enable event 7",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_7_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_7_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_7_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_7_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 8"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_8_enabled",
+      "label": "Enable event 8",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_8_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_8_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_8_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_8_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 9"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_9_enabled",
+      "label": "Enable event 9",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_9_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_9_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_9_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_9_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 10"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_10_enabled",
+      "label": "Enable event 10",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_10_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_10_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_10_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_10_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 11"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_11_enabled",
+      "label": "Enable event 11",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_11_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_11_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_11_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_11_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 12"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_12_enabled",
+      "label": "Enable event 12",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_12_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_12_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_12_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_12_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 13"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_13_enabled",
+      "label": "Enable event 13",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_13_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_13_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_13_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_13_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 14"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_14_enabled",
+      "label": "Enable event 14",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_14_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_14_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_14_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_14_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 15"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_15_enabled",
+      "label": "Enable event 15",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_15_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_15_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_15_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_15_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 16"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_16_enabled",
+      "label": "Enable event 16",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_16_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_16_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_16_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_16_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 17"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_17_enabled",
+      "label": "Enable event 17",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_17_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_17_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_17_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_17_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 18"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_18_enabled",
+      "label": "Enable event 18",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_18_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_18_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_18_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_18_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 19"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_19_enabled",
+      "label": "Enable event 19",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_19_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_19_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_19_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_19_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 20"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_20_enabled",
+      "label": "Enable event 20",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_20_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_20_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_20_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_20_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 21"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_21_enabled",
+      "label": "Enable event 21",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_21_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_21_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_21_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_21_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 22"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_22_enabled",
+      "label": "Enable event 22",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_22_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_22_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_22_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_22_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 23"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_23_enabled",
+      "label": "Enable event 23",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_23_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_23_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_23_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_23_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 24"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_24_enabled",
+      "label": "Enable event 24",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_24_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_24_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_24_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_24_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 25"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_25_enabled",
+      "label": "Enable event 25",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_25_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_25_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_25_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_25_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 26"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_26_enabled",
+      "label": "Enable event 26",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_26_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_26_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_26_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_26_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 27"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_27_enabled",
+      "label": "Enable event 27",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_27_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_27_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_27_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_27_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 28"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_28_enabled",
+      "label": "Enable event 28",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_28_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_28_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_28_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_28_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 29"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_29_enabled",
+      "label": "Enable event 29",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_29_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_29_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_29_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_29_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Event 30"
+    },
+    {
+      "type": "checkbox",
+      "id": "event_30_enabled",
+      "label": "Enable event 30",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "event_30_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "event_30_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "event_30_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "event_30_image",
+      "label": "Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Business timeline"
+    }
+  ]
+}
+{% endschema %}

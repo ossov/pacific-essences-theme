@@ -1,0 +1,687 @@
+/* --- FINAL Responsive Grid Layout --- */
+@media screen and (min-width: 750px) {
+  .product.grid--3-col-tablet {
+    display: grid;
+    /* Use flexible fr units instead of percentages */
+    grid-template-columns: 3fr 3fr 3fr; 
+    margin: 0 auto;
+    align-items: center;
+    justify-items: center;
+
+    /* Set a small base gap between all columns */
+    column-gap: 20px; 
+  }
+}
+
+/* Final fix to remove the gap above the product image */
+.product__media-wrapper .product__media {
+  padding-top: 0 !important;
+  align-items: center !important;
+} /* Aggressively removes any border, outline, or shadow from the product image gallery and everything inside it. */
+.product__media-wrapper * {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* --- Custom Quantity & Price Button (Simplified Control) --- */
+
+/* 1. The main blue pill container 
+      THIS IS YOUR MASTER HEIGHT CONTROL */
+.custom-quantity-price-wrapper {
+  display: flex;
+  align-items: center; /* This keeps content vertically centered */
+  height: 55px;      /* <--- MASTER HEIGHT. Adjust this one value. */
+  width: 230px;
+  background-color: #2A87B9;
+  border-radius: 30px;
+  padding: 0 10px;   /* We now only need left/right padding */
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: none !important;
+}
+
+/* 2. The Price Text */
+.custom-quantity-price-wrapper .price__container .price-item {
+  position: relative; /* <--- Add this line */
+  top: 2px;           /* <--- And this line to nudge it down (adjust as needed) */
+
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin: 0;
+  padding-right: 16px;
+  padding-left: 7px;
+}
+
+/* 3. The inner white pill for the quantity selector */
+.custom-quantity-price-wrapper .custom-quantity {
+  position: relative; /* <-- Add this line */
+  top: 6px;           /* <-- And this line to nudge it down */
+
+  box-sizing: border-box !important; 
+  display: flex !important;
+  align-items: center !important;
+  height: 1px !important;
+  width: 120px !important;
+  justify-content: center !important;
+  background-color: white !important;
+  border-radius: 30px !important;
+  padding: 0 10px !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* 4. The quantity text input */
+.custom-quantity-price-wrapper .custom-quantity__input {
+  height: 100% !important;
+  width: 25px !important;
+  border: none !important;
+  background: transparent !important;
+  text-align: center !important;
+  padding: 0 !important;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  font-size: 2rem !important;
+  font-weight: 600 !important;
+  color: #2A87B9 !important;
+}
+
+/* 5. The plus and minus buttons */
+.custom-quantity-price-wrapper .custom-quantity__button {
+  height: 100% !important;
+  width: auto !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 2.5rem !important;
+  font-weight: 1000 !important;
+  color: #2A87B9 !important;
+}
+
+/* Hides the default "Quantity" label */
+.custom-quantity-price-wrapper .quantity__label {
+  display: none;
+}
+
+/* Allow the product title to use the full width of its column AND prevent unnatural word wrapping */
+.product__info-wrapper-left .product__title {
+  max-width: 375px;
+  width: 100%;
+  word-break: normal !important; /* This is the magic line */
+  padding-right: 10px;
+  margin-top: 0px;
+  margin-left: 10px;
+  font-size: 5rem;
+  color: #000000;
+  text-align: center;
+  line-height: 1;
+}
+
+.product-type {
+  font-size: 3rem;
+  color: #6a6a6a;
+  text-align: center;
+  line-height: 1.2;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+/* --- Custom Add to Cart Button Styling --- */
+
+/* --- Custom Add to Cart Button Styling --- */
+
+/* Targets the main 'Add to cart' button in our new column */
+.product__info-wrapper .product-form__submit {
+  /* Sizing and Spacing */
+  display: flex;
+  width: 100%;
+  padding: 1px 1px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+
+  /* Colors and Border */
+  background-color: transparent;
+  border: 3px solid #2A87B9;
+  color: #2A87B9;
+  box-shadow: none; /* <-- Add this line to remove the shadow */
+
+  /* Shape and Text */
+  border-radius: 30px;
+  font-size: 1.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Also remove the default shadow from the quantity selector's white pill */
+.custom-quantity-price-wrapper .quantity {
+  box-shadow: none;
+}
+
+/*
+  Final Fix: This hides the "ghost" pseudo-elements that the theme
+  uses to create the rectangular shadow effect behind the buttons.
+*/
+.product__info-wrapper .button::before,
+.product__info-wrapper .button::after {
+  display: none !important;
+}
+
+/* This defines the custom hover effect for the 'Add to cart' button */
+.product__info-wrapper .product-form__submit:hover {
+  background-color: #2A87B9; /* The button fills with blue */
+  color: white;              /* The text turns white */
+}
+
+/* --- Fine-tuning for Vertical Alignment (v2) --- */
+
+/* This targets the plus/minus buttons and the number input */
+.custom-quantity-price-wrapper .quantity__button,
+.custom-quantity-price-wrapper .quantity__input {
+  /* Force all items to have the same explicit height */
+  height: 22px; /* You can adjust this pixel value up or down */
+
+  /* Matching the line-height to the height perfectly centers the text/icon */
+  line-height: 22px; 
+
+  /* Remove any default browser spacing that might interfere */
+  padding: 0;
+  margin: 0;
+}
+
+/* We still need this to center the SVG icons within the button area */
+.custom-quantity-price-wrapper .quantity__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} 
+
+/* --- Center Align the First Column's Content --- */
+.product__info-wrapper-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center !important;
+}
+
+/* --- Controls the size of the Plus/Minus Icons --- */
+.custom-quantity-price-wrapper .custom-quantity__button svg {
+  width: 100px !important; /* Adjust this value for the icon's width */
+  height: 100px !important; /* Adjust this value for the icon's height */
+}
+
+/* --- Styles for the Resonance Metafield --- */
+.product__resonance-metafield {
+  /* Sizing and Alignment */
+  width: 90%;
+  text-align: center;
+  margin: -60px 0px;
+  white-space: wrap; /* <--- Add this line to prevent wrapping */
+  margin-left: 0px;
+  margin-top: -30px;
+  line-height: 1.1;
+
+  /* Text Styling */
+  font-size: 3rem; 
+  color: #646464;    
+  letter-spacing: 0.5px;
+}
+
+/* --- Widen the Collapsible Content Section --- */
+.collapsible-content {
+  align-self: center;
+  margin-top: -20px;
+  position: relative;
+}
+
+/* --- Center the Dropdown Header Title (Final Version) --- */
+.collapsible-content .accordion__title {
+  flex-grow: 1;         /* Tells the title to take up all available space */
+  text-align: center;   /* Centers the text within that new, larger space */
+  font-size: 2.0rem;    /* Your custom font size from before */
+  padding-left: 55px;
+  font-weight: bold;
+}
+
+/* =================================================================== */
+/* FINAL STYLES FOR COLLAPSIBLE DROPDOWN                               */
+/* =================================================================== */
+
+/* 1. The main clickable bar */
+.collapsible-content summary {
+  /* This creates a "canvas" for us to position items on */
+  position: relative; 
+  display: block;
+  
+  /* Your custom pill shape and styles */
+  border: 3px solid #2A87B9;
+  border-radius: 50px;
+  padding: 15px 20px 25px 20px; /* Added extra bottom padding for the arrow */
+  cursor: pointer;
+  list-style: none; /* Hides default markers */
+}
+
+/* Hides the default arrow marker */
+.collapsible-content summary::-webkit-details-marker {
+  display: none;
+}
+
+/* 2. The Title (H2) */
+.collapsible-content .accordion__title {
+  /* This centers the title text */
+  text-align: center;
+  font-size: 2.0rem; /* Your desired font size */
+  margin: 0; /* Removes extra spacing */
+}
+
+/* 4. This makes the arrow flip when the dropdown is open */
+.collapsible-content details[open] > summary .icon-caret {
+  transform: translateX(-50%) rotate(180deg);
+}
+
+/* 5. The Content Box that opens (from before, keep this) */
+.collapsible-content .accordion__content {
+    border: 2px solid #2A87B9;
+    border-top: none;
+    border-radius: 0 0 15px 15px;
+    margin-top: -10px;
+    padding: 25px 20px 15px 20px;
+}
+
+/* --- Hide the Dropdown Arrow Icon --- */
+.collapsible-content .icon-caret {
+  display: none;
+}
+
+/* --- Custom Hover Effect for Collapsible Dropdown --- */
+
+/* This changes the background of the pill on hover */
+.collapsible-content summary:hover {
+  background-color: #2A87B9 !important; /* The same blue as your other buttons */
+}
+
+/* This changes the text color when the pill is hovered */
+.collapsible-content summary:hover .accordion__title {
+  color: white; /* The text turns white */
+  text-decoration: none !important; /* Removes the underline on hover */
+}
+
+/* --- Removes the final "ghost" border from the accordion wrapper --- */
+.collapsible-content summary {
+  box-shadow: none !important;
+}
+
+/* --- Styles for the Short Description Metafield --- */
+.product__short-description {
+  font-size: 2rem;    /* Adjust size */
+  color:rgb(82, 82, 82);      /* Adjust color (a dark grey) */
+  line-height: 1.3;     /* Adjust line spacing for readability */
+}
+
+/* --- Adds space to the top of the third column --- */
+.product.grid--3-col-tablet > .product__info-wrapper {
+  padding-top: 0px !important; /* Adjust this value as needed */
+  padding-left: 0px !important;
+  padding-bottom: 0px !important;
+  margin-bottom: 20px !important;
+  margin-left: 50px !important;
+  margin-top: 0px !important;
+  
+}
+
+/* --- Manages layout of content in the third column --- */
+.product__info-wrapper .product__info-container {
+  /* Turn the column into a flex container */
+  display: flex;
+  flex-direction: column;
+
+  /* This is important: it makes sure the column can use the full height of the grid row */
+  height: 100%;
+}
+
+/* This rule tells the description to take up available space but also be able to shrink */
+.product__info-wrapper .product__short-description {
+  flex-grow: 1; /* Allows it to take up empty space */
+  flex-shrink: 1; /* Allows it to shrink if needed */
+}
+
+/* This rule tells the buttons to not shrink, ensuring they are always visible */
+.product__info-wrapper .custom-quantity-price-wrapper,
+.product__info-wrapper .product-form__buttons {
+  flex-shrink: 0;
+}
+
+/* --- FINAL FIX: Override theme's fixed width for the third column --- */
+@media screen and (min-width: 750px) {
+  .product.grid--3-col-tablet > .product__info-wrapper {
+    width: auto !important;
+    flex-basis: auto !important;
+  }
+}
+
+/* --- FINAL LAYOUT OVERRIDE --- */
+/* This rule targets all three columns in our custom grid */
+.product.grid--3-col-tablet > .grid__item {
+  width: auto !important;
+  max-width: none !important;
+  flex-grow: 0 !important; /* Prevents unwanted growing */
+}
+
+/* =================================================================== */
+/* RESPONSIVE STYLES FOR PRODUCT PAGE (MOBILE)                         */
+/* =================================================================== */
+
+/* This targets screens 749px wide or smaller (tablets and phones) */
+@media screen and (max-width: 1025px) {
+
+  /* 1. Force the layout into a single column */
+  .product.grid--3-col-tablet {
+    display: flex !important; /* Override the desktop grid */
+    justify-content: center;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* 2. Remove fixed widths from the columns so they stack naturally */
+  .product.grid--3-col-tablet > .grid__item {
+    width: 100% !important;
+    /*max-width: 320px !important;*/
+  }
+
+  /* 3. Center all the content */
+  .product__info-wrapper-left,
+  .product__media-wrapper,
+  .product__info-wrapper,{
+    display: flex !important;
+    flex-direction: column;
+    align-items: center !important; /* Horizontally centers all items */
+    text-align: center !important;   /* Centers all text */
+    padding: 5px 0;      /* Adds some vertical space between sections */
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .product.grid--3-col-tablet > .product__info-wrapper {
+  margin-left: 0 !important;
+  margin-top: -30px !important;
+  }
+
+  /* 4. Allow the short description text to wrap normally */
+  .metafield-rich_text_field {
+    white-space: normal !important;
+    text-align: center !important;
+    margin-top: 50px !important;
+  }
+
+  /* This centers the Product Title */
+  .product__info-wrapper-left .product__title {
+    margin-top: 10px;
+  }
+
+  .product__resonance-metafield{
+    margin-bottom: 35px !important;
+    margin-top: -20px !important;
+  }
+
+  h2.product__description-heading{
+    text-align: center !important;
+    padding-top: 20px !important;
+    padding-bottom: -20px !important;
+  }
+
+  .slider-buttons {
+    display: none !important;
+  }
+
+  .product__media-wrapper ul.slider {
+    overflow-x: hidden !important;
+    touch-action: pan-y;
+  }
+
+  li.slider__slide {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .grid__item.product__media-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 0px;  /* Symmetrical padding */
+    padding-right: 5px; /* Symmetrical padding */
+    margin-left: 0;      /* No asymmetrical margin */
+    margin-right: 0;     /* No asymmetrical margin */
+  }
+    .grid__item.product__media-wrapper img {
+    position: static !important;
+    width: 95% !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+}
+
+/* --- Hides the 'Sale' badge on the main product page --- */
+.product__info-wrapper .price__badge-sale {
+  display: none !important;
+}
+
+.product-size{
+  font-size: 2.1rem;
+  font-weight: 2rem;
+  margin-block-start: 0em !important;
+  margin-block-end: 0em !important;
+  margin-top: -20px !important;
+
+}
+
+
+/* --- Adds Borders to Product Page Accordion Table --- */
+
+/* This targets the table, its cells, and its header cells */
+.accordion__content .attribute th,
+.accordion__content .attribute td {
+  border: 1px solid rgba(0, 0, 0, 0.2); /* A faint black border */
+}
+
+/* This adds a border around the entire table and collapses the cell borders */
+.accordion__content .attribute {
+  border-collapse: collapse; /* This makes the lines clean and single */
+  width: 100%; /* Ensures the table takes up the full width */
+}
+
+.product__resonance-metafield {
+  /* Create a gradient background */
+  background: linear-gradient(90deg, #5dbdfc, #975af2, #f45dfc);
+  
+  /* Use the background to "clip" the text, making the text itself the gradient */
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  /* Make the original text color transparent so the background shows through */
+  -webkit-text-fill-color: transparent;
+  
+  font-weight: bold;
+}
+h1.main-page-title {
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block !important;
+  width: fit-content;
+}
+
+/* Show only the first product image */
+.product__media-list .product__media-item:not(:first-child) {
+  display: none !important;
+}
+
+/* Optional: Ensure the visible image takes full width */
+.product__media-item:first-child {
+  width: 100% !important;
+}
+
+div#Slide-template--19587008921845__slideshow_Gpzwdz-1 > div:nth-of-type(2) > div {
+  border-radius: 10px;
+}
+
+
+
+/* New CSS for repostioned price-wrapper */
+.product__purchase-wrapper {
+  display: flex;
+  flex-direction: column; /* Stacks the price pill and buttons vertically */
+  align-items: center;    /* Horizontally centers everything inside it */
+  gap: 5px;              /* Adds a nice space between the pill and the buttons */
+  margin-top: 5px;       /* Space above this whole section */
+  margin-bottom: 10px;
+}
+
+/* 2. The Blue Price Pill (Your Existing CSS, slightly adjusted) */
+/* We removed margin-left and margin-right as the parent now handles centering */
+.custom-quantity-price-wrapper {
+  display: flex;
+  align-items: center;
+  height: 55px;
+  width: 230px;
+  background-color: #2A87B9;
+  border-radius: 30px;
+  padding: 0 10px;
+  box-shadow: none !important;
+}
+
+/* 3. Style the Buy Buttons */
+/* This makes sure the buy buttons have a consistent width */
+.product__purchase-wrapper .product-form__buttons {
+  width: 100%;
+  max-width: 280px; /* Adjust this width to match your design */
+  margin: 0; /* Removes any default margins */
+}
+
+
+/* --- ALL YOUR OTHER STYLES BELOW ARE FINE AND DO NOT NEED TO CHANGE --- */
+
+
+/* The Price Text */
+.custom-quantity-price-wrapper .price__container .price-item {
+  position: relative;
+  top: 2px;
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin: 0;
+  padding-right: 16px;
+  padding-left: 7px;
+}
+
+/* The inner white pill for the quantity selector */
+.custom-quantity-price-wrapper .custom-quantity {
+  position: relative;
+  top: 6px;
+  box-sizing: border-box !important; 
+  display: flex !important;
+  align-items: center !important;
+  height: 1px !important;
+  width: 120px !important;
+  justify-content: center !important;
+  background-color: white !important;
+  border-radius: 30px !important;
+  padding: 0 10px !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* The quantity text input */
+.custom-quantity-price-wrapper .custom-quantity__input {
+  height: 100% !important;
+  width: 25px !important;
+  border: none !important;
+  background: transparent !important;
+  text-align: center !important;
+  padding: 0 !important;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  font-size: 2rem !important;
+  font-weight: 600 !important;
+  color: #2A87B9 !important;
+}
+
+/* The plus and minus buttons */
+.custom-quantity-price-wrapper .custom-quantity__button {
+  height: 100% !important;
+  width: auto !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 2.5rem !important;
+  font-weight: 1000 !important;
+  color: #2A87B9 !important;
+}
+
+/* Hides the default "Quantity" label */
+.custom-quantity-price-wrapper .quantity__label {
+  display: none;
+}
+
+button.product-form__submit {
+  /* Sizing and Spacing */
+  display: flex;
+  width: 100%; /* This tells the button to fill its parent container */
+  margin-top: 5px;
+  justify-content: center;
+
+  /* Colors and Border */
+  background-color: transparent;
+  border: 3px solid #2A87B9;
+  color: #2A87B9;
+  box-shadow: none !important;
+
+  /* Shape and Text */
+  border-radius: 30px;
+  font-size: 1.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+button.product-form__submit:hover {
+  background-color: #2A87B9; /* The button fills with blue */
+  color: white;              /* The text turns white */
+  box-shadow: none !important;
+}
+
+#ProductSubmitButton-template--19587009183989__main{
+  box-shadow: none !important;
+}
+
+.custom-quantity-price-wrapper .price__badge-sale {
+  display: none !important;
+}
+
+h2.product__description-heading{
+  font-weight: bold;
+}
+
+div.accordion__content{
+  color: #2A87B9
+}
+
+
+body.collection-fire .button {
+  color: #E03131 !important;
+  border-color: #E03131 !important;
+}

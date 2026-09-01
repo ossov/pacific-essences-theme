@@ -1,0 +1,358 @@
+<random-card-selector class="random-card-selector section-{{ section.id }}" data-section-id="{{ section.id }}">
+
+  <div class="random-card-selector__container page-width">
+    <h2 class="random-card-selector__heading">
+      {{ 'sections.random_card_selector.heading' | t }}
+    </h2>
+
+    <div class="random-card-selector__display" id="RandomCardSelectorDisplay-{{ section.id }}">
+      
+      <div class="random-card-selector__card-wrapper">
+        <img
+          src=""
+          alt="{{ 'sections.random_card_selector.card_alt_placeholder' | t }}"
+          class="random-card-selector__card-image random-card-selector__card-image--front"
+          id="RandomCardSelectorFrontImage-{{ section.id }}"
+          loading="lazy"
+          width="300"
+          height="450"
+        >
+        <img
+          src=""
+          alt="{{ 'sections.random_card_selector.card_alt_placeholder' | t }}"
+          class="random-card-selector__card-image random-card-selector__card-image--back"
+          id="RandomCardSelectorBackImage-{{ section.id }}"
+          loading="lazy"
+          width="300"
+          height="450"
+        >
+        <!-- NEW (idea 4): shine sweep overlay -->
+        <span class="random-card-selector__shine" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <button type="button" class="random-card-selector__button button" id="RandomCardSelectorButton-{{ section.id }}">
+      {{ 'sections.random_card_selector.button_text' | t }}
+    </button>
+
+    <p class="random-card-selector__description">
+      {{ 'sections.random_card_selector.description' | t }}
+    </p>
+
+  </div>
+
+</random-card-selector>
+
+<style>
+  /* Scoped CSS for the Random Card Selector section */
+  .random-card-selector {
+    padding: var(--spacing-section-vertical, 40px) 0;
+    text-align: center;
+    background-color: var(--color-background, #ffffff);
+    color: var(--color-foreground, #333333);
+  }
+  .random-card-selector__container {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--spacing-page-horizontal, 20px);
+    padding-right: var(--spacing-page-horizontal, 20px);
+  }
+  .random-card-selector__heading {
+    font-weight: bold;
+    font-size: 3rem;
+    margin-bottom: var(--spacing-base, 15px);
+    color: var(--color-heading, #000000);
+    background: linear-gradient(90deg,rgb(33, 160, 244),rgb(237, 49, 247)); 
+    -webkit-background-clip: text;
+    background-clip: text; 
+    -webkit-text-fill-color: transparent;
+  }
+  .random-card-selector__description {
+    font-size: var(--font-body-scale, 1rem);
+    margin-bottom: var(--spacing-large, 30px);
+    line-height: 1.5;
+    font-weight: bold;
+  }
+  .random-card-selector__button {
+    display: none;
+    padding: var(--spacing-small, 12px) var(--spacing-medium, 25px);
+    font-size: var(--font-body-scale, 1rem);
+    font-weight: var(--font-weight-bold, 700);
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid var(--color-button-border, #43A6DB);
+    background-color: var(--color-button-background, #43A6DB);
+    color: #ffffff;
+    border-radius: var(--border-radius-button, 50px);
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    margin-bottom: var(--spacing-large, 10px);
+    margin-top: 40px;
+  }
+  .random-card-selector__button:hover {
+    background-color: var(--color-button-background-hover, #ffffff);
+    color: var(--color-button-text-hover, #43A6DB);
+    border-color: var(--color-button-border-hover, #43A6DB);
+  }
+  .random-card-selector__button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    shadow: none !important;
+  }
+  .random-card-selector__display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-medium, 20px);
+    min-height: 200px;
+  }
+  .random-card-selector__message {
+    font-size: var(--font-body-scale, 1rem);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-accent, #007bff);
+    min-height: 1.5em;
+  }
+  .random-card-selector__card-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-medium, 20px);
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 650px;
+    perspective: 1000px;
+    position: relative;              /* NEW: anchor for the shine overlay */
+  }
+    .random-card-selector__card-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid var(--color-border, #cccccc);
+    box-shadow: var(--shadow-card, 0 4px 8px rgba(0, 0, 0, 0.1));
+    border-radius: var(--border-radius-card, 8px);
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+    cursor: pointer;
+  }
+  .random-card-selector__card-image.is-loaded {
+    opacity: 1;
+  }
+
+  /* Single 1.4s spin. Timing is controlled per-keyframe below so the mid-flip
+     swap stays hidden, but the finish decelerates instead of stopping dead. */
+  .random-card-selector__card-image.is-spinning {
+    animation: rotate-y 1.4s;
+  }
+
+  /* NEW: once a card is picked, no more clicking */
+  .random-card-selector.is-locked .random-card-selector__card-image {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* CHANGED (idea 2): "land it, don't stop it"
+     - Linear up to 62.5% (875ms) so the card is edge-on exactly when the JS
+       swaps the images — the swap stays invisible.
+     - Then ease-out into the final turn so it decelerates and settles.
+     - A gentle scale-up mid-flip makes the card lift toward you, then relax. */
+  @keyframes rotate-y {
+    0% {
+      transform: rotateY(0deg) scale(1);
+      animation-timing-function: linear;
+    }
+    62.5% {
+      transform: rotateY(450deg) scale(1.06);
+      animation-timing-function: ease-out;
+    }
+    100% {
+      transform: rotateY(720deg) scale(1);
+    }
+  }
+
+  /* NEW (idea 4): shine sweep on reveal */
+  .random-card-selector__shine {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    border-radius: var(--border-radius-card, 8px);
+  }
+  .random-card-selector__shine::before {
+    content: "";
+    position: absolute;
+    top: -25%;
+    left: 0;
+    width: 40%;
+    height: 150%;
+    background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: translateX(-250%) skewX(-15deg);
+  }
+  .random-card-selector.is-revealing .random-card-selector__shine {
+    opacity: 1;
+  }
+  .random-card-selector.is-revealing .random-card-selector__shine::before {
+    animation: rcs-shine 0.85s ease-out;
+  }
+  @keyframes rcs-shine {
+    from { transform: translateX(-250%) skewX(-15deg); }
+    to   { transform: translateX(350%)  skewX(-15deg); }
+  }
+
+  @media screen and (min-width: 750px) {
+    .random-card-selector__card-wrapper {
+      flex-direction: row;
+    }
+    .random-card-selector__card-image {
+      max-width: 300px;
+    }
+  }
+</style>
+
+<script>
+  class RandomCardSelector extends HTMLElement {
+    constructor() {
+      super();
+      this.sectionId = this.dataset.sectionId;
+      this.button = this.querySelector(`#RandomCardSelectorButton-${this.sectionId}`);
+      this.frontImage = this.querySelector(`#RandomCardSelectorFrontImage-${this.sectionId}`);
+      this.backImage = this.querySelector(`#RandomCardSelectorBackImage-${this.sectionId}`);
+      this.maxCardNumber = 84;
+
+      this.hasPicked = false;   // one pick per page load (resets on reload)
+      this.isSpinning = false;
+
+      if (this.button) {
+        this.button.addEventListener('click', () => this.pickRandomCard());
+      }
+      if (this.frontImage) {
+        this.frontImage.addEventListener('click', () => this.pickRandomCard());
+      }
+      if (this.backImage) {
+        this.backImage.addEventListener('click', () => this.pickRandomCard());
+      }
+    }
+
+    connectedCallback() {
+      this.displayInitialCards();
+      this.prepareChosenCard();   // NEW: pick + start downloading the card up front
+    }
+
+    displayInitialCards() {
+      const initialCard1Url = "https://cdn.shopify.com/s/files/1/0261/2661/4621/files/Card-Box.png?v=1756158367";
+      const altText = `{{ 'sections.random_card_selector.card_alt_placeholder' | t }}`;
+
+      if (this.frontImage && this.backImage) {
+        this.frontImage.src = initialCard1Url;
+        this.frontImage.alt = altText;
+        this.frontImage.classList.add('is-loaded');
+        this.backImage.style.display = 'none';
+      }
+    }
+
+    // NEW: choose the random card and begin downloading it as soon as the page
+    // loads, so it's ready (cached) long before the visitor clicks. This is what
+    // keeps the mid-spin swap seamless every time instead of only sometimes.
+    prepareChosenCard() {
+      const cardNumber = Math.floor(Math.random() * this.maxCardNumber) + 1;
+      const formattedCardNumber = String(cardNumber).padStart(2, '0');
+      const baseUrl = "https://cdn.shopify.com/s/files/1/0261/2661/4621/files/";
+
+      this.chosenCard = {
+        cardNumber,
+        preload: Promise.all([
+          this.preloadImage(`${baseUrl}card_${formattedCardNumber}_txt.jpg`),
+          this.preloadImage(`${baseUrl}card_${formattedCardNumber}_img.jpg`)
+        ])
+      };
+      // Ignore a failed pre-download here; pickRandomCard() will surface it.
+      this.chosenCard.preload.catch(() => {});
+    }
+
+    preloadImage(imageUrl) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error(`Failed to preload image: ${imageUrl}`));
+        img.src = imageUrl;
+      });
+    }
+
+    async pickRandomCard() {
+      // Only one pick per page load, and ignore clicks mid-spin
+      if (this.hasPicked || this.isSpinning) return;
+      this.isSpinning = true;
+
+      // Must match the CSS: single 1.4s animation
+      const duration = 1400;
+      // Edge-on (card invisible) at the 62.5% keyframe = 875ms. We swap there.
+      const swapPoint = 875;
+
+      try {
+        // Use the card we chose + started downloading on page load.
+        const { cardNumber, preload } = this.chosenCard;
+
+        // Reveal the 2nd card (using the current placeholder) and START THE
+        // SPIN RIGHT AWAY — instant feedback.
+        const placeholder = this.frontImage.src;
+        this.backImage.src = placeholder;
+        this.backImage.style.display = 'block';
+        this.backImage.classList.add('is-loaded');
+        this.frontImage.classList.add('is-spinning');
+        this.backImage.classList.add('is-spinning');
+
+        // Wait for the edge-on moment. Because the images were already
+        // downloaded on page load, `preload` is normally done well before
+        // 875ms, so the swap lands exactly at edge-on = seamless.
+        const [frontImg, backImg] = await Promise.all([
+          preload,
+          new Promise(resolve => setTimeout(resolve, swapPoint))
+        ]).then(([imgs]) => imgs);
+
+        // Invisible swap while the card is edge-on
+        this.frontImage.src = frontImg.src;
+        this.backImage.src = backImg.src;
+        const frontAltTemplate = `{{ 'sections.random_card_selector.card_front_alt' | t }}`;
+        const backAltTemplate = `{{ 'sections.random_card_selector.card_back_alt' | t }}`;
+        this.frontImage.alt = frontAltTemplate.replace('[card_number]', cardNumber);
+        this.backImage.alt = backAltTemplate.replace('[card_number]', cardNumber);
+
+        // Fire the shine sweep as the card reveals
+        this.classList.add('is-revealing');
+
+        // Let the spin finish naturally (no early cut-off = no snap)
+        await new Promise(resolve => setTimeout(resolve, duration - swapPoint));
+
+      } catch (error) {
+        console.error("Error picking card:", error);
+      } finally {
+        this.frontImage.classList.remove('is-spinning');
+        this.backImage.classList.remove('is-spinning');
+        // Lock it: no more picks until the page is reloaded
+        this.hasPicked = true;
+        this.isSpinning = false;
+        this.classList.add('is-locked');
+      }
+    }
+  }
+
+  if (!customElements.get('random-card-selector')) {
+    customElements.define('random-card-selector', RandomCardSelector);
+  }
+</script>
+{% schema %}
+{
+  "name": "t:sections.random_card_selector.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "t:sections.random_card_selector.name"
+    }
+  ]
+}
+{% endschema %}

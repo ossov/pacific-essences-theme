@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="{{ 'custom-collection-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<div class="collection-menu-wrapper color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width">
+    <div class="collection-menu__grid">
+      {%- for block in section.blocks -%}
+        <a href="{{ block.settings.collection.url }}" class="collection-menu__button button">
+          {{ block.settings.button_text }}
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Collection Menu",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_button",
+      "name": "Collection Button",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Collection Name"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection to link to"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Collection Menu"
+    }
+  ]
+}
+{% endschema %}

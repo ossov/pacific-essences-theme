@@ -1,0 +1,163 @@
+{%- style -%}
+.card-picker {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.card-deck {
+  position: relative;
+  height: 300px;
+  margin: 2rem auto;
+  max-width: 200px;
+}
+
+.card-deck-img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.pick-card-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.pick-card-btn:hover {
+  transform: scale(1.05);
+}
+
+.pick-card-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.card-reveal {
+  animation: reveal 0.5s ease-out;
+}
+
+@keyframes reveal {
+  0% { transform: scale(0.8); opacity: 0; }
+  80% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.last-picked {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+{%- endstyle -%}
+
+<div class="card-picker">
+  <button class="pick-card-btn" type="button">Pick a Card</button>
+  <div class="card-deck">
+    <img class="card-deck-img" src="{{ 'icon-recycle.svg' | asset_url }}" alt="Card deck" id="deck-image" width="200" height="300">
+    <img class="card-deck-img" src="{{ 'icon-truck.svg' | asset_url }}" alt="Card deck" id="deck-image" width="200" height="300">
+  </div>
+  
+  <div class="last-picked" id="last-picked-message" style="display: none;">
+    You last picked a card on <span id="last-picked-date"></span>
+  </div>
+</div>
+
+{% javascript %}
+// Store in snippet if preferred
+class CardPicker {
+  constructor() {
+    this.btn = document.querySelector('.pick-card-btn');
+    this.deckImage = document.getElementById('deck-image');
+    this.selectedCard = document.getElementById('selected-card');
+    this.lastPickedMessage = document.getElementById('last-picked-message');
+    this.lastPickedDate = document.getElementById('last-picked-date');
+    
+    this.init();
+  }
+  
+  init() {
+    this.btn.addEventListener('click', this.pickCard.bind(this));
+    this.checkLastPick();
+  }
+  
+  pickCard() {
+    // Disable button during animation
+    this.btn.disabled = true;
+    
+    // Show shuffling animation
+    this.deckImage.style.animation = 'shake 0.5s';
+    
+    // Pick random card after animation
+    setTimeout(() => {
+      const randomCard = Math.floor(Math.random() * 84) + 1;
+      this.showCard(randomCard);
+      
+      // Store pick date
+      const today = new Date().toISOString().split('T')[0];
+      localStorage.setItem('lastCardPick', today);
+      this.checkLastPick();
+    }, 500);
+  }
+  
+  showCard(cardNumber) {
+    this.selectedCard.src = `{ 'card-' | append: '1' | append: '.jpg' | asset_url }`.replace('card-1.jpg', `card-${cardNumber}.jpg`);
+    this.selectedCard.style.display = 'block';
+    this.selectedCard.classList.add('card-reveal');
+    
+    // Hide deck image
+    this.deckImage.style.display = 'none';
+    
+    // Re-enable button after reveal
+    setTimeout(() => {
+      this.btn.disabled = false;
+    }, 1000);
+  }
+  
+  checkLastPick() {
+    const lastPick = localStorage.getItem('lastCardPick');
+    if (lastPick) {
+      this.lastPickedDate.textContent = lastPick;
+      this.lastPickedMessage.style.display = 'block';
+    }
+  }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.querySelector('.card-picker')) {
+    new CardPicker();
+  }
+});
+
+// Add shake animation dynamically
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+  }
+`;
+document.head.appendChild(style);
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Card Picker",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Card Picker",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

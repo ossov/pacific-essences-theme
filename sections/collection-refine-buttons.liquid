@@ -1,0 +1,185 @@
+{% comment %}
+  Manually check each of the 4 metafields and render a button if a 
+  collection is linked.
+{% endcomment %}
+
+{%- liquid
+  assign linked_collection_1 = collection.metafields.custom.linked_collections.value
+  assign linked_collection_2 = collection.metafields.custom.linked_collections_2.value
+  assign linked_collection_3 = collection.metafields.custom.linked_collections_3.value
+  assign linked_collection_4 = collection.metafields.custom.linked_collections_4.value
+  
+  # Set default button color
+  assign button_color = '#000000'
+  
+  # Check which collection we're on and set the button color
+  case collection.handle
+    when 'fire'
+      assign button_color = 'rgb(255, 118, 134)'
+    when 'earth'
+      assign button_color = 'rgb(218, 204, 78)'
+    when 'metal'
+      assign button_color = 'rgb(184, 115, 252)'
+    when 'water'
+      assign button_color = 'rgb(75, 174, 228)'
+    when 'wood'
+      assign button_color = 'rgb(118, 210, 79)'
+  endcase
+-%}
+
+{% if linked_collection_1 or linked_collection_2 or linked_collection_3 or linked_collection_4 %}
+  <div class="page-width">
+
+        <div class="refine__buttons-title">
+      <h2 class="h2"> You can click one of the buttons to further refine your search! </h2>
+    </div>
+
+    <div class="refine-buttons__container">
+
+      {%- if linked_collection_1 -%}
+        <a href="{{ linked_collection_1.url }}" class="button button--secondary">
+          {{ linked_collection_1.title }}
+        </a>
+      {%- endif -%}
+
+      {%- if linked_collection_2 -%}
+        <a href="{{ linked_collection_2.url }}" class="button button--secondary">
+          {{ linked_collection_2.title }}
+        </a>
+      {%- endif -%}
+
+      {%- if linked_collection_3 -%}
+        <a href="{{ linked_collection_3.url }}" class="button button--secondary">
+          {{ linked_collection_3.title }}
+        </a>
+      {%- endif -%}
+
+      {%- if linked_collection_4 -%}
+        <a href="{{ linked_collection_4.url }}" class="button button--secondary">
+          {{ linked_collection_4.title }}
+        </a>
+      {%- endif -%}
+
+    </div>
+  </div>
+{% endif %}
+
+<style>
+  .refine-buttons__container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem 0;
+    padding-top: 1px;
+  }
+
+  .h2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem 0;
+    font-weight: bold;
+    color: black;
+    font-size: 30px;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  a.button{
+    background-color: white !important;
+    border: 2px solid {{ button_color }} !important;
+    color: {{ button_color }} !important;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Fix for multi-line text centering */
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.2;
+    padding: 12px 20px;
+  }
+  
+  /* Change to filled background on hover */
+  a.button:hover {
+    background-color: {{ button_color }} !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  /* Mobile Responsive Styles */
+  @media screen and (max-width: 749px) {
+    .h2 {
+      font-size: 24px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .refine-buttons__container {
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1.5rem 1rem;
+    }
+
+    a.button {
+      width: 100%;
+      max-width: 280px;
+      min-height: 44px;
+      padding: 12px 20px;
+      font-size: 16px; /* Prevents zoom on iOS */
+      /* Ensure proper text wrapping and centering */
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: normal;
+      height: auto;
+      min-height: 44px;
+    }
+
+    .refine__buttons-title {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  /* Small mobile devices */
+  @media screen and (max-width: 480px) {
+    .h2 {
+      font-size: 20px;
+      padding: 1rem 0.5rem;
+    }
+
+    .refine-buttons__container {
+      padding: 1rem 0.5rem;
+      gap: 0.5rem;
+    }
+
+    a.button {
+      max-width: 100%;
+      padding: 10px 16px;
+      /* Improved multi-line handling for small screens */
+      line-height: 1.3;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection Refine Buttons",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Collection Refine Buttons"
+    }
+  ]
+}
+{% endschema %}

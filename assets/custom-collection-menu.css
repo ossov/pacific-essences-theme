@@ -1,0 +1,16 @@
+.collection-menu-wrapper {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+}
+
+.collection-menu__grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem; /* Adjust the space between buttons */
+}
+
+.collection-menu__button {
+  min-width: 150px; /* Set a minimum width for the buttons */
+}

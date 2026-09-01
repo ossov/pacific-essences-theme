@@ -1,0 +1,1292 @@
+{% doc %}
+  @prompt
+    I want to create a timeline layout where we can highlight key moments in our business journey from past to present-day, with options to include a key image for each timeline point, as well as a header and paragraph text., This is perfect - please adjust it to make it possible to add additional timeline items as needed, Use this timeline layout, but there needs to be 30 timeline items
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-timeline-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: 40px 20px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-timeline-container-{{ ai_gen_id }} {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .ai-timeline-line-{{ ai_gen_id }} {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: {{ block.settings.line_thickness }}px;
+    background-color: {{ block.settings.line_color }};
+    transform: translateX(-50%);
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }} {
+    position: relative;
+    margin-bottom: 60px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }}:last-child {
+    margin-bottom: 0;
+  }
+
+  .ai-timeline-content-{{ ai_gen_id }} {
+    flex: 1;
+    background-color: {{ block.settings.card_background_color }};
+    padding: 24px;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }}:nth-child(odd) {
+    flex-direction: row;
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }}:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }}:nth-child(odd) .ai-timeline-content-{{ ai_gen_id }} {
+    text-align: right;
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }}:nth-child(even) .ai-timeline-content-{{ ai_gen_id }} {
+    text-align: left;
+  }
+
+  .ai-timeline-marker-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 2;
+    width: {{ block.settings.marker_size }}px;
+    height: {{ block.settings.marker_size }}px;
+    background-color: {{ block.settings.marker_color }};
+    border: {{ block.settings.marker_border_thickness }}px solid {{ block.settings.marker_border_color }};
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .ai-timeline-image-wrapper-{{ ai_gen_id }} {
+    flex: 1;
+    max-width: 400px;
+  }
+
+  .ai-timeline-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    display: block;
+  }
+
+  .ai-timeline-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: #f4f4f4;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-timeline-image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-timeline-date-{{ ai_gen_id }} {
+    font-size: {{ block.settings.date_font_size }}px;
+    color: {{ block.settings.date_color }};
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .ai-timeline-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_font_size }}px;
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 12px;
+    font-weight: 700;
+  }
+
+  .ai-timeline-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.text_font_size }}px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-timeline-line-{{ ai_gen_id }} {
+      left: 20px;
+    }
+
+    .ai-timeline-item-{{ ai_gen_id }},
+    .ai-timeline-item-{{ ai_gen_id }}:nth-child(odd),
+    .ai-timeline-item-{{ ai_gen_id }}:nth-child(even) {
+      flex-direction: column;
+      align-items: flex-start;
+      padding-left: 50px;
+    }
+
+    .ai-timeline-marker-{{ ai_gen_id }} {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .ai-timeline-content-{{ ai_gen_id }},
+    .ai-timeline-item-{{ ai_gen_id }}:nth-child(odd) .ai-timeline-content-{{ ai_gen_id }},
+    .ai-timeline-item-{{ ai_gen_id }}:nth-child(even) .ai-timeline-content-{{ ai_gen_id }} {
+      text-align: left;
+      width: 100%;
+    }
+
+    .ai-timeline-image-wrapper-{{ ai_gen_id }} {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+{% endstyle %}
+
+<timeline-block-{{ ai_gen_id }} class="ai-timeline-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-timeline-container-{{ ai_gen_id }}">
+    <div class="ai-timeline-line-{{ ai_gen_id }}"></div>
+
+    {% for i in (1..30) %}
+      {% liquid
+        assign enabled_key = 'item_' | append: i | append: '_enabled'
+        assign date_key = 'item_' | append: i | append: '_date'
+        assign heading_key = 'item_' | append: i | append: '_heading'
+        assign text_key = 'item_' | append: i | append: '_text'
+        assign image_key = 'item_' | append: i | append: '_image'
+
+        assign enabled = block.settings[enabled_key]
+        assign date = block.settings[date_key]
+        assign heading = block.settings[heading_key]
+        assign text = block.settings[text_key]
+        assign image = block.settings[image_key]
+      %}
+
+      {% if enabled %}
+        <div class="ai-timeline-item-{{ ai_gen_id }}">
+          <div class="ai-timeline-marker-{{ ai_gen_id }}"></div>
+
+          <div class="ai-timeline-content-{{ ai_gen_id }}">
+            {% if date != blank %}
+              <div class="ai-timeline-date-{{ ai_gen_id }}">{{ date }}</div>
+            {% endif %}
+
+            {% if heading != blank %}
+              <h3 class="ai-timeline-heading-{{ ai_gen_id }}">{{ heading }}</h3>
+            {% endif %}
+
+            {% if text != blank %}
+              <div class="ai-timeline-text-{{ ai_gen_id }}">{{ text }}</div>
+            {% endif %}
+          </div>
+
+          <div class="ai-timeline-image-wrapper-{{ ai_gen_id }}">
+            {% if image %}
+              <img
+                src="{{ image | image_url: width: 800 }}"
+                alt="{{ image.alt | escape }}"
+                loading="lazy"
+                width="{{ image.width }}"
+                height="{{ image.height }}"
+                class="ai-timeline-image-{{ ai_gen_id }}"
+              >
+            {% else %}
+              <div class="ai-timeline-image-placeholder-{{ ai_gen_id }}">
+                {{ 'image' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</timeline-block-{{ ai_gen_id }}>
+
+{% schema %}
+{
+  "name": "Business timeline",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Timeline line"
+    },
+    {
+      "type": "range",
+      "id": "line_thickness",
+      "label": "Line thickness",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Line color",
+      "default": "#2a87b9"
+    },
+    {
+      "type": "header",
+      "content": "Timeline marker"
+    },
+    {
+      "type": "range",
+      "id": "marker_size",
+      "label": "Marker size",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "marker_color",
+      "label": "Marker color",
+      "default": "#2a87b9"
+    },
+    {
+      "type": "range",
+      "id": "marker_border_thickness",
+      "label": "Marker border thickness",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "unit": "px",
+      "default": 3
+    },
+    {
+      "type": "color",
+      "id": "marker_border_color",
+      "label": "Marker border color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "label": "Image border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "date_font_size",
+      "label": "Date font size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "date_color",
+      "label": "Date color",
+      "default": "#2a87b9"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Heading font size",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "text_font_size",
+      "label": "Text font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_1_enabled",
+      "label": "Enable item 1",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "item_1_date",
+      "label": "Date",
+      "default": "Day 1"
+    },
+    {
+      "type": "text",
+      "id": "item_1_heading",
+      "label": "Heading",
+      "default": "Milestone 1"
+    },
+    {
+      "type": "textarea",
+      "id": "item_1_text",
+      "label": "Text",
+      "default": "Describe this important moment in your journey."
+    },
+    {
+      "type": "image_picker",
+      "id": "item_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_2_enabled",
+      "label": "Enable item 2",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_2_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_2_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_2_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_3_enabled",
+      "label": "Enable item 3",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_3_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_3_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_3_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_4_enabled",
+      "label": "Enable item 4",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_4_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_4_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_4_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_5_enabled",
+      "label": "Enable item 5",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_5_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_5_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_5_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_6_enabled",
+      "label": "Enable item 6",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_6_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_6_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_6_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 7"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_7_enabled",
+      "label": "Enable item 7",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_7_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_7_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_7_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_7_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 8"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_8_enabled",
+      "label": "Enable item 8",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_8_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_8_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_8_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_8_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 9"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_9_enabled",
+      "label": "Enable item 9",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_9_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_9_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_9_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_9_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 10"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_10_enabled",
+      "label": "Enable item 10",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_10_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_10_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_10_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_10_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 11"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_11_enabled",
+      "label": "Enable item 11",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_11_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_11_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_11_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_11_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 12"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_12_enabled",
+      "label": "Enable item 12",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_12_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_12_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_12_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_12_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 13"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_13_enabled",
+      "label": "Enable item 13",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_13_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_13_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_13_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_13_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 14"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_14_enabled",
+      "label": "Enable item 14",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_14_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_14_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_14_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_14_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 15"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_15_enabled",
+      "label": "Enable item 15",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_15_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_15_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_15_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_15_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 16"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_16_enabled",
+      "label": "Enable item 16",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_16_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_16_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_16_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_16_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 17"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_17_enabled",
+      "label": "Enable item 17",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_17_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_17_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_17_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_17_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 18"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_18_enabled",
+      "label": "Enable item 18",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_18_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_18_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_18_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_18_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 19"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_19_enabled",
+      "label": "Enable item 19",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_19_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_19_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_19_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_19_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 20"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_20_enabled",
+      "label": "Enable item 20",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_20_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_20_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_20_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_20_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 21"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_21_enabled",
+      "label": "Enable item 21",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_21_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_21_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_21_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_21_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 22"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_22_enabled",
+      "label": "Enable item 22",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_22_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_22_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_22_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_22_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 23"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_23_enabled",
+      "label": "Enable item 23",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_23_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_23_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_23_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_23_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 24"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_24_enabled",
+      "label": "Enable item 24",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_24_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_24_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_24_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_24_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 25"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_25_enabled",
+      "label": "Enable item 25",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_25_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_25_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_25_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_25_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 26"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_26_enabled",
+      "label": "Enable item 26",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_26_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_26_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_26_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_26_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 27"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_27_enabled",
+      "label": "Enable item 27",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_27_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_27_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_27_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_27_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 28"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_28_enabled",
+      "label": "Enable item 28",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_28_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_28_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_28_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_28_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 29"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_29_enabled",
+      "label": "Enable item 29",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_29_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_29_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_29_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_29_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Timeline item 30"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_30_enabled",
+      "label": "Enable item 30",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "item_30_date",
+      "label": "Date"
+    },
+    {
+      "type": "text",
+      "id": "item_30_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "item_30_text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_30_image",
+      "label": "Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Business timeline"
+    }
+  ]
+}
+{% endschema %}
