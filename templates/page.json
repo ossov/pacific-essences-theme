@@ -68,9 +68,6 @@
         "row_imNnAb"
       ],
       "disabled": true,
-      "custom_css": [
-        ".multirow .button::after {display: none !important;}"
-      ],
       "name": "t:sections.multirow.presets.name",
       "settings": {
         "image_height": "medium",

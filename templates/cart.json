@@ -77,9 +77,6 @@
         "subtotal",
         "buttons"
       ],
-      "custom_css": [
-        ".button:after {box-shadow: none !important;}"
-      ],
       "settings": {
         "color_scheme": "scheme-1",
         "padding_top": 20,

@@ -223,9 +223,6 @@
         "collapsible_row_3XL7TQ",
         "collapsible_row_zGt3By"
       ],
-      "custom_css": [
-        ".accordion {margin-top: 10px !important; margin-bottom: 15px !important;}"
-      ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
         "caption": "",
@@ -319,9 +316,6 @@
         "row_39dNcm",
         "row_bN97eC",
         "row_7fiUFz"
-      ],
-      "custom_css": [
-        ".multirow .button::after {display: none !important;}"
       ],
       "name": "t:sections.multirow.presets.name",
       "settings": {

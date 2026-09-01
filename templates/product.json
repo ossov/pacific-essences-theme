@@ -55,14 +55,6 @@
         "buy_buttons",
         "description"
       ],
-      "custom_css": [
-        ".product__tax.caption {display: none !important;}",
-        ".custom-quantity-price-wrapper .price--on-sale .price__container {flex-direction: column; align-items: flex-start; gap: 0;}",
-        ".custom-quantity-price-wrapper .price--on-sale .price-item {line-height: 0; font-size: 1.8rem; padding-right: 25;}",
-        ".custom-quantity-price-wrapper .price--on-sale s {text-decoration: line-through;}",
-        ".price--on-sale .custom-quantity {margin-left: auto; margin-right: auto;}",
-        ".price--on-sale .price-item {position: relative; top: 3px;}"
-      ],
       "settings": {
         "enable_sticky_info": false,
         "color_scheme": "scheme-1",
