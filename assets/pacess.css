@@ -65,7 +65,7 @@
 
 .product-card__metafield-resonance {
   font-size: 25px;
-  color: var(--pe-muted-2);
+  color: var(--pe-muted-2, #555555);
 }
 
 /* ---------------------------------------------------------------------------
@@ -82,7 +82,7 @@
 /* .slideshow__text distinguishes the slideshow's box from image-banner's,
    which carries .banner__box on its own. */
 .slideshow__text.banner__box {
-  border-radius: var(--pe-radius-pill);
+  border-radius: var(--pe-radius-pill, 50px);
   background: rgba(255, 255, 255, 1) !important;
   padding: 12px 30px !important;
   margin: 0 25px !important;
@@ -95,7 +95,7 @@
 .eg-title {
   font-size: 4.7rem !important;
   font-weight: bold;
-  background: var(--pe-gradient-title);
+  background: var(--pe-gradient-title, linear-gradient(90deg, #5dbdfc, #975af2, #f45dfc));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -103,7 +103,7 @@
 
 .eg-sub,
 .flower-menu-wrapper .flower-menu__subtitle {
-  color: var(--pe-muted);
+  color: var(--pe-muted, #666666);
   font-size: 20px;
 }
 
@@ -121,7 +121,7 @@
 .collection__title h2 {
   text-align: center;
   font-weight: bold;
-  background: var(--pe-gradient-heading);
+  background: var(--pe-gradient-heading, linear-gradient(100deg, #830af5, #ffbff2));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -178,7 +178,7 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  border-radius: var(--pe-radius-media);
+  border-radius: var(--pe-radius-media, 25px);
   background-color: white;
   width: 100%;
   min-height: 100px;
@@ -191,7 +191,7 @@
   width: auto;
   height: auto;
   object-fit: contain;
-  border-radius: var(--pe-radius-media-inner);
+  border-radius: var(--pe-radius-media-inner, 20px);
 }
 
 /* Was duplicated identically on collection and collection.specials. */
@@ -208,10 +208,10 @@
    on collection pages, so the type-level selector is enough. */
 .refine-buttons__container .button {
   background-color: transparent;
-  border: 3px solid var(--pe-blue);
-  color: var(--pe-blue);
+  border: 3px solid var(--pe-blue, #2a87b9);
+  color: var(--pe-blue, #2a87b9);
   box-shadow: none;
-  border-radius: var(--pe-radius-button);
+  border-radius: var(--pe-radius-button, 30px);
   font-size: 1.7rem;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -254,12 +254,12 @@
 
 .article-template .rte a,
 .article-template__content a {
-  color: var(--pe-link) !important;
+  color: var(--pe-link, #2359a6) !important;
   text-decoration: underline;
 }
 
 .article-template__content a:hover {
-  color: var(--pe-link-hover) !important;
+  color: var(--pe-link-hover, #0a3066) !important;
 }
 
 /* ---------------------------------------------------------------------------

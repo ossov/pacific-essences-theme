@@ -1,3 +1,23 @@
+/* ============================================================================
+   custom-styles.css — product page and accordion overrides
+
+   This file owns the structural overrides for the product template: the
+   quantity/price block, the info columns, the collapsible content, and the
+   metafield blocks that make up an essence page.
+
+   It stays separate from pacess.css on purpose. pacess.css holds the design
+   tokens and the site-wide and per-template rules; this holds one large,
+   cohesive area of the site. Merging them would make a thousand-line file
+   without making anything easier to find.
+
+   Colours and gradients here now reference the tokens defined at the top of
+   pacess.css, so the brand blue is set in one place rather than sixteen.
+
+   Still to do in the restyle: the corner radii here (30px, 50px, 10px) are
+   hardcoded and disagree with each other and with the theme settings. They
+   need a design decision, not a search and replace.
+   ========================================================================= */
+
 /* --- FINAL Responsive Grid Layout --- */
 @media screen and (min-width: 750px) {
   .product.grid--3-col-tablet {
@@ -33,7 +53,7 @@
   align-items: center; /* This keeps content vertically centered */
   height: 55px;      /* <--- MASTER HEIGHT. Adjust this one value. */
   width: 230px;
-  background-color: #2A87B9;
+  background-color: var(--pe-blue, #2a87b9);
   border-radius: 30px;
   padding: 0 10px;   /* We now only need left/right padding */
   margin-left: auto;
@@ -85,7 +105,7 @@
   margin-right: 0px !important;
   font-size: 2rem !important;
   font-weight: 600 !important;
-  color: #2A87B9 !important;
+  color: var(--pe-blue, #2a87b9) !important;
 }
 
 /* 5. The plus and minus buttons */
@@ -102,7 +122,7 @@
   align-items: center !important;
   font-size: 2.5rem !important;
   font-weight: 1000 !important;
-  color: #2A87B9 !important;
+  color: var(--pe-blue, #2a87b9) !important;
 }
 
 /* Hides the default "Quantity" label */
@@ -149,8 +169,8 @@
 
   /* Colors and Border */
   background-color: transparent;
-  border: 3px solid #2A87B9;
-  color: #2A87B9;
+  border: 3px solid var(--pe-blue, #2a87b9);
+  color: var(--pe-blue, #2a87b9);
   box-shadow: none; /* <-- Add this line to remove the shadow */
 
   /* Shape and Text */
@@ -178,7 +198,7 @@
 
 /* This defines the custom hover effect for the 'Add to cart' button */
 .product__info-wrapper .product-form__submit:hover {
-  background-color: #2A87B9; /* The button fills with blue */
+  background-color: var(--pe-blue, #2a87b9); /* The button fills with blue */
   color: white;              /* The text turns white */
 }
 
@@ -263,7 +283,7 @@
   display: block;
   
   /* Your custom pill shape and styles */
-  border: 3px solid #2A87B9;
+  border: 3px solid var(--pe-blue, #2a87b9);
   border-radius: 50px;
   padding: 15px 20px 25px 20px; /* Added extra bottom padding for the arrow */
   cursor: pointer;
@@ -290,7 +310,7 @@
 
 /* 5. The Content Box that opens (from before, keep this) */
 .collapsible-content .accordion__content {
-    border: 2px solid #2A87B9;
+    border: 2px solid var(--pe-blue, #2a87b9);
     border-top: none;
     border-radius: 0 0 15px 15px;
     margin-top: -10px;
@@ -306,7 +326,7 @@
 
 /* This changes the background of the pill on hover */
 .collapsible-content summary:hover {
-  background-color: #2A87B9 !important; /* The same blue as your other buttons */
+  background-color: var(--pe-blue, #2a87b9) !important; /* The same blue as your other buttons */
 }
 
 /* This changes the text color when the pill is hovered */
@@ -499,7 +519,7 @@
 
 .product__resonance-metafield {
   /* Create a gradient background */
-  background: linear-gradient(90deg, #5dbdfc, #975af2, #f45dfc);
+  background: var(--pe-gradient-title, linear-gradient(90deg, #5dbdfc, #975af2, #f45dfc));
   
   /* Use the background to "clip" the text, making the text itself the gradient */
   -webkit-background-clip: text;
@@ -551,7 +571,7 @@ div#Slide-template--19587008921845__slideshow_Gpzwdz-1 > div:nth-of-type(2) > di
   align-items: center;
   height: 55px;
   width: 230px;
-  background-color: #2A87B9;
+  background-color: var(--pe-blue, #2a87b9);
   border-radius: 30px;
   padding: 0 10px;
   box-shadow: none !important;
@@ -611,7 +631,7 @@ div#Slide-template--19587008921845__slideshow_Gpzwdz-1 > div:nth-of-type(2) > di
   margin-right: 0px !important;
   font-size: 2rem !important;
   font-weight: 600 !important;
-  color: #2A87B9 !important;
+  color: var(--pe-blue, #2a87b9) !important;
 }
 
 /* The plus and minus buttons */
@@ -628,7 +648,7 @@ div#Slide-template--19587008921845__slideshow_Gpzwdz-1 > div:nth-of-type(2) > di
   align-items: center !important;
   font-size: 2.5rem !important;
   font-weight: 1000 !important;
-  color: #2A87B9 !important;
+  color: var(--pe-blue, #2a87b9) !important;
 }
 
 /* Hides the default "Quantity" label */
@@ -645,8 +665,8 @@ button.product-form__submit {
 
   /* Colors and Border */
   background-color: transparent;
-  border: 3px solid #2A87B9;
-  color: #2A87B9;
+  border: 3px solid var(--pe-blue, #2a87b9);
+  color: var(--pe-blue, #2a87b9);
   box-shadow: none !important;
 
   /* Shape and Text */
@@ -659,7 +679,7 @@ button.product-form__submit {
 }
 
 button.product-form__submit:hover {
-  background-color: #2A87B9; /* The button fills with blue */
+  background-color: var(--pe-blue, #2a87b9); /* The button fills with blue */
   color: white;              /* The text turns white */
   box-shadow: none !important;
 }
@@ -677,11 +697,5 @@ h2.product__description-heading{
 }
 
 div.accordion__content{
-  color: #2A87B9
-}
-
-
-body.collection-fire .button {
-  color: #E03131 !important;
-  border-color: #E03131 !important;
+  color: var(--pe-blue, #2a87b9)
 }
