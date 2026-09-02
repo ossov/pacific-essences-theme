@@ -394,6 +394,7 @@
     {%- endcomment -%}
     <div class="product__purchase-wrapper">
 
+      <div class="pe-pricecol">
       <div
         class="pe-price"
         data-price-block
@@ -423,7 +424,14 @@
           {%- endif -%}
         </div>
       {%- endif -%}
+      </div>
 
+      {%- comment -%}
+        The controls column. Quantity and add-to-cart on one line, the guide
+        prompt under them, and the whole stack sits beside the price rather
+        than under it.
+      {%- endcomment -%}
+      <div class="pe-buycol">
       <div class="pe-qtyrow">
     <div id="Quantity-Form-{{ section.id }}" class="product-form__input product-form__quantity">
       <quantity-input class="quantity custom-quantity">
@@ -476,6 +484,7 @@
           {{- section.settings.guide_label | escape -}}
         </button>
       {%- endif -%}
+      </div>
 
     {%- comment -%}
       The guide, in a dialog on this page rather than a trip to the homepage.

@@ -297,15 +297,34 @@
    restyled here instead.
    ------------------------------------------------------------------------ */
 
+/* Two columns rather than one stack. At 48rem every part of the box landed on
+   its own line, which made it nearly 300px tall for four short pieces of
+   content. At 72rem the price sits beside the controls and looks across at
+   them, which takes a whole row out without shrinking either button. */
 .t-product .product__purchase-wrapper {
-  display: block;
-  max-width: 48rem;
+  display: grid;
+  grid-template-columns: minmax(16rem, 24rem) minmax(0, 1fr);
+  align-items: center;
+  gap: 1.8rem 3.4rem;
+  max-width: 72rem;
   margin: 3.4rem auto 5.2rem;
-  padding: 2rem;
+  padding: 2.2rem 2.4rem;
   background: #ffffff;
   border: 1px solid #e2ecf2;
   border-radius: 16px;
   box-shadow: 0 10px 26px rgba(18, 48, 63, 0.06);
+}
+
+.t-product .pe-pricecol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.t-product .pe-buycol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
 }
 
 /* ---- price ---- */
@@ -324,6 +343,15 @@
   line-height: 1.1;
 }
 .t-product .pe-price .price__container { display: flex; align-items: baseline; gap: 10px; }
+/* Dawn separates the compare-at price and the sale price with whitespace text
+   nodes, which at this column width was just enough to push the sale price
+   onto a second line. Flex drops the whitespace and controls the gap. */
+.t-product .pe-price .price__sale {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 .t-product .pe-price .price-item { font-size: inherit; font-weight: inherit; line-height: inherit; }
 .t-product .pe-price .price-item--regular { color: inherit; }
 /* The Sale badge sits hard against the price. Margin only: setting display
@@ -352,7 +380,7 @@
   flex-wrap: wrap;
   align-items: stretch;
   gap: 12px;
-  margin: 16px 0 12px;
+  margin: 0;
   /* One height for both controls, so the pills line up. Set here rather than on
      each, which is what left the quantity taller than the button. */
   --pe-control-height: 5rem;
@@ -431,7 +459,6 @@
 /* ---- the guide prompt ---- */
 
 .t-product .pe-btn-ghost {
-  display: block;
   width: 100%;
   /* As a <button> this inherits the browser's 2px outset border, which it did
      not have as a link. The outline is drawn by the inset shadow below. */
@@ -441,7 +468,12 @@
   font-family: inherit;
   cursor: pointer;
   border-radius: 999px;
-  padding: 14px 30px;
+  /* Same height as the quantity pill and the add-to-cart button above it. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5rem;
+  padding: 0 30px;
   font-size: 1.5rem;
   font-weight: 800;
   text-align: center;
@@ -460,11 +492,13 @@
 /* ---- reassurance ---- */
 
 .t-product .pe-trust {
+  /* Runs the full width under both columns, closing the box off. */
+  grid-column: 1 / -1;
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-top: 16px;
-  padding-top: 14px;
+  margin-top: 0;
+  padding-top: 1.5rem;
   border-top: 1px dashed #e2ecf2;
   font-size: 1.3rem;
   color: #7c97a6;
@@ -480,7 +514,10 @@
 }
 
 @media screen and (max-width: 749px) {
+  /* Not enough room for two columns; back to the stack. */
   .t-product .product__purchase-wrapper {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.4rem;
     padding: 1.8rem;
     margin-bottom: 3.6rem;
   }
@@ -527,6 +564,14 @@
      width — which is most of why it ran on past the bottom of the image. */
   .t-product .product.grid--3-col-tablet > .product__info-wrapper {
     margin-left: 0 !important;
+  }
+
+  /* The identity column is sized to its content and then centred in its track,
+     which parks its right edge 19px short of the gutter and throws the
+     symmetry off. It should fill the track it was given. */
+  .t-product .product.grid--3-col-tablet > .product__info-wrapper-left {
+    width: 100% !important;
+    justify-self: stretch;
   }
 }
 
