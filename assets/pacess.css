@@ -288,18 +288,25 @@
    Product page — the buy block
 
    Previously this sat as loose text under the three columns, so the one thing
-   a visitor has to act on had no edge around it. It is now a card.
+   a visitor has to act on had no edge around it. It is now a card, laid out as
+   a row: size, then the price/quantity pill, then the cart button at the end.
 
-   Everything wraps: prices, sizes and button labels all change length between
-   products and between languages, and this must not depend on any of them
-   fitting on one line.
+   custom-styles.css sets flex-direction:column and centres the children here,
+   and puts auto margins on the quantity block. Those are all restated rather
+   than relied on to lose, because "not declaring it" is what let the column
+   direction survive the first time.
+
+   Everything wraps: prices, sizes and button labels change length between
+   products and between languages, so none of this assumes one line.
    ------------------------------------------------------------------------ */
 
 .t-product .product__purchase-wrapper {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1.8rem;
+  justify-content: flex-start;
+  gap: 1.6rem 2rem;
   margin: 3.4rem auto 0;
   padding: 2rem 2.4rem;
   max-width: var(--page-width, 120rem);
@@ -309,22 +316,41 @@
   box-shadow: 0 1px 3px rgba(var(--color-foreground), 0.06);
 }
 
-/* The add-to-cart control is pushed to the far end on a wide card and takes the
-   full width once the row wraps, so it never ends up stranded mid-line. */
-.t-product .product__purchase-wrapper > form,
-.t-product .product__purchase-wrapper .product-form {
+/* The size sat above the price with a -20px top margin holding it there. */
+.t-product .product__purchase-wrapper .product-size {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+/* The price and quantity pill: keep its own internal layout, drop the auto
+   margins that were centring it in a column. */
+.t-product .product__purchase-wrapper .custom-quantity-price-wrapper {
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+/* The cart button is the last child and goes to the far end of the row. */
+.t-product .product__purchase-wrapper > *:last-child {
   margin-left: auto;
-  flex: 0 1 auto;
 }
 
 @media screen and (max-width: 749px) {
   .t-product .product__purchase-wrapper {
     padding: 1.6rem 1.8rem;
-    gap: 1.4rem;
+    gap: 1.2rem 1.4rem;
   }
-  .t-product .product__purchase-wrapper > form,
-  .t-product .product__purchase-wrapper .product-form {
+  /* Once it wraps, the button takes the full width rather than being stranded. */
+  .t-product .product__purchase-wrapper > *:last-child {
     margin-left: 0;
     flex: 1 1 100%;
+  }
+  .t-product .product__purchase-wrapper > *:last-child .button,
+  .t-product .product__purchase-wrapper > *:last-child button {
+    width: 100%;
   }
 }
