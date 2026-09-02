@@ -356,11 +356,13 @@
   gap: 10px;
 }
 .t-product .pe-price .price-item { font-size: inherit; font-weight: inherit; line-height: inherit; }
-.t-product .pe-price .price-item--regular { color: inherit; }
-/* The struck-through compare-at price only. Scoped inside .price__sale on
-   purpose: on a product that is not on sale, .price__regular carries the same
-   class and that one is the actual price, which stays bold. */
-.t-product .pe-price .price__sale .price-item--regular { font-weight: 400; }
+/* The struck-through compare-at price. Scoped inside .price__sale on purpose:
+   on a product that is not on sale, .price__regular carries the same class and
+   that one is the actual price, which keeps the full ink and weight. */
+.t-product .pe-price .price__sale .price-item--regular {
+  font-weight: 400;
+  color: #7c97a6;
+}
 /* The Sale badge sits hard against the price. Margin only: setting display
    here also revealed the Sold out badge, which Dawn keeps hidden until it
    applies. */
