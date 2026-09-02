@@ -208,40 +208,27 @@
     "essence_energetics": {
       "type": "essence-energetics",
       "settings": {
-        "mode": "energetics",
-        "eyebrow": "Signs & symptoms · energetics of Traditional Chinese Medicine",
-        "heading": "What this essence works on",
-        "heading_size": "h2",
+        "eyebrow": "Signs & symptoms",
+        "heading": "Based on the energetics of Traditional Chinese Medicine",
+        "heading_color": "#2a87b9",
+        "label_color": "#43a6db",
+        "box_background": "#ffffff",
+        "box_border": "#e7eff4",
+        "value_color": "#33586b",
+        "box_radius": 14,
         "directions_label": "How to take it",
-        "chip_background": "#ffffff",
+        "chip_background": "#eaf3f8",
         "chip_text": "#1d6a94",
         "chip_radius": 50,
         "color_scheme": "scheme-tide",
         "padding_top": 56,
         "padding_bottom": 56
       }
-    },
-    "essence_directions": {
-      "type": "essence-energetics",
-      "settings": {
-        "mode": "directions",
-        "eyebrow": "",
-        "heading": "",
-        "heading_size": "h2",
-        "directions_label": "How to take it",
-        "chip_background": "#ffffff",
-        "chip_text": "#1d6a94",
-        "chip_radius": 50,
-        "color_scheme": "scheme-1",
-        "padding_top": 48,
-        "padding_bottom": 48
-      }
     }
   },
   "order": [
     "main",
     "essence_energetics",
-    "essence_directions",
     "collapsible_content_iD6HhX",
     "collage_6pjz9H",
     "product_12_image_gallery_izqUcc",

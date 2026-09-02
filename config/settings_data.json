@@ -256,8 +256,8 @@
       },
       "scheme-tide": {
         "settings": {
-          "background": "#f1f7fb",
-          "background_gradient": "",
+          "background": "#f5fafc",
+          "background_gradient": "linear-gradient(160deg, rgba(245, 250, 252, 1) 0%, rgba(238, 246, 250, 1) 100%)",
           "text": "#1b2a33",
           "button": "#2a87b9",
           "button_label": "#ffffff",
