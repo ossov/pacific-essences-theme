@@ -423,9 +423,11 @@
       <div class="pe-guide" id="pe-guide-{{ section.id }}" hidden>
         <div class="pe-guide__backdrop" data-guide-close></div>
         <div class="pe-guide__panel" role="dialog" aria-modal="true" aria-label="{{ section.settings.guide_label | escape }}">
-          <button type="button" class="pe-guide__close" data-guide-close aria-label="{{ 'accessibility.close' | t }}">
-            {{- 'icon-close.svg' | inline_asset_content -}}
-          </button>
+          <div class="pe-guide__head">
+            <button type="button" class="pe-guide__close" data-guide-close aria-label="{{ 'accessibility.close' | t }}">
+              {{- 'icon-close.svg' | inline_asset_content -}}
+            </button>
+          </div>
           <div id="essence-chat-product-{{ section.id }}" class="pe-guide__mount"></div>
         </div>
       </div>

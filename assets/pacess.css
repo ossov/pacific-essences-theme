@@ -433,6 +433,13 @@
 .t-product .pe-btn-ghost {
   display: block;
   width: 100%;
+  /* As a <button> this inherits the browser's 2px outset border, which it did
+     not have as a link. The outline is drawn by the inset shadow below. */
+  border: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: inherit;
+  cursor: pointer;
   border-radius: 999px;
   padding: 14px 30px;
   font-size: 1.5rem;
@@ -500,6 +507,9 @@
 
 .t-product .product.product--medium {
   align-items: start;
+  /* There was no gutter at all, so the left column's text ran straight into the
+     edge of the image card beside it. */
+  column-gap: 3.2rem;
 }
 
 .t-product .product__info-wrapper-left {
@@ -529,7 +539,9 @@
   margin: 0;
   max-width: none;
   padding-right: 0;
-  font-size: clamp(3.4rem, 2rem + 2vw, 5rem);
+  /* Was clamp(3.4rem, 2rem + 2vw, 5rem). Its floor of 34px was still too wide
+     for this column once a product had a longer name than Fearlessness. */
+  font-size: clamp(2.6rem, 1.2rem + 1.9vw, 4.4rem);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.02em;
@@ -543,7 +555,7 @@
 .t-product .product__info-wrapper-left .product__resonance-metafield {
   order: 2;
   width: auto;
-  max-width: 32ch;
+  max-width: min(32ch, 100%);
   margin: 0.6rem 0 0;
   background: none;
   -webkit-background-clip: border-box;
@@ -559,7 +571,7 @@
   margin: 0;
   /* Sits between the name and body text: clearly the second thing you read,
      without competing with the name for the top of the hierarchy. */
-  font-size: clamp(2rem, 1.4rem + 0.9vw, 2.7rem);
+  font-size: clamp(1.7rem, 1.1rem + 0.8vw, 2.5rem);
   font-weight: 400;
   font-style: italic;
   line-height: 1.25;
@@ -636,19 +648,33 @@
 
 .pe-guide__panel {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: min(72rem, 100%);
-  max-height: min(80vh, 72rem);
-  overflow: auto;
+  max-height: min(86vh, 76rem);
+  /* The panel itself does not scroll; the conversation inside it does, so the
+     close button cannot be scrolled out of reach. */
+  overflow: hidden;
   background: #ffffff;
   border-radius: 20px;
-  padding: 2.6rem 2.4rem 2.4rem;
+  padding: 1.2rem 2.4rem 2.4rem;
   box-shadow: 0 24px 60px rgba(18, 48, 63, 0.28);
 }
 
+.pe-guide__head {
+  flex: none;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.4rem;
+}
+
+.pe-guide__mount {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
 .pe-guide__close {
-  position: absolute;
-  top: 1.2rem;
-  right: 1.2rem;
   width: 3.6rem;
   height: 3.6rem;
   display: flex;
