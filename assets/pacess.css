@@ -434,36 +434,40 @@
    carried competed with the name directly above it, so it is plain italic
    here; the gradient still does its job on the homepage. */
 .t-product .product__info-wrapper-left .product__resonance-metafield {
-  order: 1;
+  order: 2;
   width: auto;
   max-width: 32ch;
-  margin: 0.4rem 0 0;
+  margin: 0.6rem 0 0;
   background: none;
   -webkit-background-clip: border-box;
   background-clip: border-box;
   -webkit-text-fill-color: currentColor;
   color: rgb(var(--color-foreground));
-  opacity: 0.75;
+  opacity: 1;
   text-align: right;
   white-space: normal;
 }
 
 .t-product .product__info-wrapper-left .product__resonance-metafield p {
   margin: 0;
-  font-size: clamp(1.7rem, 1.4rem + 0.4vw, 2rem);
+  /* Sits between the name and body text: clearly the second thing you read,
+     without competing with the name for the top of the hierarchy. */
+  font-size: clamp(2rem, 1.4rem + 0.9vw, 2.7rem);
   font-weight: 400;
   font-style: italic;
-  line-height: 1.35;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
 }
 
 /* A short rule under the identity stack, closing it off and pointing at the
    image. Sits on the column so it survives a missing resonance. */
 .t-product .product__info-wrapper-left::after {
   content: "";
-  order: 2;
+  order: 1;
   width: 4.6rem;
   height: 2px;
-  margin-top: 1.4rem;
+  margin: 1.4rem 0 0.2rem;
   background: rgb(var(--color-foreground));
   opacity: 0.35;
 }
