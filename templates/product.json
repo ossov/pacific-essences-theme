@@ -185,26 +185,6 @@
         "include_margins": true
       }
     },
-    "1760716968aa1efbb6": {
-      "type": "apps",
-      "blocks": {
-        "judge_me_reviews_review_widget_MKXMVN": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "review_data": "real_data",
-            "max_width": 1200,
-            "show_shop_reviews": false,
-            "empty_state": "empty_widget"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_review_widget_MKXMVN"
-      ],
-      "settings": {
-        "include_margins": true
-      }
-    },
     "essence_energetics": {
       "type": "essence-energetics",
       "settings": {
@@ -224,6 +204,44 @@
         "padding_top": 56,
         "padding_bottom": 56
       }
+    },
+    "essence_reviews": {
+      "type": "essence-reviews",
+      "blocks": {
+        "judge_me_reviews_review_widget_MKXMVN": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "real_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_MKXMVN"
+      ],
+      "settings": {
+        "eyebrow": "In their words",
+        "heading": "Customer reviews",
+        "intro": "",
+        "heading_color": "#2a87b9",
+        "label_color": "#43a6db",
+        "box_background": "#ffffff",
+        "box_border": "#e7eff4",
+        "value_color": "#33586b",
+        "muted_color": "#7c97a6",
+        "box_radius": 14,
+        "star_color": "#f0b429",
+        "star_off_color": "#dbe6ed",
+        "bar_color": "#2a87b9",
+        "chip_background": "#eaf3f8",
+        "chip_text": "#1d6a94",
+        "color_scheme": "scheme-tide",
+        "padding_top": 56,
+        "padding_bottom": 56,
+        "ink_color": "#123b51"
+      }
     }
   },
   "order": [
@@ -234,6 +252,6 @@
     "product_12_image_gallery_izqUcc",
     "related-products",
     "175158049886d1ef6d",
-    "1760716968aa1efbb6"
+    "essence_reviews"
   ]
 }

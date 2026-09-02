@@ -1,0 +1,377 @@
+{%- comment -%}
+  Customer reviews — the Judge.me widget, wrapped in the same band treatment as
+  the energetics section and restyled to match.
+
+  The Judge.me review widget is added to this section as an app block, so the
+  app still owns the reviews, the star data and the review form. What this
+  section owns is the chrome around it: the band, the heading, and the CSS that
+  turns Judge.me's stacked, divider-separated list into the card layout.
+{%- endcomment -%}
+
+{%- liquid
+  assign has_app = false
+  for block in section.blocks
+    if block.type == '@app'
+      assign has_app = true
+    endif
+  endfor
+-%}
+
+{%- if has_app -%}
+  {% style %}
+    #er-{{ section.id }} {
+      padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+      border-top: 1px solid {{ section.settings.box_border }};
+      border-bottom: 1px solid {{ section.settings.box_border }};
+    }
+
+    #er-{{ section.id }} .er-eyebrow {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: {{ section.settings.label_color }};
+    }
+
+    #er-{{ section.id }} .er-title {
+      margin: 0 0 6px;
+      font-size: clamp(2.1rem, 1.6rem + 0.8vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      color: {{ section.settings.heading_color }};
+      text-wrap: balance;
+    }
+
+    #er-{{ section.id }} .er-intro {
+      margin: 0 0 24px;
+      font-size: 1.5rem;
+      line-height: 1.6;
+      max-width: 56ch;
+      color: {{ section.settings.value_color }};
+    }
+    #er-{{ section.id }} .er-title:last-child { margin-bottom: 24px; }
+
+    /* ---- Judge.me: strip the app's own chrome -------------------------- */
+
+    /* The section supplies the heading, so the widget's own one would be a
+       duplicate h2 sitting directly under it. */
+    #er-{{ section.id }} .jdgm-rev-widg__title { display: none !important; }
+
+    #er-{{ section.id }} .jdgm-rev-widg,
+    #er-{{ section.id }} .jdgm-widget {
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+    }
+
+    /* Judge.me separates reviews with a rule across the top of each one.
+       They are cards here, so the rules have to go. */
+    #er-{{ section.id }} .jdgm-rev.jdgm-divider-top,
+    #er-{{ section.id }} .jdgm-rev {
+      border-top: 0 !important;
+      border-bottom: 0 !important;
+    }
+
+    /* ---- Summary card and histogram ------------------------------------ */
+
+    #er-{{ section.id }} .jdgm-row-stars {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 22px;
+      margin: 0 0 20px;
+      padding: 0 !important;
+    }
+
+    /* Judge.me sizes the summary and the button wrapper at a percentage of the
+       row, which leaves both stretched far past their content. */
+    #er-{{ section.id }} .jdgm-rev-widg__summary {
+      flex: 0 0 auto;
+      width: auto !important;
+      min-width: 190px;
+      display: block;
+      text-align: center;
+      background: {{ section.settings.box_background }};
+      border: 1px solid {{ section.settings.box_border }};
+      border-radius: {{ section.settings.box_radius }}px;
+      padding: 18px 28px;
+      margin: 0 !important;
+    }
+
+    #er-{{ section.id }} .jdgm-rev-widg__summary-stars {
+      display: block;
+      font-size: 2.2rem;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    #er-{{ section.id }} .jdgm-rev-widg__summary-average,
+    #er-{{ section.id }} .jdgm-rev-widg__summary-average .jdgm-link {
+      display: block;
+      font-size: 1.9rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin: 8px 0 0;
+      color: {{ section.settings.heading_color }};
+      text-decoration: none;
+    }
+
+    #er-{{ section.id }} .jdgm-rev-widg__summary-text {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: {{ section.settings.muted_color }};
+      margin: 2px 0 0;
+    }
+
+    #er-{{ section.id }} .jdgm-histogram {
+      flex: 1 1 240px;
+      width: auto !important;
+      max-width: 380px;
+      margin: 0 !important;
+    }
+    #er-{{ section.id }} .jdgm-histogram__row { align-items: center; gap: 10px; }
+    #er-{{ section.id }} .jdgm-histogram__bar {
+      background: {{ section.settings.chip_background }};
+      border-radius: 50px;
+      height: 8px;
+      overflow: hidden;
+    }
+    #er-{{ section.id }} .jdgm-histogram__bar-content {
+      background: {{ section.settings.bar_color }};
+      border-radius: 50px;
+      height: 100%;
+    }
+    #er-{{ section.id }} .jdgm-histogram__frequency {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: {{ section.settings.muted_color }};
+    }
+
+    /* ---- Write a review, and the sort control --------------------------- */
+
+    #er-{{ section.id }} .jdgm-widget-actions-wrapper {
+      flex: 0 0 auto;
+      width: auto !important;
+      align-items: center;
+      margin: 0 0 0 auto !important;
+    }
+
+    /* With no reviews yet, Judge.me renders a one-line invitation and the
+       button. Pushing the button to the far edge of a 1100px row leaves the two
+       halves of one sentence-and-its-action a screen apart. */
+    #er-{{ section.id }} .jdgm-rev-widg:not(:has(.jdgm-rev)) .jdgm-widget-actions-wrapper {
+      margin-left: 0 !important;
+    }
+
+    #er-{{ section.id }} .jdgm-write-rev-link {
+      display: inline-block;
+      border: 1px solid {{ section.settings.heading_color }};
+      border-radius: 50px;
+      padding: 10px 22px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: {{ section.settings.heading_color }};
+      background: transparent;
+      max-width: none;
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    #er-{{ section.id }} .jdgm-write-rev-link:hover {
+      background: {{ section.settings.heading_color }};
+      color: {{ section.settings.box_background }};
+    }
+
+    #er-{{ section.id }} .jdgm-row-actions { margin: 0 0 14px; padding: 0 !important; }
+    #er-{{ section.id }} .jdgm-sort-dropdown-wrapper {
+      background: {{ section.settings.box_background }};
+      border: 1px solid {{ section.settings.box_border }};
+      border-radius: 50px;
+      padding: 4px 14px;
+    }
+    #er-{{ section.id }} .jdgm-sort-dropdown,
+    #er-{{ section.id }} .jdgm-sort-dropdown-label {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: {{ section.settings.muted_color }};
+    }
+
+    /* ---- The reviews themselves ---------------------------------------- */
+
+    /* Column flow rather than a grid, for the same reason as the energetics
+       section: reviews are wildly uneven in length, and a grid would give
+       every card in a row the height of the longest one. */
+    #er-{{ section.id }} .jdgm-rev-widg__reviews {
+      columns: 2;
+      column-gap: 16px;
+    }
+
+    /* A lone review in a two-column container is a half-width card next to an
+       empty gap. Products with one review are common here. */
+    #er-{{ section.id }} .jdgm-rev-widg__reviews:has(.jdgm-rev:only-child) {
+      columns: 1;
+      max-width: 640px;
+    }
+
+    #er-{{ section.id }} .jdgm-rev {
+      break-inside: avoid;
+      -webkit-column-break-inside: avoid;
+      page-break-inside: avoid;
+      /* Block, not inline-block. Judge.me emits whitespace between reviews, and
+         inline-level children turn that into line boxes the column balancer
+         will not split, which piles every review into the first column. */
+      display: block;
+      width: 100%;
+      margin: 0 0 16px !important;
+      padding: 20px 22px !important;
+      background: {{ section.settings.box_background }};
+      border: 1px solid {{ section.settings.box_border }} !important;
+      border-radius: {{ section.settings.box_radius }}px;
+    }
+
+    #er-{{ section.id }} .jdgm-rev__rating { font-size: 1.6rem; }
+
+    #er-{{ section.id }} .jdgm-rev__timestamp {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: {{ section.settings.muted_color }};
+    }
+
+    #er-{{ section.id }} .jdgm-rev__author {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: {{ section.settings.ink_color }};
+    }
+
+    #er-{{ section.id }} .jdgm-rev__location,
+    #er-{{ section.id }} .jdgm-rev__buyer-badge {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: {{ section.settings.chip_text }};
+    }
+
+    #er-{{ section.id }} .jdgm-rev__title {
+      display: block;
+      margin: 10px 0 5px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1.35;
+      color: {{ section.settings.ink_color }};
+    }
+
+    #er-{{ section.id }} .jdgm-rev__body,
+    #er-{{ section.id }} .jdgm-rev__body p {
+      font-size: 1.4rem;
+      line-height: 1.6;
+      color: {{ section.settings.value_color }};
+    }
+    #er-{{ section.id }} .jdgm-rev__body > :first-child { margin-top: 0; }
+    #er-{{ section.id }} .jdgm-rev__body > :last-child { margin-bottom: 0; }
+
+    /* Judge.me always emits these two rows; on this store they are empty, and
+       an empty row leaves a gap at the bottom of every card. :empty keeps the
+       styling honest if the store ever turns them on. */
+    #er-{{ section.id }} .jdgm-rev__actions:has(.jdgm-rev__social:empty):has(.jdgm-rev__votes:empty) {
+      display: none;
+    }
+
+    /* ---- Stars --------------------------------------------------------- */
+
+    #er-{{ section.id }} .jdgm-star.jdgm--on,
+    #er-{{ section.id }} .jdgm-star.jdgm--half {
+      color: {{ section.settings.star_color }} !important;
+    }
+    #er-{{ section.id }} .jdgm-star.jdgm--off {
+      color: {{ section.settings.star_off_color }} !important;
+    }
+
+    /* ---- Pagination ---------------------------------------------------- */
+
+    #er-{{ section.id }} .jdgm-paginate { margin-top: 6px; text-align: center; }
+    #er-{{ section.id }} .jdgm-paginate__page {
+      border-radius: 50px;
+      padding: 4px 12px;
+      font-weight: 700;
+      color: {{ section.settings.muted_color }};
+    }
+    #er-{{ section.id }} .jdgm-paginate__current-page {
+      background: {{ section.settings.chip_background }};
+      color: {{ section.settings.chip_text }};
+    }
+
+    @media screen and (max-width: 749px) {
+      #er-{{ section.id }} .jdgm-rev-widg__reviews { columns: 1; }
+      #er-{{ section.id }} .jdgm-row-stars { gap: 16px; }
+      #er-{{ section.id }} .jdgm-rev-widg__summary { flex: 1 1 100%; }
+    }
+  {% endstyle %}
+
+  <div id="er-{{ section.id }}" class="color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-width">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="er-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="er-title">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.intro != blank -%}
+        <p class="er-intro">{{ section.settings.intro | escape }}</p>
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            {%- render block -%}
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Customer reviews",
+  "tag": "section",
+  "class": "section",
+  "blocks": [{ "type": "@app" }],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Add the Judge.me review widget as a block here. This section supplies the heading and the styling around it."
+    },
+
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "In their words" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Customer reviews" },
+    { "type": "text", "id": "intro", "label": "Intro line" },
+    { "type": "color", "id": "heading_color", "label": "Heading colour", "default": "#2a87b9" },
+    { "type": "color", "id": "label_color", "label": "Eyebrow colour", "default": "#43a6db" },
+
+    { "type": "header", "content": "Cards" },
+    { "type": "color", "id": "box_background", "label": "Card background", "default": "#ffffff" },
+    { "type": "color", "id": "box_border", "label": "Card border", "default": "#e7eff4" },
+    { "type": "color", "id": "ink_color", "label": "Reviewer name and title colour", "default": "#123b51" },
+    { "type": "color", "id": "value_color", "label": "Review text colour", "default": "#33586b" },
+    { "type": "color", "id": "muted_color", "label": "Secondary text colour", "default": "#7c97a6" },
+    { "type": "range", "id": "box_radius", "min": 0, "max": 30, "step": 2, "unit": "px", "label": "Card corner radius", "default": 14 },
+
+    { "type": "header", "content": "Stars and bars" },
+    { "type": "color", "id": "star_color", "label": "Star colour", "default": "#f0b429" },
+    { "type": "color", "id": "star_off_color", "label": "Empty star colour", "default": "#dbe6ed" },
+    { "type": "color", "id": "bar_color", "label": "Histogram bar colour", "default": "#2a87b9" },
+    { "type": "color", "id": "chip_background", "label": "Histogram track colour", "default": "#eaf3f8" },
+    { "type": "color", "id": "chip_text", "label": "Badge text colour", "default": "#1d6a94" },
+
+    { "type": "header", "content": "Section style" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-tide" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding top", "default": 56 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding bottom", "default": 56 }
+  ],
+  "presets": [{ "name": "Customer reviews" }]
+}
+{% endschema %}
