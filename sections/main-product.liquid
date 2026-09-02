@@ -95,6 +95,69 @@
         {%- endif -%}
         {% endcomment %}
 
+        {%- comment -%}
+          Two pieces of reassurance under the identity stack: what other people
+          scored it, and where it is made. Both are optional — a product with no
+          reviews renders no rating, and the origin line is a section setting so
+          it can be edited and translated rather than being baked in here.
+        {%- endcomment -%}
+
+        {%- liquid
+          assign rating = product.metafields.reviews.rating.value
+          assign rating_count = product.metafields.reviews.rating_count.value | plus: 0
+        -%}
+
+        {%- if rating != blank and rating_count > 0 -%}
+          {%- liquid
+            assign rating_decimal = 0
+            assign decimal = rating.rating | modulo: 1
+            if decimal >= 0.3 and decimal <= 0.7
+              assign rating_decimal = 0.5
+            elsif decimal > 0.7
+              assign rating_decimal = 1
+            endif
+          -%}
+          <a class="pe-hero-rating" href="#judgeme_product_reviews">
+            <span
+              class="rating"
+              role="img"
+              aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: rating, rating_max: rating.scale_max }}"
+            >
+              <span
+                aria-hidden="true"
+                class="rating-star"
+                style="--rating: {{ rating.rating | floor }}; --rating-max: {{ rating.scale_max }}; --rating-decimal: {{ rating_decimal }};"
+              ></span>
+            </span>
+            <span class="pe-hero-rating__count">
+              <span aria-hidden="true">{{ rating.rating }}</span>
+              <span aria-hidden="true">&middot;</span>
+              <span aria-hidden="true">{{ rating_count }} {{ section.settings.reviews_label | escape }}</span>
+              <span class="visually-hidden">{{ rating_count }} {{ 'accessibility.total_reviews' | t }}</span>
+            </span>
+          </a>
+        {%- elsif product.metafields.judgeme.badge != blank -%}
+          {%- comment -%}
+            Fallback for stores where Judge.me is not syncing into the standard
+            reviews metafields: its own preview badge, styled to match.
+          {%- endcomment -%}
+          <a class="pe-hero-rating pe-hero-rating--badge" href="#judgeme_product_reviews">
+            {{ product.metafields.judgeme.badge }}
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.origin_line != blank -%}
+          <p class="pe-hero-origin">
+            <svg class="pe-hero-flag" viewBox="0 0 9600 4800" role="img" aria-label="Canada" focusable="false">
+              <path fill="#d52b1e" d="M0 0h9600v4800H0z"/>
+              <path fill="#ffffff" d="M2400 0h4800v4800H2400z"/>
+              <path fill="#d52b1e" d="M0 0m4890 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/>
+            </svg>
+            <span>{{ section.settings.origin_line | escape }}</span>
+          </p>
+        {%- endif -%}
+
+
         
 
       </div>
@@ -2077,6 +2140,24 @@
       "id": "color_scheme",
       "label": "t:sections.all.colors.label",
       "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "origin_line",
+      "label": "Origin line",
+      "default": "Made on Vancouver Island since 1983",
+      "info": "Shown under the name with a Canadian flag. Leave empty to hide it."
+    },
+    {
+      "type": "text",
+      "id": "reviews_label",
+      "label": "Reviews word",
+      "default": "reviews",
+      "info": "Follows the review count beside the stars."
     },
     {
       "type": "header",
