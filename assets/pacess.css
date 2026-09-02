@@ -47,7 +47,6 @@
 
   /* Corner radii. There are four distinct values in play; also a restyle
      decision rather than something to change silently here. */
-  --pe-paper: #ffffff;
   --pe-radius-pill: 50px;
   --pe-radius-button: 30px;
   --pe-radius-media: 25px;
@@ -408,10 +407,10 @@
 .t-product .product__info-wrapper-left .product-type {
   order: -1;
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 700;
   line-height: 1.4;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgb(var(--color-foreground));
   opacity: 0.7;
@@ -423,14 +422,12 @@
   margin: 0;
   max-width: none;
   padding-right: 0;
-  font-size: clamp(2.4rem, 2.2vw, 3.2rem);
+  font-size: clamp(3.4rem, 2rem + 2vw, 5rem);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.02em;
   text-align: right;
   text-wrap: balance;
-  /* A single long product name should shrink and wrap, never spill out. */
-  overflow-wrap: break-word;
 }
 
 /* The resonance is a descriptor, not a second heading. The gradient fill it
@@ -455,7 +452,7 @@
   margin: 0;
   /* Sits between the name and body text: clearly the second thing you read,
      without competing with the name for the top of the hierarchy. */
-  font-size: clamp(1.7rem, 1.5vw, 2.2rem);
+  font-size: clamp(2rem, 1.4rem + 0.9vw, 2.7rem);
   font-weight: 400;
   font-style: italic;
   line-height: 1.25;
@@ -502,80 +499,5 @@
   }
   .t-product .product__info-wrapper-left .product__resonance-metafield {
     max-width: 40ch;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Product page — framing the hero
-
-   The hero band is tinted (scheme-tide), and each of the three columns sits on
-   it as a white card. On white the columns had nothing separating them from
-   the header above or from each other.
-
-   The middle column is wider than the outer two, so the bottle gets more room.
-   The image is width:100% height:auto, so widening its column scales it
-   proportionally rather than stretching it.
-   ------------------------------------------------------------------------ */
-
-.t-product .product.product--medium {
-  /* Was three equal thirds. The image earns the extra width. */
-  /* minmax, not a bare 1fr. A grid track's automatic minimum is its content's
-     intrinsic size: the image forced the middle track wide, and container-type
-     on the left card zeroed its own minimum, so it collapsed to a sliver. */
-  grid-template-columns: minmax(20rem, 1fr) minmax(0, 1.5fr) minmax(20rem, 1fr);
-  gap: 1.8rem;
-  align-items: stretch;
-}
-
-/* Same reason: without this the image's natural width sets the track's floor. */
-.t-product .product .grid__item {
-  min-width: 0;
-}
-
-.t-product .product__info-wrapper-left,
-.t-product .product__media-wrapper,
-.t-product .product__info-wrapper {
-  background: var(--pe-paper, #ffffff);
-  border: 1px solid rgba(var(--color-foreground), 0.14);
-  border-radius: var(--pe-radius-card, 14px);
-  box-shadow:
-    0 1px 2px rgba(var(--color-foreground), 0.05),
-    0 12px 28px -18px rgba(var(--color-foreground), 0.3);
-}
-
-.t-product .product__info-wrapper-left {
-  padding: 2.6rem 2.4rem;
-  justify-content: center;
-}
-
-.t-product .product__media-wrapper {
-  /* No padding: the shot already carries its own pale ground, so letting it
-     meet the card edge buys real size back rather than framing it twice. */
-  padding: 0;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.t-product .product__media-wrapper img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.t-product .product__info-wrapper {
-  padding: 2.6rem 2.4rem;
-}
-
-@media screen and (max-width: 989px) {
-  .t-product .product.product--medium {
-    grid-template-columns: 1fr;
-    gap: 1.6rem;
-  }
-  .t-product .product__info-wrapper-left,
-  .t-product .product__media-wrapper,
-  .t-product .product__info-wrapper {
-    padding: 2rem 1.8rem;
   }
 }

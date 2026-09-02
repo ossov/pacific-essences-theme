@@ -57,7 +57,7 @@
       ],
       "settings": {
         "enable_sticky_info": false,
-        "color_scheme": "scheme-tide",
+        "color_scheme": "scheme-1",
         "media_size": "medium",
         "constrain_to_viewport": false,
         "media_fit": "contain",
