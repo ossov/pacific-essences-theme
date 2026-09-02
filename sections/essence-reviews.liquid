@@ -246,12 +246,34 @@
       color: {{ section.settings.ink_color }};
     }
 
-    #er-{{ section.id }} .jdgm-rev__location,
-    #er-{{ section.id }} .jdgm-rev__buyer-badge {
+    #er-{{ section.id }} .jdgm-rev__location {
       font-size: 1.2rem;
       font-weight: 700;
       color: {{ section.settings.chip_text }};
     }
+
+    /* Judge.me ships this as a hard-cornered blue block with a fixed 16px
+       height. Same chip as the key attractors and challenges above. */
+    #er-{{ section.id }} .jdgm-rev__buyer-badge {
+      display: inline-block;
+      height: auto;
+      padding: 3px 11px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+      vertical-align: middle;
+      background: {{ section.settings.chip_background }} !important;
+      color: {{ section.settings.chip_text }} !important;
+    }
+
+    /* The avatar carries a small verified tick in its corner. It says the same
+       thing as the chip beside the name, and it is absolutely positioned, so
+       when the avatar is not its containing block it lands loose over the
+       stars. Pin the avatar and drop the tick. */
+    #er-{{ section.id }} .jdgm-rev__icon { position: relative; }
+    #er-{{ section.id }} .jdgm-rev__icon::after { content: none !important; display: none !important; }
 
     #er-{{ section.id }} .jdgm-rev__title {
       display: block;
