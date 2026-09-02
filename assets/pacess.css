@@ -326,6 +326,13 @@
 .t-product .pe-price .price__container { display: flex; align-items: baseline; gap: 10px; }
 .t-product .pe-price .price-item { font-size: inherit; font-weight: inherit; line-height: inherit; }
 .t-product .pe-price .price-item--regular { color: inherit; }
+/* The Sale badge sits hard against the price. Margin only: setting display
+   here also revealed the Sold out badge, which Dawn keeps hidden until it
+   applies. */
+.t-product .pe-price .price__badge-sale {
+  margin-top: 12px;
+}
+
 .t-product .pe-price__meta {
   font-size: 1.38rem;
   font-weight: 600;
@@ -400,6 +407,9 @@
   width: 100%;
   height: var(--pe-control-height, 5rem);
   min-height: 0;
+  /* Dawn sets margin:5px 0 10px here, which sat the button 5px lower than the
+     quantity pill beside it. */
+  margin: 0;
   border: 0;
   border-radius: 999px;
   padding: 0 30px;
