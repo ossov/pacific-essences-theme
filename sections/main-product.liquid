@@ -401,10 +401,92 @@
       {%- assign guide_match = section.settings.guide_only_when | default: 'Combination' -%}
       {%- assign essence_type_value = product.metafields.custom.essence_type.value | default: product.metafields.custom.essence_type -%}
       {%- if section.settings.guide_label != blank and essence_type_value contains guide_match -%}
-        <a class="pe-btn-ghost" href="{{ section.settings.guide_link | default: '/' }}">
+        {%- assign essence_name = split_title[0] | strip | default: product.title -%}
+        {%- assign guide_prompt = section.settings.guide_prompt | default: 'Is [product] right for me?' | replace: '[product]', essence_name -%}
+        <button
+          type="button"
+          class="pe-btn-ghost"
+          data-guide-open
+          data-guide-prompt="{{ guide_prompt | escape }}"
+          aria-haspopup="dialog"
+        >
           {{- section.settings.guide_label | escape -}}
-        </a>
+        </button>
       {%- endif -%}
+
+    {%- comment -%}
+      The guide, in a dialog on this page rather than a trip to the homepage.
+      The widget is mounted here on load and seeded with a question about this
+      essence when the button is pressed.
+    {%- endcomment -%}
+    {%- if section.settings.guide_label != blank and essence_type_value contains guide_match -%}
+      <div class="pe-guide" id="pe-guide-{{ section.id }}" hidden>
+        <div class="pe-guide__backdrop" data-guide-close></div>
+        <div class="pe-guide__panel" role="dialog" aria-modal="true" aria-label="{{ section.settings.guide_label | escape }}">
+          <button type="button" class="pe-guide__close" data-guide-close aria-label="{{ 'accessibility.close' | t }}">
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </button>
+          <div id="essence-chat-product-{{ section.id }}" class="pe-guide__mount"></div>
+        </div>
+      </div>
+
+      <script
+        src="{{ 'essence-chat.js' | asset_url }}"
+        data-mount="#essence-chat-product-{{ section.id }}"
+        data-endpoint="{{ section.settings.guide_endpoint | default: '/apps/essence-chat/chat-v2' | escape }}"
+        data-accent="#2a87b9"
+        data-placeholder="{{ section.settings.guide_label | escape }}"
+        defer
+      ></script>
+
+      <script>
+        (function () {
+          var root = document.getElementById('pe-guide-{{ section.id }}');
+          var opener = document.querySelector('[data-guide-open]');
+          if (!root || !opener) return;
+          var lastFocus = null;
+
+          function close() {
+            root.hidden = true;
+            document.body.style.overflow = '';
+            if (lastFocus) lastFocus.focus();
+          }
+
+          function seed(text) {
+            // The widget renders on a deferred script, so wait for its textarea
+            // rather than assuming it is there.
+            var tries = 0;
+            (function poll() {
+              var ta = root.querySelector('.ec-hero textarea');
+              var form = ta && ta.closest('form');
+              if (!ta || !form) {
+                if (++tries > 60) return;
+                return setTimeout(poll, 100);
+              }
+              if (form.dataset.seeded) { ta.focus(); return; }
+              form.dataset.seeded = '1';
+              ta.value = text;
+              ta.dispatchEvent(new Event('input', { bubbles: true }));
+              form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+            })();
+          }
+
+          opener.addEventListener('click', function () {
+            lastFocus = opener;
+            root.hidden = false;
+            document.body.style.overflow = 'hidden';
+            seed(opener.getAttribute('data-guide-prompt') || '');
+          });
+
+          root.addEventListener('click', function (e) {
+            if (e.target.closest('[data-guide-close]')) close();
+          });
+          document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !root.hidden) close();
+          });
+        })();
+      </script>
+    {%- endif -%}
 
       {%- comment -%}
         The displayed price follows the quantity. Shopify still does the real
@@ -2007,6 +2089,19 @@
       "label": "Only show when essence type contains",
       "default": "Combination",
       "info": "The guide only handles combination essences. Single essences carry their own name in this field, so they will not match."
+    },
+    {
+      "type": "text",
+      "id": "guide_prompt",
+      "label": "Question to open with",
+      "default": "Is [product] right for me?",
+      "info": "[product] is replaced with the essence name."
+    },
+    {
+      "type": "text",
+      "id": "guide_endpoint",
+      "label": "Guide backend endpoint",
+      "default": "/apps/essence-chat/chat-v2"
     },
     {
       "type": "text",
