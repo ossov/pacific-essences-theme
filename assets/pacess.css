@@ -346,7 +346,10 @@
 /* Dawn separates the compare-at price and the sale price with whitespace text
    nodes, which at this column width was just enough to push the sale price
    onto a second line. Flex drops the whitespace and controls the gap. */
-.t-product .pe-price .price__sale {
+/* Scoped to .price--on-sale: Dawn hides .price__sale on a product that is not
+   on sale, and a bare `display: flex` here beat that rule and exposed its
+   placeholder $0.00. */
+.t-product .pe-price .price--on-sale .price__sale {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
@@ -354,6 +357,10 @@
 }
 .t-product .pe-price .price-item { font-size: inherit; font-weight: inherit; line-height: inherit; }
 .t-product .pe-price .price-item--regular { color: inherit; }
+/* The struck-through compare-at price only. Scoped inside .price__sale on
+   purpose: on a product that is not on sale, .price__regular carries the same
+   class and that one is the actual price, which stays bold. */
+.t-product .pe-price .price__sale .price-item--regular { font-weight: 400; }
 /* The Sale badge sits hard against the price. Margin only: setting display
    here also revealed the Sold out badge, which Dawn keeps hidden until it
    applies. */
