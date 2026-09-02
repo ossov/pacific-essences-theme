@@ -253,6 +253,28 @@
           "secondary_button_label": "#121212",
           "shadow": "#121212"
         }
+      },
+      "scheme-tide": {
+        "settings": {
+          "background": "#f1f7fb",
+          "background_gradient": "",
+          "text": "#2a87b9",
+          "button": "#2a87b9",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#121212",
+          "shadow": "#121212"
+        }
+      },
+      "scheme-sage": {
+        "settings": {
+          "background": "#f1f7f2",
+          "background_gradient": "",
+          "text": "#2a87b9",
+          "button": "#2a87b9",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#121212",
+          "shadow": "#121212"
+        }
       }
     }
   },

@@ -1,0 +1,327 @@
+{%- comment -%}
+  Essence energetics — the metafield content that currently sits collapsed
+  inside the "More About This Product" accordion.
+
+  One file, two modes, so the same section can be added twice to a product
+  template and given a different colour scheme each time:
+
+    mode = energetics  -> resonance, attractors, challenges, the bodies,
+                          meridians, chakras, essence type
+    mode = directions  -> how to take it, and what it is made from
+
+  Scaling: every row is conditional, the grid balances itself with CSS columns
+  rather than a fixed split, and the whole section renders nothing at all when
+  a product has none of its fields. Individual essences carry a different set
+  from combinations, and plenty of products carry almost none.
+{%- endcomment -%}
+
+{%- liquid
+  assign m = product.metafields.custom
+
+  # Decide up front whether there is anything to show, so a product with no
+  # metafields does not leave an empty coloured band on the page.
+  assign has_content = false
+  if section.settings.mode == 'directions'
+    if m.directions != blank or m.ingredients != blank
+      assign has_content = true
+    endif
+  else
+    if m.resonance != blank or m.key_attractors != blank or m.key_challenges != blank
+      assign has_content = true
+    elsif m.mental != blank or m.emotional != blank or m.physical != blank or m.spiritual != blank
+      assign has_content = true
+    elsif m.meridians != blank or m.chakras != blank or m.essence_type != blank
+      assign has_content = true
+    elsif m.essence_new != blank or m.simple_accordion_rich != blank
+      assign has_content = true
+    endif
+  endif
+-%}
+
+{%- if has_content -%}
+  {% style %}
+    #ee-{{ section.id }} {
+      padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    }
+
+    #ee-{{ section.id }} .ee-eyebrow {
+      margin: 0 0 14px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgb(var(--color-foreground));
+      opacity: .75;
+    }
+
+    #ee-{{ section.id }} .ee-title {
+      margin: 0 0 26px;
+      /* Fluid so a long heading does not wrap awkwardly on a narrow screen. */
+      font-size: clamp(2.2rem, 1.4rem + 1.4vw, 2.9rem);
+      line-height: 1.25;
+      text-wrap: balance;
+    }
+
+    #ee-{{ section.id }} .ee-intro {
+      font-size: 1.65rem;
+      line-height: 1.65;
+      max-width: 62ch;
+      margin: 0 0 30px;
+    }
+    #ee-{{ section.id }} .ee-intro > :first-child { margin-top: 0; }
+    #ee-{{ section.id }} .ee-intro > :last-child { margin-bottom: 0; }
+
+    /* CSS columns rather than two hand-split lists: the number of populated
+       fields varies a lot between products, and this balances whatever it gets. */
+    #ee-{{ section.id }} .ee-grid {
+      columns: 2;
+      column-gap: 46px;
+    }
+
+    #ee-{{ section.id }} .ee-row {
+      break-inside: avoid;
+      display: grid;
+      grid-template-columns: minmax(96px, 130px) 1fr;
+      gap: 8px 16px;
+      padding: 13px 0;
+      border-bottom: 1px solid rgba(var(--color-foreground), .12);
+      align-items: baseline;
+    }
+
+    #ee-{{ section.id }} .ee-row dt {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: .65;
+      /* Long single-word labels must not push the value column off the edge. */
+      overflow-wrap: anywhere;
+    }
+
+    #ee-{{ section.id }} .ee-row dd {
+      margin: 0;
+      font-size: 1.6rem;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    #ee-{{ section.id }} .ee-row dd > :first-child { margin-top: 0; }
+    #ee-{{ section.id }} .ee-row dd > :last-child { margin-bottom: 0; }
+    #ee-{{ section.id }} .ee-row dd p { margin: 0 0 .4em; }
+
+    #ee-{{ section.id }} .ee-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    #ee-{{ section.id }} .ee-chip {
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1.4;
+      padding: 3px 11px;
+      border-radius: {{ section.settings.chip_radius }}px;
+      background: {{ section.settings.chip_background }};
+      color: {{ section.settings.chip_text }};
+    }
+
+    /* Directions mode is prose, not a table, so it gets its own measure. */
+    #ee-{{ section.id }} .ee-prose {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 40px;
+    }
+    #ee-{{ section.id }} .ee-prose h3 {
+      margin: 0 0 10px;
+      font-size: 1.8rem;
+      line-height: 1.3;
+    }
+    #ee-{{ section.id }} .ee-prose .ee-body {
+      font-size: 1.65rem;
+      line-height: 1.65;
+      max-width: 46ch;
+    }
+    #ee-{{ section.id }} .ee-prose .ee-body > :first-child { margin-top: 0; }
+    #ee-{{ section.id }} .ee-prose .ee-body > :last-child { margin-bottom: 0; }
+
+    @media screen and (max-width: 749px) {
+      #ee-{{ section.id }} .ee-grid { columns: 1; }
+      #ee-{{ section.id }} .ee-prose { grid-template-columns: 1fr; gap: 26px; }
+      #ee-{{ section.id }} .ee-row { grid-template-columns: 1fr; gap: 4px; padding: 11px 0; }
+    }
+  {% endstyle %}
+
+  <div id="ee-{{ section.id }}" class="color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-width">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="ee-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="ee-title {{ section.settings.heading_size }}">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      {%- comment -%}
+        The old accordion opened with this rich text block on products that have
+        it, so it is carried over rather than dropped.
+      {%- endcomment -%}
+      {%- if section.settings.mode != 'directions' and m.simple_accordion_rich != blank -%}
+        <div class="ee-intro rte">{{ m.simple_accordion_rich | metafield_tag }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.mode == 'directions' -%}
+
+        <div class="ee-prose">
+          {%- if m.directions != blank -%}
+            <div>
+              <h3>{{ section.settings.directions_label | escape }}</h3>
+              <div class="ee-body rte">{{ m.directions | metafield_tag }}</div>
+            </div>
+          {%- endif -%}
+          {%- if m.ingredients != blank -%}
+            <div>
+              <h3>{{ section.settings.ingredients_label | escape }}</h3>
+              <div class="ee-body rte">{{ m.ingredients | metafield_tag }}</div>
+            </div>
+          {%- endif -%}
+        </div>
+
+      {%- else -%}
+
+        <dl class="ee-grid">
+          {%- if m.essence_new != blank -%}
+            <div class="ee-row"><dt>Essence</dt><dd>{{ m.essence_new | metafield_tag }}</dd></div>
+          {%- endif -%}
+
+          {%- if m.resonance != blank -%}
+            <div class="ee-row"><dt>Resonance</dt><dd>{{ m.resonance | metafield_tag }}</dd></div>
+          {%- endif -%}
+
+          {%- comment -%}
+            Attractors and challenges are plain comma-separated text, which is
+            why they are the two rendered as chips rather than through
+            metafield_tag. A value with no commas simply becomes one chip.
+          {%- endcomment -%}
+          {%- if m.key_attractors != blank -%}
+            <div class="ee-row">
+              <dt>Key attractors</dt>
+              <dd>
+                <div class="ee-chips">
+                  {%- assign attractors = m.key_attractors | split: ',' -%}
+                  {%- for item in attractors -%}
+                    {%- assign clean = item | strip -%}
+                    {%- if clean != blank -%}<span class="ee-chip">{{ clean }}</span>{%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </dd>
+            </div>
+          {%- endif -%}
+
+          {%- if m.key_challenges != blank -%}
+            <div class="ee-row">
+              <dt>Key challenges</dt>
+              <dd>
+                <div class="ee-chips">
+                  {%- assign challenges = m.key_challenges | split: ',' -%}
+                  {%- for item in challenges -%}
+                    {%- assign clean = item | strip -%}
+                    {%- if clean != blank -%}<span class="ee-chip">{{ clean }}</span>{%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </dd>
+            </div>
+          {%- endif -%}
+
+          {%- if m.mental != blank -%}
+            <div class="ee-row"><dt>Mental</dt><dd>{{ m.mental | metafield_tag }}</dd></div>
+          {%- endif -%}
+          {%- if m.emotional != blank -%}
+            <div class="ee-row"><dt>Emotional</dt><dd>{{ m.emotional | metafield_tag }}</dd></div>
+          {%- endif -%}
+          {%- if m.physical != blank -%}
+            <div class="ee-row"><dt>Physical</dt><dd>{{ m.physical | metafield_tag }}</dd></div>
+          {%- endif -%}
+          {%- if m.spiritual != blank -%}
+            <div class="ee-row"><dt>Spiritual</dt><dd>{{ m.spiritual | metafield_tag }}</dd></div>
+          {%- endif -%}
+
+          {%- if m.meridians != blank -%}
+            <div class="ee-row"><dt>Meridians</dt><dd>{{ m.meridians | metafield_tag }}</dd></div>
+          {%- endif -%}
+          {%- if m.chakras != blank -%}
+            <div class="ee-row"><dt>Chakras</dt><dd>{{ m.chakras | metafield_tag }}</dd></div>
+          {%- endif -%}
+          {%- if m.essence_type != blank -%}
+            <div class="ee-row"><dt>Essence type</dt><dd>{{ m.essence_type | metafield_tag }}</dd></div>
+          {%- endif -%}
+        </dl>
+
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Essence energetics",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "mode",
+      "label": "What to show",
+      "options": [
+        { "value": "energetics", "label": "Energetics — resonance, attractors, meridians, chakras" },
+        { "value": "directions", "label": "Directions and ingredients" }
+      ],
+      "default": "energetics"
+    },
+    {
+      "type": "paragraph",
+      "content": "Rows appear only when the product has that metafield. A product with none of them renders nothing at all, so there is no empty band."
+    },
+
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Signs & symptoms · energetics of Traditional Chinese Medicine" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What this essence works on" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h3", "label": "Small" },
+        { "value": "h2", "label": "Medium" },
+        { "value": "h1", "label": "Large" }
+      ],
+      "default": "h2"
+    },
+
+    { "type": "header", "content": "Directions mode" },
+    { "type": "text", "id": "directions_label", "label": "Directions heading", "default": "How to take it" },
+    { "type": "text", "id": "ingredients_label", "label": "Ingredients heading", "default": "Made from" },
+
+    { "type": "header", "content": "Chips" },
+    { "type": "color", "id": "chip_background", "label": "Chip background", "default": "#e3f0f7" },
+    { "type": "color", "id": "chip_text", "label": "Chip text", "default": "#2a87b9" },
+    { "type": "range", "id": "chip_radius", "min": 0, "max": 50, "step": 2, "unit": "px", "label": "Chip corner radius", "default": 50 },
+
+    { "type": "header", "content": "Section style" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding top", "default": 56 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding bottom", "default": 56 }
+  ],
+  "presets": [
+    { "name": "Essence energetics", "settings": { "mode": "energetics" } },
+    {
+      "name": "Essence directions",
+      "settings": {
+        "mode": "directions",
+        "eyebrow": "",
+        "heading": ""
+      }
+    }
+  ]
+}
+{% endschema %}

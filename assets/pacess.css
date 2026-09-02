@@ -283,3 +283,48 @@
   margin-top: 10px !important;
   margin-bottom: 15px !important;
 }
+
+/* ---------------------------------------------------------------------------
+   Product page — the buy block
+
+   Previously this sat as loose text under the three columns, so the one thing
+   a visitor has to act on had no edge around it. It is now a card.
+
+   Everything wraps: prices, sizes and button labels all change length between
+   products and between languages, and this must not depend on any of them
+   fitting on one line.
+   ------------------------------------------------------------------------ */
+
+.t-product .product__purchase-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.8rem;
+  margin: 3.4rem auto 0;
+  padding: 2rem 2.4rem;
+  max-width: var(--page-width, 120rem);
+  background: rgb(var(--color-background));
+  border: 1px solid rgba(var(--color-foreground), 0.14);
+  border-radius: var(--pe-radius-card, 14px);
+  box-shadow: 0 1px 3px rgba(var(--color-foreground), 0.06);
+}
+
+/* The add-to-cart control is pushed to the far end on a wide card and takes the
+   full width once the row wraps, so it never ends up stranded mid-line. */
+.t-product .product__purchase-wrapper > form,
+.t-product .product__purchase-wrapper .product-form {
+  margin-left: auto;
+  flex: 0 1 auto;
+}
+
+@media screen and (max-width: 749px) {
+  .t-product .product__purchase-wrapper {
+    padding: 1.6rem 1.8rem;
+    gap: 1.4rem;
+  }
+  .t-product .product__purchase-wrapper > form,
+  .t-product .product__purchase-wrapper .product-form {
+    margin-left: 0;
+    flex: 1 1 100%;
+  }
+}
