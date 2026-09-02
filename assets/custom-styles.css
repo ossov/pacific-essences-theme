@@ -493,13 +493,17 @@
   display: none !important;
 }
 
-.product-size{
+.product-size {
   font-size: 2.1rem;
-  font-weight: 2rem;
   margin-block-start: 0em !important;
   margin-block-end: 0em !important;
-  margin-top: -20px !important;
+  /* The -20px top margin here was pulling the size up in the old stacked
+     purchase block. That block is a grid now and places it, so the negative
+     margin only fought the layout. Removed rather than overridden, because it
+     was !important and would have needed another !important to beat.
 
+     font-weight: 2rem also went: a length is not a valid font-weight, so the
+     declaration never did anything. */
 }
 
 
