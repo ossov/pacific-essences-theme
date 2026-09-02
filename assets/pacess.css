@@ -287,51 +287,56 @@
 /* ---------------------------------------------------------------------------
    Product page — the buy block
 
-   Laid out as a grid rather than a row so the size can sit directly above the
-   price as one unit, with the cart button held at the far end:
+   One row, pill shaped:
 
-       30 ML
-       [ $29.00 | - 1 + ]              [ Add to cart ]
+       [ $29.00 | - 1 + ]  30 ML                      [ Add to cart ]
 
-   As a flex row the size was just a third sibling with nothing tying it to
-   anything, which is why it read as floating.
+   Flex rather than grid now that it is a single line, with order used to put
+   the size after the price: the markup has size first, and reordering in CSS
+   avoids touching the section template.
 
    custom-styles.css sets display:flex, flex-direction:column and centres the
-   children here, and puts auto margins on the quantity block. All of that is
-   restated rather than relied on to lose on source order — not declaring the
-   direction is what let the old column layout survive a previous attempt.
+   children here, and puts auto margins on the quantity block. All of it is
+   restated rather than left to lose on source order — not declaring the
+   direction is what let the old column layout survive an earlier attempt.
    ------------------------------------------------------------------------ */
 
 .t-product .product__purchase-wrapper {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  grid-template-rows: auto auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.4rem 2.4rem;
+  justify-content: flex-start;
+  gap: 1.4rem 2rem;
 
-  margin: 3.4rem auto 0;
-  padding: 2.2rem 2.6rem;
+  /* The bottom margin is doing real work: without it the shadow runs into the
+     top of the band below and the card stops reading as a separate object. */
+  margin: 3.4rem auto 5.2rem;
+  padding: 1.8rem 3.4rem;
   max-width: var(--page-width, 120rem);
 
-  /* The card sits on white, so it needs its own weight to read as an object.
-     A whisper of a gradient gives it a top edge without a visible line, and the
-     shadow is tinted with the scheme foreground rather than neutral grey, which
-     on this page means it picks up the brand blue. */
   background:
     linear-gradient(180deg,
       rgb(var(--color-background)) 0%,
       rgba(var(--color-foreground), 0.022) 100%);
   border: 1px solid rgba(var(--color-foreground), 0.18);
-  border-radius: var(--pe-radius-card, 14px);
+  /* Pill, matching the price and quantity control inside it. */
+  border-radius: 999px;
   box-shadow:
     0 1px 2px rgba(var(--color-foreground), 0.06),
     0 14px 34px -16px rgba(var(--color-foreground), 0.38);
 }
 
-/* Row 1, above the price. Was held in place by a -20px top margin. */
+/* Price and quantity lead. */
+.t-product .product__purchase-wrapper .custom-quantity-price-wrapper {
+  order: 1;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+/* Size sits immediately to its right, as a caption on the price. */
 .t-product .product__purchase-wrapper .product-size {
-  grid-column: 1;
-  grid-row: 1;
+  order: 2;
   margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
@@ -339,53 +344,28 @@
   text-transform: uppercase;
   opacity: 0.55;
   white-space: nowrap;
+  flex: 0 0 auto;
 }
 
-/* Row 2. Keeps its own internal layout; loses the auto margins that were
-   centring it back when the wrapper was a column. */
-.t-product .product__purchase-wrapper .custom-quantity-price-wrapper {
-  grid-column: 1;
-  grid-row: 2;
-  margin: 0;
-}
-
-/* The cart button spans both rows at the far end, vertically centred. */
+/* Cart button at the far end. */
 .t-product .product__purchase-wrapper > *:last-child {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  justify-self: end;
-  align-self: center;
-  margin: 0;
-}
-
-/* A product with no size metafield leaves row 1 empty; pull the pill up so the
-   card does not keep a gap where the label would have been. */
-.t-product .product__purchase-wrapper:not(:has(.product-size)) {
-  grid-template-rows: auto;
-}
-.t-product .product__purchase-wrapper:not(:has(.product-size)) .custom-quantity-price-wrapper {
-  grid-row: 1;
-}
-.t-product .product__purchase-wrapper:not(:has(.product-size)) > *:last-child {
-  grid-row: 1;
+  order: 3;
+  margin: 0 0 0 auto;
+  flex: 0 0 auto;
 }
 
 @media screen and (max-width: 749px) {
   .t-product .product__purchase-wrapper {
-    grid-template-columns: 1fr;
-    gap: 0.4rem;
-    padding: 1.8rem;
+    /* A full pill on a tall stacked box reads as a lozenge, so the radius
+       steps down once the row wraps. */
+    border-radius: 2.6rem;
+    padding: 1.8rem 2rem;
+    gap: 1rem 1.4rem;
+    margin-bottom: 3.6rem;
   }
-  .t-product .product__purchase-wrapper .product-size,
-  .t-product .product__purchase-wrapper .custom-quantity-price-wrapper,
   .t-product .product__purchase-wrapper > *:last-child {
-    grid-column: 1;
-    grid-row: auto;
-    justify-self: stretch;
-  }
-  /* The button gets its own breathing room once everything is stacked. */
-  .t-product .product__purchase-wrapper > *:last-child {
-    margin-top: 0.8rem;
+    margin: 0.6rem 0 0;
+    flex: 1 1 100%;
   }
   .t-product .product__purchase-wrapper > *:last-child .button,
   .t-product .product__purchase-wrapper > *:last-child button {
