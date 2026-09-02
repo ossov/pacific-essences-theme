@@ -475,7 +475,16 @@
             lastFocus = opener;
             root.hidden = false;
             document.body.style.overflow = 'hidden';
-            seed(opener.getAttribute('data-guide-prompt') || '');
+            // Let the dialog lay out before seeding. Submitting in the same
+            // frame starts the widget's fade while it is still display:none,
+            // and the transition never completes: the panel sticks part-faded.
+            //
+            // A timer rather than requestAnimationFrame: rAF does not fire in a
+            // background or hidden tab, which would leave the dialog open and
+            // the question never sent.
+            setTimeout(function () {
+              seed(opener.getAttribute('data-guide-prompt') || '');
+            }, 60);
           });
 
           root.addEventListener('click', function (e) {

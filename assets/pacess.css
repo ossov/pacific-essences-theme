@@ -671,6 +671,14 @@
   padding: 0 !important;
 }
 
+/* The widget fades its panel and each message in. Those transitions depend on
+   the element being visible when they start, which is not guaranteed inside a
+   dialog that was display:none a moment earlier. In here they are simply on. */
+.pe-guide .ec-panel,
+.pe-guide .ec-msg {
+  opacity: 1 !important;
+}
+
 @media screen and (max-width: 749px) {
   .pe-guide { padding: 1rem; }
   .pe-guide__panel { padding: 2.4rem 1.6rem 1.6rem; max-height: 88vh; }
