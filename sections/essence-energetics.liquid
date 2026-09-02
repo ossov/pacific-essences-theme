@@ -22,7 +22,7 @@
   # metafields does not leave an empty coloured band on the page.
   assign has_content = false
   if section.settings.mode == 'directions'
-    if m.directions != blank or m.ingredients != blank
+    if m.directions != blank
       assign has_content = true
     endif
   else
@@ -32,7 +32,7 @@
       assign has_content = true
     elsif m.meridians != blank or m.chakras != blank or m.essence_type != blank
       assign has_content = true
-    elsif m.essence_new != blank or m.simple_accordion_rich != blank
+    elsif m.essence_new != blank or m.simple_accordion_rich != blank or m.ingredients != blank
       assign has_content = true
     endif
   endif
@@ -121,6 +121,7 @@
       font-weight: 700;
       line-height: 1.4;
       padding: 3px 11px;
+      border: 1px solid rgba(var(--color-foreground), 0.1);
       border-radius: {{ section.settings.chip_radius }}px;
       background: {{ section.settings.chip_background }};
       color: {{ section.settings.chip_text }};
@@ -177,12 +178,6 @@
             <div>
               <h3>{{ section.settings.directions_label | escape }}</h3>
               <div class="ee-body rte">{{ m.directions | metafield_tag }}</div>
-            </div>
-          {%- endif -%}
-          {%- if m.ingredients != blank -%}
-            <div>
-              <h3>{{ section.settings.ingredients_label | escape }}</h3>
-              <div class="ee-body rte">{{ m.ingredients | metafield_tag }}</div>
             </div>
           {%- endif -%}
         </div>
@@ -255,6 +250,9 @@
           {%- if m.essence_type != blank -%}
             <div class="ee-row"><dt>Essence type</dt><dd>{{ m.essence_type | metafield_tag }}</dd></div>
           {%- endif -%}
+          {%- if m.ingredients != blank -%}
+            <div class="ee-row"><dt>Ingredients</dt><dd>{{ m.ingredients | metafield_tag }}</dd></div>
+          {%- endif -%}
         </dl>
 
       {%- endif -%}
@@ -299,13 +297,12 @@
       "default": "h2"
     },
 
-    { "type": "header", "content": "Directions mode" },
+    { "type": "header", "content": "Directions band" },
     { "type": "text", "id": "directions_label", "label": "Directions heading", "default": "How to take it" },
-    { "type": "text", "id": "ingredients_label", "label": "Ingredients heading", "default": "Made from" },
 
     { "type": "header", "content": "Chips" },
-    { "type": "color", "id": "chip_background", "label": "Chip background", "default": "#e3f0f7" },
-    { "type": "color", "id": "chip_text", "label": "Chip text", "default": "#2a87b9" },
+    { "type": "color", "id": "chip_background", "label": "Chip background", "default": "#ffffff" },
+    { "type": "color", "id": "chip_text", "label": "Chip text", "default": "#1d6a94" },
     { "type": "range", "id": "chip_radius", "min": 0, "max": 50, "step": 2, "unit": "px", "label": "Chip corner radius", "default": 50 },
 
     { "type": "header", "content": "Section style" },
