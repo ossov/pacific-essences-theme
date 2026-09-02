@@ -69,25 +69,29 @@
     #ee-{{ section.id }} .ee-intro > :first-child { margin-top: 0; }
     #ee-{{ section.id }} .ee-intro > :last-child { margin-bottom: 0; }
 
-    /* One box per field. Boxes only exist for fields the product carries, so
-       the grid fills itself and never leaves a hole. */
+    /* Column flow rather than a grid. A grid gives every box in a row the
+       height of the tallest one, which leaves dead space under the short ones
+       and a ragged last row when the count is not divisible by three. Boxes
+       here pack against each other and the browser balances the columns, so it
+       stays tidy whether a product carries four fields or twelve. */
     #ee-{{ section.id }} .ee-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      align-items: start;
+      columns: 3;
+      column-gap: 16px;
     }
 
     #ee-{{ section.id }} .ee-box {
+      break-inside: avoid;
+      /* Safari needs the older pair as well. */
+      -webkit-column-break-inside: avoid;
+      page-break-inside: avoid;
+      display: inline-block;
+      width: 100%;
+      margin: 0 0 16px;
       background: {{ section.settings.box_background }};
       border: 1px solid {{ section.settings.box_border }};
       border-radius: {{ section.settings.box_radius }}px;
       padding: 18px;
-      min-width: 0;
     }
-
-    /* Prose runs longer than a label/value pair, so it takes two columns. */
-    #ee-{{ section.id }} .ee-box--wide { grid-column: span 2; }
 
     #ee-{{ section.id }} .ee-box h3 {
       margin: 0 0 5px;
@@ -129,11 +133,10 @@
     }
 
     @media screen and (max-width: 989px) {
-      #ee-{{ section.id }} .ee-grid { grid-template-columns: repeat(2, 1fr); }
+      #ee-{{ section.id }} .ee-grid { columns: 2; }
     }
     @media screen and (max-width: 749px) {
-      #ee-{{ section.id }} .ee-grid { grid-template-columns: 1fr; }
-      #ee-{{ section.id }} .ee-box--wide { grid-column: span 1; }
+      #ee-{{ section.id }} .ee-grid { columns: 1; }
     }
   {% endstyle %}
 
@@ -227,7 +230,7 @@
         {%- endif -%}
 
         {%- if m.directions != blank -%}
-          <div class="ee-box ee-box--wide">
+          <div class="ee-box">
             <h3>{{ section.settings.directions_label | escape }}</h3>
             <div class="ee-val rte">{{ m.directions | metafield_tag }}</div>
           </div>
