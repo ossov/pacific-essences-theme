@@ -285,219 +285,180 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Product page — the buy block
+   Product page — the buy box
 
-   One row, pill shaped:
+   Reworked to match the Abundance artifact: price on its own line with the
+   currency and size beside it, quantity and add-to-cart sharing a row, then the
+   guide prompt and a reassurance line.
 
-       [ $29.00 | - 1 + ]  30 ML                      [ Add to cart ]
-
-   Flex rather than grid now that it is a single line, with order used to put
-   the size after the price: the markup has size first, and reordering in CSS
-   avoids touching the section template.
-
-   custom-styles.css sets display:flex, flex-direction:column and centres the
-   children here, and puts auto margins on the quantity block. All of it is
-   restated rather than left to lose on source order — not declaring the
-   direction is what let the old column layout survive an earlier attempt.
+   The old .custom-quantity-price-wrapper that fused price and quantity into one
+   pill has been removed from the template, so the seventeen rules targeting it
+   in custom-styles.css no longer match anything. The quantity control is
+   restyled here instead.
    ------------------------------------------------------------------------ */
 
 .t-product .product__purchase-wrapper {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 1.4rem 2rem;
-
-  /* The bottom margin is doing real work: without it the shadow runs into the
-     top of the band below and the card stops reading as a separate object. */
+  display: block;
+  max-width: 48rem;
   margin: 3.4rem auto 5.2rem;
-  padding: 1.8rem 3.4rem;
-  max-width: var(--page-width, 120rem);
-
-  background:
-    linear-gradient(180deg,
-      rgb(var(--color-background)) 0%,
-      rgba(var(--color-foreground), 0.022) 100%);
-  border: 1px solid rgba(var(--color-foreground), 0.18);
-  /* Pill, matching the price and quantity control inside it. */
-  border-radius: 999px;
-  box-shadow:
-    0 1px 2px rgba(var(--color-foreground), 0.06),
-    0 14px 34px -16px rgba(var(--color-foreground), 0.38);
+  padding: 2rem;
+  background: #ffffff;
+  border: 1px solid #e2ecf2;
+  border-radius: 16px;
+  box-shadow: 0 10px 26px rgba(18, 48, 63, 0.06);
 }
 
-/* Price and quantity lead. */
-.t-product .product__purchase-wrapper .custom-quantity-price-wrapper {
-  order: 1;
-  margin: 0;
-  flex: 0 0 auto;
-}
+/* ---- price ---- */
 
-/* Size sits immediately to its right, as a caption on the price. */
-.t-product .product__purchase-wrapper .product-size {
-  order: 2;
+.t-product .pe-price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.t-product .pe-price .price {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #123b51;
+  line-height: 1.1;
+}
+.t-product .pe-price .price__container { display: flex; align-items: baseline; gap: 10px; }
+.t-product .pe-price .price-item { font-size: inherit; font-weight: inherit; line-height: inherit; }
+.t-product .pe-price .price-item--regular { color: inherit; }
+.t-product .pe-price__meta {
+  font-size: 1.38rem;
+  font-weight: 600;
+  color: #7c97a6;
+  white-space: nowrap;
+}
+.t-product .product__purchase-wrapper .product__tax {
   margin: 0;
   font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  opacity: 0.55;
-  white-space: nowrap;
-  flex: 0 0 auto;
+  color: #7c97a6;
 }
 
-/* Cart button at the far end. */
-.t-product .product__purchase-wrapper > *:last-child {
-  order: 3;
-  margin: 0 0 0 auto;
-  flex: 0 0 auto;
+/* ---- quantity and add to cart, sharing a row ---- */
+
+.t-product .pe-qtyrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 12px;
+  margin: 16px 0 12px;
+}
+
+.t-product .pe-qtyrow .product-form__quantity { margin: 0; flex: 0 0 auto; }
+
+.t-product .pe-qtyrow .quantity {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  min-height: 4.8rem;
+  width: auto;
+  border: 1.6px solid #d9e8f1;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #ffffff;
+}
+.t-product .pe-qtyrow .quantity::after { display: none; }
+.t-product .pe-qtyrow .quantity__button {
+  width: auto;
+  padding: 0 15px;
+  color: #4d7387;
+  font-weight: 800;
+}
+.t-product .pe-qtyrow .quantity__input {
+  width: 4rem;
+  min-width: 0;
+  padding: 0;
+  text-align: center;
+  font-weight: 800;
+  color: #123b51;
+  background: transparent;
+}
+
+/* The buy-buttons snippet wraps everything in a bare div, so the flex child is
+   that wrapper rather than the form itself. Everything between it and the
+   button has to carry the width down. */
+.t-product .pe-qtyrow > *:last-child { flex: 1 1 18rem; min-width: 0; }
+.t-product .pe-qtyrow product-form,
+.t-product .pe-qtyrow form,
+.t-product .pe-qtyrow .product-form__buttons {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.t-product .pe-qtyrow .product-form__submit {
+  width: 100%;
+  min-height: 4.8rem;
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 30px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  /* The gradient, which is the part you liked. */
+  background: linear-gradient(135deg, #43a6db, #2a87b9);
+  box-shadow: 0 8px 18px rgba(42, 135, 185, 0.3);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.t-product .pe-qtyrow .product-form__submit:hover {
+  box-shadow: 0 10px 22px rgba(42, 135, 185, 0.42);
+}
+/* Dawn draws its button edge with an ::after, which would sit over the gradient. */
+.t-product .pe-qtyrow .product-form__submit::after { display: none; }
+
+/* ---- the guide prompt ---- */
+
+.t-product .pe-btn-ghost {
+  display: block;
+  width: 100%;
+  border-radius: 999px;
+  padding: 14px 30px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  color: #2a87b9;
+  background: none;
+  box-shadow: inset 0 0 0 1.6px rgba(42, 135, 185, 0.45);
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+.t-product .pe-btn-ghost:hover {
+  background: rgba(42, 135, 185, 0.06);
+  box-shadow: inset 0 0 0 1.6px rgba(42, 135, 185, 0.7);
+}
+.t-product .pe-btn-ghost:focus-visible { outline: 2px solid #2a87b9; outline-offset: 2px; }
+
+/* ---- reassurance ---- */
+
+.t-product .pe-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed #e2ecf2;
+  font-size: 1.3rem;
+  color: #7c97a6;
+}
+.t-product .pe-trust span { display: flex; align-items: center; gap: 6px; }
+.t-product .pe-trust i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #16a08c;
+  display: block;
+  flex: none;
 }
 
 @media screen and (max-width: 749px) {
   .t-product .product__purchase-wrapper {
-    /* A full pill on a tall stacked box reads as a lozenge, so the radius
-       steps down once the row wraps. */
-    border-radius: 2.6rem;
-    padding: 1.8rem 2rem;
-    gap: 1rem 1.4rem;
+    padding: 1.8rem;
     margin-bottom: 3.6rem;
   }
-  .t-product .product__purchase-wrapper > *:last-child {
-    margin: 0.6rem 0 0;
-    flex: 1 1 100%;
-  }
-  .t-product .product__purchase-wrapper > *:last-child .button,
-  .t-product .product__purchase-wrapper > *:last-child button {
-    width: 100%;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Product page — the hero
-
-   Three columns with the image in the middle, which is the distinctive thing
-   about this layout and stays. What changes is everything around it:
-
-     - all three columns share a top edge. The left one was vertically centred
-       while the other two started at the top, so nothing lined up
-     - the two text columns face the image: the left is right-aligned, the
-       right is left-aligned. With a centred image that reads as composed
-       rather than as three unrelated stacks
-     - the identity stack is ordered type, name, resonance. The markup has the
-       name first, so CSS order does it without touching the template
-     - the -30px/-60px margins holding the resonance in place are gone. They
-       were the reason it collided with the type above it, and they would have
-       broken outright on a longer resonance value
-   ------------------------------------------------------------------------ */
-
-.t-product .product.product--medium {
-  align-items: start;
-}
-
-.t-product .product__info-wrapper-left {
-  align-items: flex-end;
-  justify-content: flex-start;
-  text-align: right;
-  gap: 0.6rem;
-  padding-top: 1.2rem;
-}
-
-/* "Combination Essence" becomes a label above the name. */
-.t-product .product__info-wrapper-left .product-type {
-  order: -1;
-  margin: 0;
-  font-size: 1.3rem;
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgb(var(--color-foreground));
-  opacity: 0.7;
-  text-align: right;
-}
-
-.t-product .product__info-wrapper-left .product__title {
-  order: 0;
-  margin: 0;
-  max-width: none;
-  padding-right: 0;
-  font-size: clamp(3.4rem, 2rem + 2vw, 5rem);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  text-align: right;
-  text-wrap: balance;
-}
-
-/* The resonance is a descriptor, not a second heading. The gradient fill it
-   carried competed with the name directly above it, so it is plain italic
-   here; the gradient still does its job on the homepage. */
-.t-product .product__info-wrapper-left .product__resonance-metafield {
-  order: 2;
-  width: auto;
-  max-width: 32ch;
-  margin: 0.6rem 0 0;
-  background: none;
-  -webkit-background-clip: border-box;
-  background-clip: border-box;
-  -webkit-text-fill-color: currentColor;
-  color: rgb(var(--color-foreground));
-  opacity: 1;
-  text-align: right;
-  white-space: normal;
-}
-
-.t-product .product__info-wrapper-left .product__resonance-metafield p {
-  margin: 0;
-  /* Sits between the name and body text: clearly the second thing you read,
-     without competing with the name for the top of the hierarchy. */
-  font-size: clamp(2rem, 1.4rem + 0.9vw, 2.7rem);
-  font-weight: 400;
-  font-style: italic;
-  line-height: 1.25;
-  letter-spacing: -0.005em;
-  text-wrap: balance;
-}
-
-/* A short rule under the identity stack, closing it off and pointing at the
-   image. Sits on the column so it survives a missing resonance. */
-.t-product .product__info-wrapper-left::after {
-  content: "";
-  order: 1;
-  width: 4.6rem;
-  height: 2px;
-  margin: 1.4rem 0 0.2rem;
-  background: rgb(var(--color-foreground));
-  opacity: 0.35;
-}
-
-/* The right column faces the image. */
-.t-product .product__info-wrapper .product__description-heading {
-  margin: 0 0 1.6rem;
-  font-size: 1.9rem;
-  line-height: 1.3;
-  text-align: left;
-  text-wrap: balance;
-}
-
-.t-product .product__info-wrapper {
-  padding-top: 1.2rem;
-}
-
-@media screen and (max-width: 989px) {
-  /* Stacked, so the facing-inward alignment has nothing to face. */
-  .t-product .product__info-wrapper-left,
-  .t-product .product__info-wrapper-left .product-type,
-  .t-product .product__info-wrapper-left .product__title,
-  .t-product .product__info-wrapper-left .product__resonance-metafield {
-    align-items: center;
-    text-align: center;
-  }
-  .t-product .product__info-wrapper-left {
-    align-items: center;
-  }
-  .t-product .product__info-wrapper-left .product__resonance-metafield {
-    max-width: 40ch;
-  }
+  .t-product .pe-qtyrow > *:last-child { flex: 1 1 100%; }
 }

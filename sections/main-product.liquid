@@ -322,21 +322,28 @@
       </div>
     {%- endif -%}
 
+    {%- comment -%}
+      The buy box. Price on its own line with the currency and size beside it,
+      then quantity and add-to-cart sharing a row, then the guide prompt and the
+      reassurance line. The old .custom-quantity-price-wrapper that fused price
+      and quantity into one pill is gone, so the rules targeting it in
+      custom-styles.css no longer apply.
+    {%- endcomment -%}
     <div class="product__purchase-wrapper">
 
-      {%- if product.metafields.custom.size.value != blank and product.metafields.custom.size.value != 0 -%}
-          <p class="product-size">{{ product.metafields.custom.size.value }}</p>
-        {%- endif -%}
-  
-  <div class="custom-quantity-price-wrapper">
+      <div class="pe-price">
+        <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+          {%- render 'price',
+            product: product,
+            use_variant: true,
+            show_badges: true,
+            price_class: 'price--large'
+          -%}
+        </div>
+        {%- capture price_meta -%}{{ shop.currency }}{% if product.metafields.custom.size.value != blank and product.metafields.custom.size.value != 0 %} &middot; {{ product.metafields.custom.size.value }}{% endif %}{%- endcapture -%}
+        <span class="pe-price__meta">{{ price_meta }}</span>
+      </div>
 
-    <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
-      {%- render 'price',
-        product: product,
-        use_variant: true,
-        show_badges: true,
-        price_class: 'price--large'
-      -%}
       {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
         <div class="product__tax caption rte">
           {%- if cart.taxes_included -%}
@@ -347,8 +354,8 @@
           {%- endif -%}
         </div>
       {%- endif -%}
-    </div>
 
+      <div class="pe-qtyrow">
     <div id="Quantity-Form-{{ section.id }}" class="product-form__input product-form__quantity">
       <quantity-input class="quantity custom-quantity">
         <button class="quantity__button custom-quantity__button" name="minus" type="button">
@@ -371,18 +378,33 @@
         </button>
       </quantity-input>
     </div>
+        {%- render 'buy-buttons',
+          block: block,
+          product: product,
+          product_form_id: product_form_id,
+          section_id: section.id,
+          show_pickup_availability: true
+        -%}
+      </div>
 
-  </div>
+      {%- if section.settings.guide_label != blank -%}
+        <a class="pe-btn-ghost" href="{{ section.settings.guide_link | default: '/' }}">
+          {{- section.settings.guide_label | escape -}}
+        </a>
+      {%- endif -%}
 
-  {%- render 'buy-buttons',
-    block: block,
-    product: product,
-    product_form_id: product_form_id,
-    section_id: section.id,
-    show_pickup_availability: true
-  -%}
+      {%- if section.settings.trust_1 != blank or section.settings.trust_2 != blank -%}
+        <div class="pe-trust">
+          {%- if section.settings.trust_1 != blank -%}
+            <span><i></i>{{ section.settings.trust_1 | escape }}</span>
+          {%- endif -%}
+          {%- if section.settings.trust_2 != blank -%}
+            <span><i></i>{{ section.settings.trust_2 | escape }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
 
-</div>
+    </div>
           
 
     {% render 'product-media-modal', variant_images: variant_images %}
@@ -1861,6 +1883,34 @@
       "id": "color_scheme",
       "label": "t:sections.all.colors.label",
       "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Buy box"
+    },
+    {
+      "type": "text",
+      "id": "guide_label",
+      "label": "Guide prompt label",
+      "default": "Not sure? Ask the Essence Guide",
+      "info": "Leave empty to hide the button."
+    },
+    {
+      "type": "url",
+      "id": "guide_link",
+      "label": "Guide prompt link"
+    },
+    {
+      "type": "text",
+      "id": "trust_1",
+      "label": "Reassurance line 1",
+      "default": "Ships worldwide"
+    },
+    {
+      "type": "text",
+      "id": "trust_2",
+      "label": "Reassurance line 2",
+      "info": "Leave empty to show only one."
     },
     {
       "type": "header",
