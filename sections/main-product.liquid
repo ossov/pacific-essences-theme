@@ -335,7 +335,7 @@
         class="pe-price"
         data-price-block
         data-money-format="{{ shop.money_format | escape }}"
-        data-variant-prices='{% for v in product.variants %}{% unless forloop.first %},{% endunless %}"{{ v.id }}":{{ v.price }}{% endfor %}'
+        data-variant-prices='{% for v in product.variants %}{% unless forloop.first %},{% endunless %}"{{ v.id }}":[{{ v.price }},{{ v.compare_at_price | default: 0 }}]{% endfor %}'
         data-form-id="{{ product_form_id }}"
       >
         <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
@@ -442,17 +442,34 @@
             return field ? field.value : Object.keys(prices)[0];
           }
 
-          // Always computed from the stored unit price, never from what is on
+          // Always computed from the stored unit prices, never from what is on
           // screen, so repeated updates cannot compound.
+          //
+          // Dawn renders two elements carrying .price-item--regular: a hidden
+          // one inside .price__regular holding the current price, and the
+          // visible struck-through compare-at inside .price__sale. Writing the
+          // price into both wipes out the compare-at, so they are separated.
           function apply() {
-            var unit = prices[currentVariant()];
-            if (unit === undefined) return;
+            var pair = prices[currentVariant()];
+            if (!pair) return;
+            var unit = pair[0];
+            var compareAt = pair[1];
             var qty = parseInt(qtyInput.value, 10);
             if (!qty || qty < 1) qty = 1;
-            var text = money(unit * qty);
-            priceBlock.querySelectorAll('.price-item--regular, .price-item--sale').forEach(function (el) {
-              el.textContent = text;
+
+            var unitText = money(unit * qty);
+
+            priceBlock.querySelectorAll('.price__regular .price-item--regular').forEach(function (el) {
+              el.textContent = unitText;
             });
+            priceBlock.querySelectorAll('.price-item--sale').forEach(function (el) {
+              el.textContent = unitText;
+            });
+            if (compareAt > 0) {
+              priceBlock.querySelectorAll('.price__sale .price-item--regular').forEach(function (el) {
+                el.textContent = money(compareAt * qty);
+              });
+            }
           }
 
           ['input', 'change'].forEach(function (evt) { qtyInput.addEventListener(evt, apply); });
