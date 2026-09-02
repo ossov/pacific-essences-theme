@@ -331,7 +331,13 @@
     {%- endcomment -%}
     <div class="product__purchase-wrapper">
 
-      <div class="pe-price">
+      <div
+        class="pe-price"
+        data-price-block
+        data-money-format="{{ shop.money_format | escape }}"
+        data-variant-prices='{% for v in product.variants %}{% unless forloop.first %},{% endunless %}"{{ v.id }}":{{ v.price }}{% endfor %}'
+        data-form-id="{{ product_form_id }}"
+      >
         <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
           {%- render 'price',
             product: product,
@@ -387,11 +393,89 @@
         -%}
       </div>
 
-      {%- if section.settings.guide_label != blank -%}
+      {%- comment -%}
+        The guide only knows about combination essences, so the prompt is gated
+        on the essence type. Singles carry their own name here
+        ("Blue Camas Flower Essence"); combinations carry "Combination".
+      {%- endcomment -%}
+      {%- assign guide_match = section.settings.guide_only_when | default: 'Combination' -%}
+      {%- assign essence_type_value = product.metafields.custom.essence_type.value | default: product.metafields.custom.essence_type -%}
+      {%- if section.settings.guide_label != blank and essence_type_value contains guide_match -%}
         <a class="pe-btn-ghost" href="{{ section.settings.guide_link | default: '/' }}">
           {{- section.settings.guide_label | escape -}}
         </a>
       {%- endif -%}
+
+      {%- comment -%}
+        The displayed price follows the quantity. Shopify still does the real
+        arithmetic at checkout; this only keeps the number on screen honest.
+      {%- endcomment -%}
+      {%- raw -%}
+      <script>
+        (function () {
+          var block = document.currentScript.closest('.product__purchase-wrapper');
+          if (!block) return;
+          var priceBlock = block.querySelector('[data-price-block]');
+          var qtyInput = block.querySelector('input[name="quantity"]');
+          if (!priceBlock || !qtyInput) return;
+
+          var prices;
+          try { prices = JSON.parse('{' + priceBlock.getAttribute('data-variant-prices') + '}'); }
+          catch (e) { return; }
+
+          var format = priceBlock.getAttribute('data-money-format') || '${{amount}}';
+
+          function money(cents) {
+            var n = cents / 100;
+            return format.replace(/\{\{\s*(\w+)\s*\}\}/g, function (_, token) {
+              if (token === 'amount_no_decimals') return Math.round(n).toLocaleString('en');
+              if (token === 'amount_with_comma_separator') {
+                return n.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+              }
+              return n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            });
+          }
+
+          function currentVariant() {
+            var form = document.getElementById(priceBlock.getAttribute('data-form-id'));
+            var field = form && form.querySelector('input[name="id"], select[name="id"]');
+            return field ? field.value : Object.keys(prices)[0];
+          }
+
+          // Always computed from the stored unit price, never from what is on
+          // screen, so repeated updates cannot compound.
+          function apply() {
+            var unit = prices[currentVariant()];
+            if (unit === undefined) return;
+            var qty = parseInt(qtyInput.value, 10);
+            if (!qty || qty < 1) qty = 1;
+            var text = money(unit * qty);
+            priceBlock.querySelectorAll('.price-item--regular, .price-item--sale').forEach(function (el) {
+              el.textContent = text;
+            });
+          }
+
+          ['input', 'change'].forEach(function (evt) { qtyInput.addEventListener(evt, apply); });
+          block.addEventListener('click', function (e) {
+            if (e.target.closest('.quantity__button')) setTimeout(apply, 0);
+          });
+
+          // Dawn rewrites the price when the variant changes, which puts the
+          // unit price back; reapply once it settles.
+          var target = priceBlock.querySelector('[id^="price-"]');
+          if (target && window.MutationObserver) {
+            var busy = false;
+            new MutationObserver(function () {
+              if (busy) return;
+              busy = true;
+              setTimeout(function () { busy = false; apply(); }, 0);
+            }).observe(target, { childList: true, subtree: true });
+          }
+
+          apply();
+        })();
+      </script>
+      {%- endraw -%}
 
       {%- if section.settings.trust_1 != blank or section.settings.trust_2 != blank -%}
         <div class="pe-trust">
@@ -1899,6 +1983,13 @@
       "type": "url",
       "id": "guide_link",
       "label": "Guide prompt link"
+    },
+    {
+      "type": "text",
+      "id": "guide_only_when",
+      "label": "Only show when essence type contains",
+      "default": "Combination",
+      "info": "The guide only handles combination essences. Single essences carry their own name in this field, so they will not match."
     },
     {
       "type": "text",

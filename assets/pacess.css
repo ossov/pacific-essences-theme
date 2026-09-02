@@ -346,6 +346,9 @@
   align-items: stretch;
   gap: 12px;
   margin: 16px 0 12px;
+  /* One height for both controls, so the pills line up. Set here rather than on
+     each, which is what left the quantity taller than the button. */
+  --pe-control-height: 5rem;
 }
 
 .t-product .pe-qtyrow .product-form__quantity { margin: 0; flex: 0 0 auto; }
@@ -353,9 +356,10 @@
 .t-product .pe-qtyrow .quantity {
   display: flex;
   align-items: center;
-  height: 100%;
-  min-height: 4.8rem;
+  height: var(--pe-control-height, 5rem);
+  min-height: 0;
   width: auto;
+  box-sizing: border-box;
   border: 1.6px solid #d9e8f1;
   border-radius: 999px;
   overflow: hidden;
@@ -365,6 +369,7 @@
 .t-product .pe-qtyrow .quantity__button {
   width: auto;
   padding: 0 15px;
+  height: 100%;
   color: #4d7387;
   font-weight: 800;
 }
@@ -393,10 +398,12 @@
 
 .t-product .pe-qtyrow .product-form__submit {
   width: 100%;
-  min-height: 4.8rem;
+  height: var(--pe-control-height, 5rem);
+  min-height: 0;
   border: 0;
   border-radius: 999px;
-  padding: 14px 30px;
+  padding: 0 30px;
+  box-sizing: border-box;
   font-size: 1.5rem;
   font-weight: 800;
   color: #ffffff;
