@@ -1,9 +1,33 @@
+{%- comment -%}
+  The card, the copy beside it, and the band behind them. The markup for the
+  card itself is untouched — the flip animation is driven by these element ids
+  and by the is-spinning / is-revealing / is-locked classes, so only the
+  wrapper around them has changed.
+
+  Heading, description and button label are section settings now. They were
+  locale strings, which meant they could only be edited by hand in
+  locales/*.json rather than in the theme editor. Leave one blank and it falls
+  back to the locale string, so existing translations still work.
+{%- endcomment -%}
+
+{%- liquid
+  assign rcs_heading = section.settings.heading
+  if rcs_heading == blank
+    assign rcs_heading = 'sections.random_card_selector.heading' | t
+  endif
+  assign rcs_button = section.settings.button_label
+  if rcs_button == blank
+    assign rcs_button = 'sections.random_card_selector.button_text' | t
+  endif
+  assign rcs_body = section.settings.description
+  if rcs_body == blank
+    assign rcs_body = 'sections.random_card_selector.description' | t
+  endif
+-%}
+
 <random-card-selector class="random-card-selector section-{{ section.id }}" data-section-id="{{ section.id }}">
 
-  <div class="random-card-selector__container page-width">
-    <h2 class="random-card-selector__heading">
-      {{ 'sections.random_card_selector.heading' | t }}
-    </h2>
+  <div class="random-card-selector__container page-width rcs-layout">
 
     <div class="random-card-selector__display" id="RandomCardSelectorDisplay-{{ section.id }}">
       
@@ -31,17 +55,133 @@
       </div>
     </div>
 
-    <button type="button" class="random-card-selector__button button" id="RandomCardSelectorButton-{{ section.id }}">
-      {{ 'sections.random_card_selector.button_text' | t }}
-    </button>
+    <div class="rcs-copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="rcs-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
 
-    <p class="random-card-selector__description">
-      {{ 'sections.random_card_selector.description' | t }}
-    </p>
+      <h2 class="random-card-selector__heading">{{ rcs_heading }}</h2>
+
+      {%- if rcs_body != blank -%}
+        <p class="random-card-selector__description">{{ rcs_body }}</p>
+      {%- endif -%}
+
+      {%- if rcs_button != blank -%}
+        <button type="button" class="random-card-selector__button button" id="RandomCardSelectorButton-{{ section.id }}">
+          {{ rcs_button }}
+        </button>
+      {%- else -%}
+        {%- comment -%} The id has to exist for the script even with no label. {%- endcomment -%}
+        <button type="button" class="random-card-selector__button button visually-hidden" id="RandomCardSelectorButton-{{ section.id }}">
+          {{ 'sections.random_card_selector.heading' | t }}
+        </button>
+      {%- endif -%}
+    </div>
 
   </div>
 
 </random-card-selector>
+
+{% style %}
+  /* ---- the band -------------------------------------------------------- */
+  .section-{{ section.id }}.random-card-selector {
+    /* A custom element is inline by default, so the padding and the band both
+       had nothing to sit on. */
+    display: block;
+    background: linear-gradient(160deg, {{ section.settings.band_from }} 0%, {{ section.settings.band_to }} 100%);
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    color: {{ section.settings.body_color }};
+  }
+
+  /* Card on one side, the words on the other, rather than stacked down the
+     middle of an empty white section. */
+  .section-{{ section.id }} .rcs-layout {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 4rem;
+    max-width: 96rem;
+  }
+
+  .section-{{ section.id }} .random-card-selector__display {
+    width: {{ section.settings.card_width }}px;
+    max-width: 100%;
+    margin: 0;
+  }
+  .section-{{ section.id }} .random-card-selector__card-wrapper {
+    max-width: none;
+    filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.42));
+  }
+  .section-{{ section.id }} .random-card-selector__card-image { border: 0; }
+
+  .section-{{ section.id }} .rcs-copy { text-align: left; }
+
+  .section-{{ section.id }} .rcs-eyebrow {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: {{ section.settings.eyebrow_color }};
+  }
+
+  .section-{{ section.id }} .random-card-selector__heading {
+    margin: 0 0 12px;
+    font-size: clamp(2.4rem, 1.8rem + 1.2vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: {{ section.settings.heading_color }};
+    text-align: left;
+    text-wrap: balance;
+  }
+
+  .section-{{ section.id }} .random-card-selector__description {
+    margin: 0 0 24px;
+    max-width: 46ch;
+    font-size: 1.6rem;
+    line-height: 1.65;
+    color: {{ section.settings.body_color }};
+  }
+
+  .section-{{ section.id }} .random-card-selector__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 5rem;
+    padding: 0 3rem;
+    border: 0;
+    border-radius: 999px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    color: {{ section.settings.button_text_color }};
+    background: {{ section.settings.button_color }};
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+  }
+  .section-{{ section.id }} .random-card-selector__button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.34);
+    background: {{ section.settings.button_color }};
+  }
+  .section-{{ section.id }} .random-card-selector__button::after { display: none; }
+
+  @media screen and (max-width: 749px) {
+    .section-{{ section.id }} .rcs-layout {
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: center;
+      gap: 2.6rem;
+    }
+    .section-{{ section.id }} .rcs-copy,
+    .section-{{ section.id }} .random-card-selector__heading { text-align: center; }
+    .section-{{ section.id }} .random-card-selector__description { margin-inline: auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section-{{ section.id }} .random-card-selector__button { transition: none; }
+  }
+{% endstyle %}
 
 <style>
   /* Scoped CSS for the Random Card Selector section */
@@ -348,7 +488,118 @@
   "name": "t:sections.random_card_selector.name",
   "tag": "section",
   "class": "section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Today"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Pick a card for your daily inspiration",
+      "info": "Leave empty to use the translated text from the language files instead."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "A card drawn at random, to sit with for the day. If the same one keeps arriving, there is probably a reason.",
+      "info": "Placeholder wording — replace it with your own."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Draw a card"
+    },
+    {
+      "type": "header",
+      "content": "Band"
+    },
+    {
+      "type": "color",
+      "id": "band_from",
+      "label": "Background, top",
+      "default": "#0f3446"
+    },
+    {
+      "type": "color",
+      "id": "band_to",
+      "label": "Background, bottom",
+      "default": "#16495f"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Eyebrow colour",
+      "default": "#7fc4e2"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading colour",
+      "default": "#eaf6fb"
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Text colour",
+      "default": "#9dc0d1"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button background",
+      "default": "#eaf6fb"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#0f3446"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "card_width",
+      "min": 140,
+      "max": 320,
+      "step": 10,
+      "unit": "px",
+      "label": "Card width",
+      "default": 210
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 64
+    }
+  ],
   "presets": [
     {
       "name": "t:sections.random_card_selector.name"

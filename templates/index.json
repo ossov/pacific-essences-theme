@@ -362,24 +362,6 @@
         "padding_bottom": 36
       }
     },
-    "featured_blog_fC9Xh7": {
-      "type": "featured-blog",
-      "name": "t:sections.featured-blog.presets.name",
-      "settings": {
-        "blog": "pacific-essences-blog",
-        "post_limit": 3,
-        "heading": "Wisdom from Pacific Essences",
-        "heading_size": "h1",
-        "columns_desktop": 3,
-        "show_view_all": true,
-        "show_image": true,
-        "show_date": true,
-        "show_author": false,
-        "color_scheme": "scheme-5",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
     "17876670097e2973bc": {
       "type": "_blocks",
       "blocks": {
@@ -428,6 +410,29 @@
       "type": "random-card-selector",
       "name": "t:sections.random_card_selector.name",
       "settings": {}
+    },
+    "essence_journal": {
+      "type": "essence-journal",
+      "settings": {
+        "blog": "pacific-essences-blog",
+        "post_limit": 4,
+        "eyebrow": "From the journal",
+        "heading": "Wisdom from Pacific Essences",
+        "intro": "",
+        "heading_color": "#2a87b9",
+        "label_color": "#43a6db",
+        "show_date": true,
+        "show_excerpt": true,
+        "card_background": "#ffffff",
+        "card_border": "#e7eff4",
+        "value_color": "#33586b",
+        "card_radius": 14,
+        "show_view_all": true,
+        "view_all_label": "Read all",
+        "color_scheme": "scheme-tide",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
     }
   },
   "order": [
@@ -437,7 +442,7 @@
     "image_with_text_7XwEaf",
     "image_with_text_TwygQK",
     "featured_collection_NGddmY",
-    "featured_blog_fC9Xh7",
+    "essence_journal",
     "17876670097e2973bc",
     "random_card_selector_XrXiM4"
   ]
