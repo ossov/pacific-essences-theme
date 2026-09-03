@@ -59,15 +59,165 @@
       text-wrap: balance;
     }
 
+    /* ---------------------------------------------------------------------
+       The alternate description.
+
+       Products that carry custom.simple_accordion_rich skip the energetics
+       grid entirely and print this field instead — the animal essences, the
+       books, the cards and the kits. It is a single rich text field, but it is
+       not shapeless: a bold-only paragraph is a heading or a label, a bold
+       lead-in followed by text is a spec line, and a list is a list. The rules
+       below read those shapes, so nothing has to be re-entered and anything
+       written later in the same way is picked up automatically.
+       --------------------------------------------------------------------- */
+
     #ee-{{ section.id }} .ee-intro {
-      font-size: 1.6rem;
-      line-height: 1.65;
-      max-width: 62ch;
+      font-size: 1.7rem;
+      line-height: 1.7;
       margin: 0 0 22px;
       color: {{ section.settings.value_color }};
     }
-    #ee-{{ section.id }} .ee-intro > :first-child { margin-top: 0; }
-    #ee-{{ section.id }} .ee-intro > :last-child { margin-bottom: 0; }
+
+    /* metafield_tag wraps the field in its own div; that is the column. */
+    #ee-{{ section.id }} .ee-intro > div {
+      max-width: 68rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    #ee-{{ section.id }} .ee-intro p { margin: 0 0 1.1em; }
+    #ee-{{ section.id }} .ee-intro ul { margin: 0 0 1.1em; }
+    #ee-{{ section.id }} .ee-intro > div > *:last-child { margin-bottom: 0; }
+    /* Several products carry a stray blank paragraph. */
+    #ee-{{ section.id }} .ee-intro > div > p:empty { display: none; }
+
+    #ee-{{ section.id }} .ee-intro > div > p {
+      max-width: 62ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #ee-{{ section.id }} .ee-intro a {
+      color: {{ section.settings.heading_color }};
+      text-decoration: none;
+      border-bottom: 1px solid {{ section.settings.heading_color }}59;
+    }
+    #ee-{{ section.id }} .ee-intro a:hover { border-bottom-color: {{ section.settings.heading_color }}; }
+
+    /* 1 — Title. A bold-only first paragraph that is not introducing a list.
+       The :not() matters: on the books the first line is "Includes:", which is
+       a card label, not a heading. */
+    #ee-{{ section.id }} .ee-intro > div > p:first-child:has(> strong:only-child):not(:has(+ ul)) {
+      margin: 0 0 1.8rem;
+    }
+    #ee-{{ section.id }} .ee-intro > div > p:first-child:has(> strong:only-child):not(:has(+ ul)) strong {
+      display: block;
+      font-size: 2.7rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      color: {{ section.settings.heading_color }};
+    }
+    #ee-{{ section.id }} .ee-intro > div > p:first-child:has(> strong:only-child):not(:has(+ ul))::after {
+      content: "";
+      display: block;
+      width: 4.6rem;
+      height: 2px;
+      margin: 15px auto 0;
+      background: {{ section.settings.heading_color }};
+      opacity: 0.3;
+    }
+
+    /* 2 — Every list is a card. All four corners rounded by default, so a list
+       with no label above it still reads as one object. */
+    #ee-{{ section.id }} .ee-intro ul {
+      padding: 18px 24px 20px 44px;
+      background: {{ section.settings.box_background }};
+      border: 1px solid {{ section.settings.box_border }};
+      border-radius: {{ section.settings.box_radius }}px;
+      list-style: none;
+      text-align: left;
+    }
+    #ee-{{ section.id }} .ee-intro ul li {
+      position: relative;
+      margin-bottom: 0.5em;
+      font-size: 1.55rem;
+      line-height: 1.5;
+    }
+    #ee-{{ section.id }} .ee-intro ul li:last-child { margin-bottom: 0; }
+    #ee-{{ section.id }} .ee-intro ul li::before {
+      content: "";
+      position: absolute;
+      left: -1.15em;
+      top: 0.58em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: {{ section.settings.label_color }};
+    }
+    /* A name at the head of an item — the twelve essences in a kit. */
+    #ee-{{ section.id }} .ee-intro ul li > strong:first-child,
+    #ee-{{ section.id }} .ee-intro ul li > a:first-child strong {
+      color: {{ section.settings.heading_color }};
+      font-weight: 800;
+    }
+
+    /* 3 — A bold-only paragraph sitting on a list is that card's lid. */
+    #ee-{{ section.id }} .ee-intro p:has(> strong:only-child):has(+ ul) {
+      margin: 1.8rem 0 0;
+      padding: 17px 24px 0;
+      background: {{ section.settings.box_background }};
+      border: 1px solid {{ section.settings.box_border }};
+      border-bottom: 0;
+      border-radius: {{ section.settings.box_radius }}px {{ section.settings.box_radius }}px 0 0;
+      max-width: none;
+      text-align: left;
+    }
+    #ee-{{ section.id }} .ee-intro p:has(> strong:only-child):has(+ ul) strong {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+      color: {{ section.settings.label_color }};
+    }
+    #ee-{{ section.id }} .ee-intro p:has(> strong:only-child) + ul {
+      padding-top: 13px;
+      border-top: 0;
+      border-radius: 0 0 {{ section.settings.box_radius }}px {{ section.settings.box_radius }}px;
+    }
+
+    /* 4 — A bold-only paragraph with no list under it is a standalone label.
+       Left as a plain bold line rather than an uppercase marker, because a few
+       of these are whole sentences rather than two words. */
+    #ee-{{ section.id }} .ee-intro > div > p:has(> strong:only-child):not(:has(+ ul)) {
+      margin-top: 1.6rem;
+    }
+    #ee-{{ section.id }} .ee-intro > div > p:has(> strong:only-child):not(:has(+ ul)) strong {
+      color: {{ section.settings.heading_color }};
+      font-weight: 800;
+    }
+
+    /* 5 — A bold lead-in followed by text: "Ingredients: Infusions of …". */
+    #ee-{{ section.id }} .ee-intro > div > p:has(> strong:first-child):not(:has(> strong:only-child)) {
+      margin: 1.6rem auto 0;
+      padding: 16px 24px;
+      background: {{ section.settings.chip_background }};
+      border-radius: {{ section.settings.box_radius }}px;
+      max-width: none;
+      text-align: left;
+      font-size: 1.45rem;
+      line-height: 1.6;
+      color: {{ section.settings.chip_text }};
+    }
+    #ee-{{ section.id }} .ee-intro > div > p:has(> strong:first-child):not(:has(> strong:only-child)) strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+    }
 
     /* Column flow rather than a grid. A grid gives every box in a row the
        height of the tallest one, which leaves dead space under the short ones
