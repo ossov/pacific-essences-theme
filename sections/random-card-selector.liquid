@@ -97,22 +97,31 @@
      middle of an empty white section. */
   .section-{{ section.id }} .rcs-layout {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    /* Wide enough for two cards: a drawn card shows its front and its back
+       side by side, so this column has to hold the pair, not one card. */
+    grid-template-columns: minmax(0, {{ section.settings.card_width }}px) minmax(0, 1fr);
     align-items: center;
     gap: 4rem;
-    max-width: 96rem;
+    max-width: 104rem;
   }
 
   .section-{{ section.id }} .random-card-selector__display {
-    width: {{ section.settings.card_width }}px;
-    max-width: 100%;
+    width: 100%;
     margin: 0;
+    min-width: 0;
   }
   .section-{{ section.id }} .random-card-selector__card-wrapper {
     max-width: none;
+    gap: 14px;
     filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.42));
   }
-  .section-{{ section.id }} .random-card-selector__card-image { border: 0; }
+  .section-{{ section.id }} .random-card-selector__card-image {
+    border: 0;
+    /* Flex items default to min-width:auto, which for an image is its
+       intrinsic width — so the pair could not shrink and overflowed onto the
+       words beside them. One card shows at its own size; two share the room. */
+    min-width: 0;
+  }
 
   .section-{{ section.id }} .rcs-copy { text-align: left; }
 
@@ -126,6 +135,13 @@
   }
 
   .section-{{ section.id }} .random-card-selector__heading {
+    /* The section ships a gradient text fill on this heading; the transparent
+       -webkit-text-fill-color it sets beats any colour, so it has to be
+       cleared before the band colour can show. */
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    -webkit-text-fill-color: currentColor;
     margin: 0 0 12px;
     font-size: clamp(2.4rem, 1.8rem + 1.2vw, 3.2rem);
     font-weight: 800;
@@ -572,12 +588,13 @@
     {
       "type": "range",
       "id": "card_width",
-      "min": 140,
-      "max": 320,
-      "step": 10,
+      "min": 240,
+      "max": 640,
+      "step": 20,
       "unit": "px",
-      "label": "Card width",
-      "default": 210
+      "label": "Card area width",
+      "default": 440,
+      "info": "A drawn card shows both faces side by side, so this is the width of the pair."
     },
     {
       "type": "range",
