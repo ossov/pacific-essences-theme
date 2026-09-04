@@ -96,14 +96,26 @@
       outline-offset: 3px;
     }
 
-    #ej-{{ section.id }} .ej-card__media { display: block; overflow: hidden; background: #eef6fa; }
+    #ej-{{ section.id }} .ej-card__media {
+      display: block;
+      overflow: hidden;
+      background: #eef6fa;
+      min-height: 0;
+    }
     #ej-{{ section.id }} .ej-card__media img {
       width: 100%;
       height: 100%;
       display: block;
       object-fit: cover;
     }
-    #ej-{{ section.id }} .ej-lead .ej-card__media { aspect-ratio: 16 / 9; }
+    /* The lead is as tall as the three beside it, but its picture was a fixed
+       16:9 and its text is short, so at some widths the content stopped up to
+       94px above the bottom of the card and the left column read as shorter.
+       The picture takes whatever height is left instead. */
+    #ej-{{ section.id }} .ej-lead .ej-card__media {
+      flex: 1 1 auto;
+      min-height: 22rem;
+    }
 
     #ej-{{ section.id }} .ej-card__body {
       display: flex;
@@ -174,6 +186,11 @@
     @media screen and (max-width: 989px) {
       #ej-{{ section.id }} .ej-grid { grid-template-columns: minmax(0, 1fr); }
       #ej-{{ section.id }} .ej-stack { grid-template-rows: none; }
+      #ej-{{ section.id }} .ej-lead .ej-card__media {
+        flex: none;
+        aspect-ratio: 16 / 9;
+        min-height: 0;
+      }
     }
     @media screen and (max-width: 560px) {
       #ej-{{ section.id }} .ej-stack .ej-card { flex-direction: column; }

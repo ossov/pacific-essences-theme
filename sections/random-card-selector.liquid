@@ -110,17 +110,25 @@
     margin: 0;
     min-width: 0;
   }
+  /* A fixed height for the card area. Before a draw there is one image, after
+     a draw there are two at half the width — so the band was 578px tall, then
+     443px, and jumped as you drew. Both states now live in the same box. */
   .section-{{ section.id }} .random-card-selector__card-wrapper {
     max-width: none;
+    height: {{ section.settings.card_height }}px;
     gap: 14px;
+    align-items: center;
+    justify-content: center;
     filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.42));
   }
   .section-{{ section.id }} .random-card-selector__card-image {
     border: 0;
-    /* Flex items default to min-width:auto, which for an image is its
-       intrinsic width — so the pair could not shrink and overflowed onto the
-       words beside them. One card shows at its own size; two share the room. */
+    /* Each face gets the same half of the row whether one or two are showing,
+       so nothing moves and nothing overflows. */
+    width: calc(50% - 7px);
+    height: 100%;
     min-width: 0;
+    object-fit: contain;
   }
 
   .section-{{ section.id }} .rcs-copy { text-align: left; }
@@ -188,6 +196,16 @@
       grid-template-columns: minmax(0, 1fr);
       justify-items: center;
       gap: 2.6rem;
+    }
+    /* Stacked on a phone, so the fixed row height and the half-widths do not
+       apply — each card takes the full column and its own height. */
+    .section-{{ section.id }} .random-card-selector__card-wrapper {
+      height: auto;
+      filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.38));
+    }
+    .section-{{ section.id }} .random-card-selector__card-image {
+      width: 100%;
+      height: auto;
     }
     .section-{{ section.id }} .rcs-copy,
     .section-{{ section.id }} .random-card-selector__heading { text-align: center; }
@@ -588,13 +606,24 @@
     {
       "type": "range",
       "id": "card_width",
-      "min": 240,
-      "max": 640,
+      "min": 320,
+      "max": 760,
       "step": 20,
       "unit": "px",
       "label": "Card area width",
-      "default": 440,
+      "default": 600,
       "info": "A drawn card shows both faces side by side, so this is the width of the pair."
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "min": 260,
+      "max": 560,
+      "step": 20,
+      "unit": "px",
+      "label": "Card height",
+      "default": 440,
+      "info": "Fixed, so the band does not change height when a card is drawn."
     },
     {
       "type": "range",
