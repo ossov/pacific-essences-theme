@@ -198,6 +198,11 @@
   .card-wrapper:hover .card--card { transform: none; }
 }
 
+/* The card picker closes the home page on a full-width dark band, and Dawn
+   puts 68px of margin above the footer — invisible when the last section is
+   white, a white gap under a dark one. */
+.t-index .footer { margin-top: 0; }
+
 /* ---------------------------------------------------------------------------
    Home — slideshow
    The slideshow is live only on the home page, so this needs no scoping.
