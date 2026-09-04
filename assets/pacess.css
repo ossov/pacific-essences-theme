@@ -97,6 +97,12 @@
 .card-wrapper .card__media .media img {
   padding: 14px;
   object-fit: contain;
+  /* The photographs carry their own pale background baked in, and it is not
+     the same one on every product — the bottles are #f3f3f5, the card deck is
+     pure white, the kits sit between the two. Multiplying drops whichever it
+     is into the plinth behind it, so no square edge shows and the plinth can
+     stay the brand tint rather than having to match a colour that varies. */
+  mix-blend-mode: multiply;
 }
 
 .card-wrapper .card__content { padding: 13px 16px 16px; }
