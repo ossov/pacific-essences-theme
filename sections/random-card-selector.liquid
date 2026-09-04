@@ -123,12 +123,14 @@
   }
   .section-{{ section.id }} .random-card-selector__card-image {
     border: 0;
-    /* Each face gets the same half of the row whether one or two are showing,
-       so nothing moves and nothing overflows. */
-    width: calc(50% - 7px);
-    height: 100%;
+    /* Scaled to fit inside half the row, by its own proportions. object-fit
+       was letterboxing the picture a few pixels inside its box, which left the
+       photo's square corners showing through the rounded box around it. */
+    max-width: calc(50% - 7px);
+    max-height: 100%;
+    width: auto;
+    height: auto;
     min-width: 0;
-    object-fit: contain;
   }
 
   .section-{{ section.id }} .rcs-copy { text-align: left; }
@@ -204,6 +206,8 @@
       filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.38));
     }
     .section-{{ section.id }} .random-card-selector__card-image {
+      max-width: 100%;
+      max-height: none;
       width: 100%;
       height: auto;
     }
