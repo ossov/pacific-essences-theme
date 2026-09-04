@@ -90,7 +90,14 @@
 .card-wrapper .card__inner {
   background: linear-gradient(160deg, #f7fbfd, #eef6fa);
 }
-.card-wrapper .card__media { padding: 12px; }
+/* The plinth is inset on the picture itself. .card__media is absolutely
+   positioned with inset:0 and holds another absolutely positioned box, so
+   padding there shifted that inner box sideways instead of insetting it —
+   every image sat 12px right of its frame and bled off the other edge. */
+.card-wrapper .card__media .media img {
+  padding: 14px;
+  object-fit: contain;
+}
 
 .card-wrapper .card__content { padding: 13px 16px 16px; }
 .card-wrapper .card__information {
@@ -98,7 +105,13 @@
   flex-direction: column;
   gap: 4px;
   padding: 0;
+  /* The theme centres card text; the price row is a flex row and packed left,
+     so the two disagreed. Everything reads down one edge instead. */
+  text-align: left;
 }
+.card-wrapper .card__information > *,
+.card-wrapper .card__heading,
+.card-wrapper .card__heading a { text-align: left; }
 
 .card__information .card__heading { margin: 0; }
 .card__information .card__heading .full-unstyled-link {
@@ -134,6 +147,8 @@
   gap: 8px;
   margin-top: 8px;
   font-size: 1.5rem;
+  justify-content: flex-start;
+  text-align: left;
 }
 .pc-price .price { font-size: inherit; }
 .pc-price .price__container { display: flex; align-items: baseline; gap: 8px; }
