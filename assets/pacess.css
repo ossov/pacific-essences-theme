@@ -198,10 +198,12 @@
   .card-wrapper:hover .card--card { transform: none; }
 }
 
-/* The card picker closes the home page on a full-width dark band, and Dawn
-   puts 68px of margin above the footer — invisible when the last section is
-   white, a white gap under a dark one. */
-.t-index .footer { margin-top: 0; }
+/* Dawn puts 68px of margin above the footer. That is invisible when a page
+   ends on white, but both of these end on a full-width band — the card picker
+   on the home page, the reviews on a product page — so it reads as a white
+   gap. Other templates still end on a light section and keep the spacing. */
+.t-index .footer,
+.t-product .footer { margin-top: 0; }
 
 /* ---------------------------------------------------------------------------
    Home — slideshow
