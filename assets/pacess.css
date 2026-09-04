@@ -34,6 +34,11 @@
   /* Brand */
   --pe-blue: #2a87b9;
   --pe-muted: #666666;
+  --pe-card-ink: #123b51;
+  --pe-card-muted: #7c97a6;
+  --pe-card-hair: #e7eff4;
+  --pe-sale: #b3392b;
+  --pe-sale-bg: #fdeceb;
   --pe-muted-2: #555555;
 
   /* Links in long-form copy */
@@ -58,14 +63,112 @@
    Previously inline <style> blocks in layout/theme.liquid, so already global.
    ------------------------------------------------------------------------ */
 
+/* ---------------------------------------------------------------------------
+   Product cards
+
+   The same card serves the three specials on the home page and the thirty-six
+   on a collection page, so it has to sell at three and stay quiet at
+   thirty-six. The resonance line does that work: it is the one thing on the
+   card no other shop could print, it is already written for every essence,
+   and it turns a grid of near-identical brown bottles into a list of
+   intentions you can read.
+   ------------------------------------------------------------------------ */
+
+.card-wrapper .card--card {
+  border: 1px solid var(--pe-card-hair, #e7eff4);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.card-wrapper:hover .card--card {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px rgba(18, 48, 63, 0.1);
+}
+
+/* A tinted plinth behind the bottle, so the product sits on something rather
+   than floating on the page. */
+.card-wrapper .card__inner {
+  background: linear-gradient(160deg, #f7fbfd, #eef6fa);
+}
+.card-wrapper .card__media { padding: 12px; }
+
+.card-wrapper .card__content { padding: 13px 16px 16px; }
+.card-wrapper .card__information {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+}
+
+.card__information .card__heading { margin: 0; }
 .card__information .card__heading .full-unstyled-link {
-  font-size: 23px;
-  font-weight: 400;
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--pe-card-ink, #123b51);
 }
 
 .product-card__metafield-resonance {
-  font-size: 25px;
-  color: var(--pe-muted-2, #555555);
+  font-size: 1.35rem;
+  font-style: italic;
+  line-height: 1.35;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--pe-blue, #2a87b9);
+}
+
+.pc-family {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--pe-card-muted, #7c97a6);
+  margin-top: 2px;
+}
+
+.pc-price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 1.5rem;
+}
+.pc-price .price { font-size: inherit; }
+.pc-price .price__container { display: flex; align-items: baseline; gap: 8px; }
+.pc-price .price--on-sale .price__sale { display: flex; align-items: baseline; gap: 8px; }
+.pc-price .price-item { font-size: inherit; margin: 0; }
+.pc-price .price-item--sale,
+.pc-price .price__regular .price-item--regular {
+  font-weight: 800;
+  color: var(--pe-card-ink, #123b51);
+  font-variant-numeric: tabular-nums;
+}
+.pc-price .price__sale .price-item--regular {
+  font-weight: 400;
+  font-size: 0.92em;
+  color: var(--pe-card-muted, #7c97a6);
+  font-variant-numeric: tabular-nums;
+}
+/* The card already carries a Sale badge over the image. */
+.pc-price .price__badge-sale,
+.pc-price .price__badge-sold-out { display: none; }
+
+.pc-save {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pe-sale, #b3392b);
+  background: var(--pe-sale-bg, #fdeceb);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-wrapper .card--card { transition: none; }
+  .card-wrapper:hover .card--card { transform: none; }
 }
 
 /* ---------------------------------------------------------------------------

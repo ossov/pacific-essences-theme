@@ -177,6 +177,31 @@
             </div>
           {%- endif -%}
 
+          {%- comment -%}
+            The half of the title after the pipe is already the family in the
+            form we want — "Flower Essence", "Sea Essence", "Combination
+            Essence". Books and kits have no pipe, so they simply get no line.
+          {%- endcomment -%}
+          {%- assign card_family = card_title_parts[1] | strip -%}
+          {%- if card_family != blank -%}
+            <div class="pc-family">{{ card_family | escape }}</div>
+          {%- endif -%}
+
+          {%- comment -%}
+            The cards carried no price at all. The compare-at comes with the
+            price snippet; the saving beside it is worked out here.
+          {%- endcomment -%}
+          <div class="pc-price">
+            {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+            {%- assign card_variant = card_product.selected_or_first_available_variant -%}
+            {%- if card_variant.compare_at_price > card_variant.price -%}
+              {%- assign saved = card_variant.compare_at_price | minus: card_variant.price | times: 100.0 | divided_by: card_variant.compare_at_price | round -%}
+              {%- if saved > 0 -%}
+                <span class="pc-save">&minus;{{ saved }}%</span>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+
           <div class="card-information">
             {%- if show_vendor -%}
               <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
