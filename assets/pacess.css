@@ -86,8 +86,14 @@
 }
 
 /* A tinted plinth behind the bottle, so the product sits on something rather
-   than floating on the page. */
-.card-wrapper .card__inner {
+   than floating on the page.
+
+   It lives on .card__media rather than .card__inner on purpose: .card__media
+   is absolutely positioned with z-index 0, which makes it a stacking context,
+   and a blended image can only mix with what is painted inside its own
+   context. With the plinth outside it, the multiply below had nothing to
+   blend against and the photographs kept their own white. */
+.card-wrapper .card__media {
   background: linear-gradient(160deg, #f7fbfd, #eef6fa);
 }
 /* The plinth is inset on the picture itself. .card__media is absolutely
