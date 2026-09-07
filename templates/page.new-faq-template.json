@@ -57,101 +57,6 @@
         "padding_bottom": 32
       }
     },
-    "multirow_FfegMY": {
-      "type": "multirow",
-      "blocks": {
-        "row_NBUdLQ": {
-          "type": "row",
-          "settings": {
-            "image": "shopify://shop_images/1_5ba9b75e-a553-4fb7-a869-d59b642eeba3.png",
-            "caption": "",
-            "heading": "<strong>Flower Essences</strong>",
-            "text": "<p>The healing gifts of the flowers and trees of the Pacific Northwest are abundant and unique. Each of the 48 Flower Essences in our repertory contributes a unique vibration which can help us heal physically, emotionally, mentally and spiritually.</p><p></p>",
-            "button_label": "SHOP | FLOWER ESSENCES",
-            "button_link": "shopify://collections/flower-tree-essences"
-          }
-        },
-        "row_LTap7X": {
-          "type": "row",
-          "settings": {
-            "image": "shopify://shop_images/2_ebf85ad0-9f54-49bd-9d57-7ecc707c5213.png",
-            "caption": "",
-            "heading": "<strong>Sea Essences</strong>",
-            "text": "<p>Our 24 Sea Essences promote transformations in consciousness. They can be used to attain major breakthroughs, move into spaces of greater perspective, and connect with the basic rhythms of the universe during periods of change.</p><p></p>",
-            "button_label": "SHOP | SEA ESSENCES",
-            "button_link": "shopify://collections/sea-essences"
-          }
-        },
-        "row_rtTTGX": {
-          "type": "row",
-          "settings": {
-            "image": "shopify://shop_images/3_289b7327-694d-4705-b3f4-66c9e1380e36.png",
-            "caption": "",
-            "heading": "<strong>Gem & Crystal Essences</strong>",
-            "text": "<p>Our Gem and Crystal Essences are lovingly prepared using the energy of both the Sun and the Moon in the Mother tincture. The geometry of gems and crystals demonstrates that their external symmetry is a reflection of their internal order.\u00a0<br/><br/></p>",
-            "button_label": "SHOP | GEM ESSENCES",
-            "button_link": "shopify://collections/gem-and-crystal-essences"
-          }
-        },
-        "row_39dNcm": {
-          "type": "row",
-          "settings": {
-            "image": "shopify://shop_images/4_774fb588-7bdf-45f9-9989-019a3574dbf2.png",
-            "caption": "",
-            "heading": "<strong>Goddess Essences</strong>",
-            "text": "<p>For both men and women, each Goddess Essence fosters the qualities of that goddess archetype and assists in dealing with challenges. They help women to embrace the energies of the goddess as she manifests in different aspects of their lives. They help men to recognize and feel their own goddess energy within.</p>",
-            "button_label": "SHOP | GODDESS ESSENCES",
-            "button_link": "shopify://collections/goddess-essences"
-          }
-        },
-        "row_bN97eC": {
-          "type": "row",
-          "settings": {
-            "image": "shopify://shop_images/5_c5efd854-d735-44e6-8d9d-05a3fafd6f1e.png",
-            "caption": "",
-            "heading": "<strong>Essence Combinations</strong>",
-            "text": "<p>When a number of Essences are combined in a formula, the whole becomes greater than the sum of its parts. That\u2019s why we call these Combinations 'synergistic formulas'. We have learned that when some Essences are combined, they can create an even bigger impact than when used individually.</p>",
-            "button_label": "SHOP | ESSENCE COMBINATIONS",
-            "button_link": "shopify://collections/flower-essence-combinations"
-          }
-        },
-        "row_7fiUFz": {
-          "type": "row",
-          "settings": {
-            "image": "shopify://shop_images/6_89c9ee5b-4913-4d3f-ba12-09ef87f71e90.png",
-            "caption": "",
-            "heading": "<strong>Essences for Animals</strong>",
-            "text": "<p>Animals have a rich capacity for emotions. Our animal friends want to feel good and to be happy and content. Like us, chronic emotional and mental imbalances eventually affect their health, vitality and well-being. These Essence Combinations help to address common sources of dis-ease for pets and other animal friends.</p>",
-            "button_label": "SHOP | ESSENCES FOR ANIMALS",
-            "button_link": "shopify://collections/essences-for-animals"
-          }
-        }
-      },
-      "block_order": [
-        "row_NBUdLQ",
-        "row_LTap7X",
-        "row_rtTTGX",
-        "row_39dNcm",
-        "row_bN97eC",
-        "row_7fiUFz"
-      ],
-      "name": "t:sections.multirow.presets.name",
-      "settings": {
-        "image_height": "small",
-        "desktop_image_width": "small",
-        "image_layout": "align-left",
-        "heading_size": "h2",
-        "text_style": "body",
-        "button_style": "primary",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "mobile_content_alignment": "left",
-        "section_color_scheme": "",
-        "row_color_scheme": "",
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
-    },
     "essence_faq": {
       "type": "essence-faq",
       "blocks": {
@@ -315,12 +220,98 @@
         "padding_top": 36,
         "padding_bottom": 60
       }
+    },
+    "essence_families": {
+      "type": "essence-families",
+      "blocks": {
+        "family_1": {
+          "type": "family",
+          "settings": {
+            "image": "shopify://shop_images/1_5ba9b75e-a553-4fb7-a869-d59b642eeba3.png",
+            "heading": "Flower Essences",
+            "text": "The healing gifts of the flowers and trees of the Pacific Northwest are abundant and unique. Each of the 48 Flower Essences in our repertory contributes a unique vibration which can help us heal physically, emotionally, mentally and spiritually.",
+            "link": "shopify://collections/flower-tree-essences",
+            "link_label": "SHOP | FLOWER ESSENCES"
+          }
+        },
+        "family_2": {
+          "type": "family",
+          "settings": {
+            "image": "shopify://shop_images/2_ebf85ad0-9f54-49bd-9d57-7ecc707c5213.png",
+            "heading": "Sea Essences",
+            "text": "Our 24 Sea Essences promote transformations in consciousness. They can be used to attain major breakthroughs, move into spaces of greater perspective, and connect with the basic rhythms of the universe during periods of change.",
+            "link": "shopify://collections/sea-essences",
+            "link_label": "SHOP | SEA ESSENCES"
+          }
+        },
+        "family_3": {
+          "type": "family",
+          "settings": {
+            "image": "shopify://shop_images/3_289b7327-694d-4705-b3f4-66c9e1380e36.png",
+            "heading": "Gem & Crystal Essences",
+            "text": "Our Gem and Crystal Essences are lovingly prepared using the energy of both the Sun and the Moon in the Mother tincture. The geometry of gems and crystals demonstrates that their external symmetry is a reflection of their internal order.",
+            "link": "shopify://collections/gem-and-crystal-essences",
+            "link_label": "SHOP | GEM ESSENCES"
+          }
+        },
+        "family_4": {
+          "type": "family",
+          "settings": {
+            "image": "shopify://shop_images/4_774fb588-7bdf-45f9-9989-019a3574dbf2.png",
+            "heading": "Goddess Essences",
+            "text": "For both men and women, each Goddess Essence fosters the qualities of that goddess archetype and assists in dealing with challenges. They help women to embrace the energies of the goddess as she manifests in different aspects of their lives. They help men to recognize and feel their own goddess energy within.",
+            "link": "shopify://collections/goddess-essences",
+            "link_label": "SHOP | GODDESS ESSENCES"
+          }
+        },
+        "family_5": {
+          "type": "family",
+          "settings": {
+            "image": "shopify://shop_images/5_c5efd854-d735-44e6-8d9d-05a3fafd6f1e.png",
+            "heading": "Essence Combinations",
+            "text": "When a number of Essences are combined in a formula, the whole becomes greater than the sum of its parts. That\u2019s why we call these Combinations 'synergistic formulas'. We have learned that when some Essences are combined, they can create an even bigger impact than when used individually.",
+            "link": "shopify://collections/flower-essence-combinations",
+            "link_label": "SHOP | ESSENCE COMBINATIONS"
+          }
+        },
+        "family_6": {
+          "type": "family",
+          "settings": {
+            "image": "shopify://shop_images/6_89c9ee5b-4913-4d3f-ba12-09ef87f71e90.png",
+            "heading": "Essences for Animals",
+            "text": "Animals have a rich capacity for emotions. Our animal friends want to feel good and to be happy and content. Like us, chronic emotional and mental imbalances eventually affect their health, vitality and well-being. These Essence Combinations help to address common sources of dis-ease for pets and other animal friends.",
+            "link": "shopify://collections/essences-for-animals",
+            "link_label": "SHOP | ESSENCES FOR ANIMALS"
+          }
+        }
+      },
+      "block_order": [
+        "family_1",
+        "family_2",
+        "family_3",
+        "family_4",
+        "family_5",
+        "family_6"
+      ],
+      "settings": {
+        "eyebrow": "Explore",
+        "heading": "The six families",
+        "columns": 3,
+        "heading_color": "#2a87b9",
+        "label_color": "#2a87b9",
+        "name_color": "#123b51",
+        "text_color": "#4a6b7c",
+        "rule_color": "#e7eff4",
+        "color_scheme": "scheme-1",
+        "padding_top": 48,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
     "main",
     "image_with_text_wMVQYe",
     "essence_faq",
-    "multirow_FfegMY"
+    "essence_families"
   ]
 }

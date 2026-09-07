@@ -1,0 +1,223 @@
+{%- comment -%}
+  The six essence families.
+
+  Dawn's multirow gives each family a full-width band with the picture on one
+  side and the words on the other, alternating. Six of those is over two
+  thousand pixels of scrolling to read six short paragraphs, and by the fourth
+  one the shape has stopped meaning anything.
+
+  These are six doors to six collections, so they are laid out as six doors.
+  Whole card is the link — picture, name and description all go to the same
+  place, which is what people try to click anyway.
+{%- endcomment -%}
+
+{%- if section.blocks.size > 0 -%}
+  {% style %}
+    #ef-{{ section.id }} {
+      padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    }
+
+    #ef-{{ section.id }} .ef-head { margin: 0 0 2.6rem; text-align: center; }
+    #ef-{{ section.id }} .ef-eyebrow {
+      margin: 0 0 0.8rem;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: {{ section.settings.label_color }};
+    }
+    #ef-{{ section.id }} .ef-title {
+      margin: 0;
+      font-size: clamp(2.1rem, 1.7rem + 0.8vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      color: {{ section.settings.heading_color }};
+      text-wrap: balance;
+    }
+
+    #ef-{{ section.id }} .ef-grid {
+      display: grid;
+      grid-template-columns: repeat({{ section.settings.columns }}, 1fr);
+      gap: 3rem 2.4rem;
+      align-items: stretch;
+    }
+    /* A column, so the descriptions can be different lengths and the links
+       still line up across a row. */
+    #ef-{{ section.id }} .ef-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      text-decoration: none;
+      color: inherit;
+    }
+    #ef-{{ section.id }} .ef-shot {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border-radius: var(--pe-radius-media-inner, 20px);
+      background: {{ section.settings.rule_color }};
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    #ef-{{ section.id }} .ef-shot img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    #ef-{{ section.id }} .ef-card:hover .ef-shot {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 30px rgba(18, 48, 63, 0.14);
+    }
+    #ef-{{ section.id }} .ef-name {
+      display: block;
+      margin: 1.2rem 0 0.5rem;
+      font-size: 1.9rem;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: {{ section.settings.name_color }};
+    }
+    #ef-{{ section.id }} .ef-card:hover .ef-name { color: {{ section.settings.label_color }}; }
+    #ef-{{ section.id }} .ef-text {
+      display: block;
+      margin: 0;
+      font-size: 1.5rem;
+      line-height: 1.6;
+      color: {{ section.settings.text_color }};
+    }
+    #ef-{{ section.id }} .ef-go {
+      align-self: flex-start;
+      margin-top: auto;
+      padding-top: 1rem;
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: {{ section.settings.label_color }};
+    }
+    #ef-{{ section.id }} .ef-go::after {
+      content: ' →';
+      transition: transform 0.18s ease;
+      display: inline-block;
+    }
+    #ef-{{ section.id }} .ef-card:hover .ef-go::after { transform: translateX(3px); }
+    #ef-{{ section.id }} .ef-card:focus-visible .ef-shot {
+      outline: 2px solid {{ section.settings.label_color }};
+      outline-offset: 3px;
+    }
+
+    @media screen and (max-width: 989px) {
+      #ef-{{ section.id }} .ef-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media screen and (max-width: 599px) {
+      #ef-{{ section.id }} .ef-grid { grid-template-columns: 1fr; gap: 2.6rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #ef-{{ section.id }} .ef-shot { transition: none; }
+      #ef-{{ section.id }} .ef-card:hover .ef-shot { transform: none; }
+      #ef-{{ section.id }} .ef-card:hover .ef-go::after { transform: none; }
+    }
+  {% endstyle %}
+
+  <div id="ef-{{ section.id }}" class="ef-section color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-width">
+      {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+        <div class="ef-head">
+          {%- if section.settings.eyebrow != blank -%}
+            <p class="ef-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 class="ef-title">{{ section.settings.heading | escape }}</h2>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="ef-grid">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            # The headings arrived wrapped in <strong> from the old section.
+            assign name = block.settings.heading | strip_html | strip
+            assign text = block.settings.text | strip_html | strip
+          -%}
+          <a
+            class="ef-card"
+            href="{{ block.settings.link | default: '#' }}"
+            {{ block.shopify_attributes }}
+          >
+            <span class="ef-shot">
+              {%- if block.settings.image -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 900
+                  | image_tag:
+                    loading: 'lazy',
+                    sizes: '(min-width: 990px) 34rem, (min-width: 600px) 46vw, 92vw',
+                    widths: '420, 600, 900',
+                    alt: name
+                }}
+              {%- endif -%}
+            </span>
+            <span class="ef-name">{{ name }}</span>
+            {%- if text != blank -%}
+              <span class="ef-text">{{ text }}</span>
+            {%- endif -%}
+            {%- if block.settings.link_label != blank -%}
+              <span class="ef-go">{{ block.settings.link_label | escape }}</span>
+            {%- endif -%}
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Essence families",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Explore" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The six families" },
+
+    { "type": "header", "content": "Appearance" },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns",
+      "default": 3,
+      "info": "Two on a tablet and one on a phone, whatever this is set to."
+    },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#2a87b9" },
+    { "type": "color", "id": "label_color", "label": "Eyebrow, link and hover", "default": "#2a87b9" },
+    { "type": "color", "id": "name_color", "label": "Family name", "default": "#123b51" },
+    { "type": "color", "id": "text_color", "label": "Description", "default": "#4a6b7c" },
+    { "type": "color", "id": "rule_color", "label": "Behind the picture", "default": "#e7eff4" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Colour scheme", "default": "scheme-1" },
+
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Top padding", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Bottom padding", "default": 64 }
+  ],
+  "blocks": [
+    {
+      "type": "family",
+      "name": "Family",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Picture" },
+        { "type": "text", "id": "heading", "label": "Name" },
+        { "type": "textarea", "id": "text", "label": "Description" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "text", "id": "link_label", "label": "Link text", "default": "Shop" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Essence families" }]
+}
+{% endschema %}
