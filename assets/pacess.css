@@ -908,7 +908,16 @@
 .t-product .eg-slide.is-on { opacity: 1; }
 .t-product .eg-slide img { width: 100%; height: 100%; display: block; }
 .t-product .eg-slide--contain img { object-fit: contain; }
-.t-product .eg-slide--cover img { object-fit: cover; }
+
+/* The plant photograph is the only one with a visible edge — it is colour to
+   all four sides, where the bottle sits on a near-white ground that dissolves
+   into the page. So the rounding goes on the plant alone: on the bottle it
+   would only clip the corners off a picture whose edges you cannot see
+   anyway, which is what looked cut before. */
+.t-product .eg-slide--cover img {
+  object-fit: cover;
+  border-radius: var(--pe-radius-media-inner, 20px);
+}
 
 .t-product .eg-caption {
   margin: 0;
