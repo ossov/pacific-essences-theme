@@ -27,14 +27,6 @@
       thumbs.forEach(function (t, i) {
         t.classList.toggle('is-on', i === at);
         t.setAttribute('aria-current', i === at ? 'true' : 'false');
-        var bar = t.querySelector('.eg-bar');
-        if (!bar) return;
-        bar.classList.remove('is-running');
-        if (i === at && !stopped && !paused && !reduce) {
-          void bar.offsetWidth;            /* restart the fill */
-          bar.style.animationDuration = wait + 'ms';
-          bar.classList.add('is-running');
-        }
       });
     }
 
@@ -50,10 +42,6 @@
       if (forGood) stopped = true;
       paused = !forGood;
       clearInterval(timer);
-      thumbs.forEach(function (t) {
-        var bar = t.querySelector('.eg-bar');
-        if (bar) bar.classList.remove('is-running');
-      });
     }
 
     thumbs.forEach(function (t, i) {

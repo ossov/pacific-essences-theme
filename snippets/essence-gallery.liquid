@@ -102,11 +102,9 @@
   <div class="eg-thumbs">
     <button type="button" class="eg-thumb is-on" data-eg-go="0" aria-label="{{ 'products.product.media.gallery_viewer' | t | default: 'Show the bottle' }}">
       {{ lead | image_url: width: 160 | image_tag: loading: 'eager', widths: '160', alt: '' }}
-      <span class="eg-bar"></span>
     </button>
     <button type="button" class="eg-thumb" data-eg-go="1" aria-label="{{ plant_name | escape }}">
       {{ botanical | image_url: width: 160 | image_tag: loading: 'eager', widths: '160', alt: '' }}
-      <span class="eg-bar"></span>
     </button>
   </div>
 </div>

@@ -904,13 +904,6 @@
   margin: 0;
   opacity: 0;
   transition: opacity 0.5s ease;
-  /* Each slide gets its own compositor layer from the first paint rather than
-     only earning one the first time the cross-fade runs. That layer is what
-     the picture gains when you switch images and back, and it is rasterised
-     once at full quality; before it exists the photograph is painted along
-     with the rest of the page while the page is still loading, which is where
-     the softness was coming from. */
-  will-change: opacity;
 }
 .t-product .eg-slide.is-on { opacity: 1; }
 .t-product .eg-slide img { width: 100%; height: 100%; display: block; }
@@ -961,30 +954,8 @@
 .t-product .eg-thumb:hover { transform: translateY(-2px); }
 .t-product .eg-thumb:focus-visible { outline: 2px solid var(--pe-blue, #2a87b9); outline-offset: 2px; }
 
-/* The timer, so the picture never changes without warning.
-
-   It grows by transform rather than by width. Animating width re-runs layout
-   and repaint on every frame, and this animation starts the moment the page
-   loads and only stops for good when a preview is clicked — which is exactly
-   the window in which the picture looked soft. While the browser is repainting
-   for an animation it scales images with its cheap filter; a transform runs on
-   the compositor instead and leaves the picture alone. */
-.t-product .eg-bar {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 3px;
-  width: 100%;
-  transform: scaleX(0);
-  transform-origin: left center;
-  background: var(--pe-blue, #2a87b9);
-}
-.t-product .eg-bar.is-running { animation: eg-fill linear forwards; }
-@keyframes eg-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-
 @media (prefers-reduced-motion: reduce) {
   .t-product .eg-slide { transition: none; }
-  .t-product .eg-bar.is-running { animation: none; }
   .t-product .eg-thumb { transition: none; }
   .t-product .eg-thumb:hover { transform: none; }
 }
