@@ -49,6 +49,43 @@
       t.addEventListener('focus', function () { if (!stopped) halt(false); });
     });
 
+    /* The picture arrives soft on a fresh page load and sharpens the moment you
+       switch images and come back. Nothing in the CSS explains it — no filter,
+       no transform, no scaling of the element; the browser is simply drawing a
+       large photograph into a smaller frame with its cheap scaler while the
+       page is still loading, and only redoing it properly the next time it has
+       a reason to repaint. Switching images was supplying that reason.
+
+       So we supply it ourselves, once, as soon as the picture has decoded:
+       promoting a slide to its own layer and immediately dropping it again
+       forces exactly the repaint a switch would, and nothing moves on screen.
+       Belt and braces, because this is a browser quirk rather than something
+       the page controls: the same nudge runs again on window load, by which
+       point everything else has finished competing for the main thread. */
+    function resharpen() {
+      slides.forEach(function (s) {
+        s.style.willChange = 'opacity';
+        var cleared = false;
+        function clear() {
+          if (cleared) return;
+          cleared = true;
+          s.style.willChange = '';
+        }
+        /* A frame is the right moment to drop it again, but requestAnimationFrame
+           never fires in a background tab, and a slide left promoted for good is
+           precisely what made the picture soft all the time. The timeout is the
+           one that must not be missed. */
+        requestAnimationFrame(function () { requestAnimationFrame(clear); });
+        setTimeout(clear, 250);
+      });
+    }
+
+    var lead = slides[0].querySelector('img');
+    if (lead && lead.decode) lead.decode().then(resharpen, resharpen);
+    else if (lead && lead.complete) resharpen();
+    else if (lead) lead.addEventListener('load', resharpen, { once: true });
+    window.addEventListener('load', resharpen);
+
     root.addEventListener('mouseenter', function () { if (!stopped) halt(false); });
     root.addEventListener('mouseleave', function () {
       if (stopped) return;
