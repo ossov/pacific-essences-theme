@@ -33,6 +33,7 @@
 :root {
   /* Brand */
   --pe-blue: #2a87b9;
+  --pe-deep: #1c5b7d;
   --pe-muted: #666666;
   --pe-card-ink: #123b51;
   --pe-card-muted: #7c97a6;
@@ -1090,4 +1091,184 @@
 @media screen and (max-width: 749px) {
   .pe-guide { padding: 1rem; }
   .pe-guide__panel { padding: 2.4rem 1.6rem 1.6rem; max-height: 88vh; }
+}
+
+/* ---------------------------------------------------------------------------
+   Our Story — the timeline
+
+   The page content is a decade of accumulated markup: cd-timeline-* classes
+   from a stylesheet that no longer exists, decorative placeholder icons, empty
+   parallax "bubble" divs, and text-align:center written inline on almost every
+   element. None of that can be edited from here — the store token has no
+   access to page content — so this styles what is there and neutralises the
+   rest rather than rewriting it.
+
+   Two consequences worth knowing. The inline alignment can only be beaten with
+   !important, which is why there is more of it here than anywhere else in this
+   file. And the order is reversed by the layout, not by the content: the page
+   still stores 2020 first, so a screen reader and a search engine read it
+   newest-first while the page shows it oldest-first. That is a compromise, not
+   a design decision — when the content itself is reordered, delete the
+   column-reverse below and everything else still holds.
+   ------------------------------------------------------------------------ */
+
+/* The intro above the timeline. */
+.t-page-story .pe-story.center-block { max-width: 68ch; margin: 0 auto 4.8rem; }
+.t-page-story .pe-story .title-page {
+  font-size: clamp(2.4rem, 1.9rem + 1vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--pe-blue, #2a87b9);
+  text-wrap: balance;
+}
+.t-page-story .pe-story .lead {
+  font-size: 1.7rem;
+  line-height: 1.65;
+  color: var(--pe-card-ink, #123b51);
+}
+
+/* ---- the spine ---- */
+.t-page-story #cd-timeline {
+  position: relative;
+  display: flex;
+  /* Oldest first. See the note above: this is layout, not content order. */
+  flex-direction: column-reverse;
+  max-width: 82rem;
+  margin: 0 auto;
+  padding: 0 0 0 15.6rem;
+  text-align: left !important;
+}
+.t-page-story #cd-timeline::before {
+  content: '';
+  position: absolute;
+  left: 12rem;
+  top: 0.8rem;
+  bottom: 0.8rem;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--pe-card-hair, #e7eff4),
+    var(--pe-blue, #2a87b9) 10%,
+    var(--pe-blue, #2a87b9) 90%,
+    var(--pe-card-hair, #e7eff4)
+  );
+}
+
+/* The icons are generic placeholders — a camera, a map pin, a film reel — that
+   say nothing about the year they sit on. The bubbles are empty divs left over
+   from a parallax effect. Both are decoration with no content. */
+.t-page-story #cd-timeline .cd-timeline-img,
+.t-page-story #cd-timeline .bubble { display: none !important; }
+
+.t-page-story .cd-timeline-block {
+  position: relative;
+  margin: 0 0 3.4rem;
+  padding: 0;
+  text-align: left !important;
+}
+.t-page-story .cd-timeline-block:first-child { margin-bottom: 0; }
+/* The marker on the line. Sized and offset to sit centred on the 2px rule. */
+.t-page-story .cd-timeline-block::before {
+  content: '';
+  position: absolute;
+  left: -4.15rem;
+  top: 0.9rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  background: var(--pe-blue, #2a87b9);
+  box-shadow: 0 0 0 4px #ffffff;
+}
+
+.t-page-story .cd-timeline-content { text-align: left !important; }
+
+/* The year, lifted out of the flow into the gutter beside the line. */
+.t-page-story .cd-timeline-content h1 {
+  position: absolute;
+  left: -15.6rem;
+  top: -0.2rem;
+  width: 10rem;
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-align: right !important;
+  color: var(--pe-deep, #1c5b7d);
+  font-variant-numeric: tabular-nums;
+  /* 1977 carries "Our Beginning" under the date, and Dawn breaks words
+     anywhere by default, which split it mid-syllable. */
+  overflow-wrap: normal;
+  word-break: normal;
+  text-wrap: balance;
+}
+
+.t-page-story .cd-timeline-content h2 {
+  margin: 0 0 0.6rem;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--pe-card-ink, #123b51);
+  text-align: left !important;
+}
+.t-page-story .cd-timeline-content h2 ~ h2 { margin-top: 2rem; }
+
+.t-page-story .cd-timeline-content p {
+  margin: 0 0 0.9rem;
+  max-width: 62ch;
+  font-size: 1.55rem;
+  line-height: 1.65;
+  color: var(--pe-muted-2, #555555);
+  text-align: left !important;
+}
+/* The content is full of <p> </p> spacers doing the job of a margin. */
+.t-page-story .cd-timeline-content p:empty { display: none; }
+
+.t-page-story .cd-timeline-content img {
+  display: block !important;
+  max-width: 28rem;
+  width: 100%;
+  height: auto;
+  margin: 1.2rem 0 0.4rem !important;
+  border-radius: 12px;
+}
+
+/* The dated sub-entries — the annual Circle of Healing trainings, mostly. */
+.t-page-story .cd-timeline-content .cd-list {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: 0.2rem 1.2rem;
+  margin: 1.2rem 0 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--pe-card-hair, #e7eff4);
+}
+.t-page-story .cd-timeline-content .cd-list dt,
+.t-page-story .cd-timeline-content .cd-list dd { margin: 0; }
+.t-page-story .cd-timeline-content .cd-list dt p {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--pe-blue, #2a87b9);
+  font-variant-numeric: tabular-nums;
+}
+.t-page-story .cd-timeline-content .cd-list dd p {
+  margin: 0;
+  font-size: 1.35rem;
+  color: var(--pe-card-muted, #7c97a6);
+}
+
+@media screen and (max-width: 749px) {
+  .t-page-story #cd-timeline { padding-left: 2.6rem; }
+  .t-page-story #cd-timeline::before { left: 0.5rem; }
+  .t-page-story .cd-timeline-block::before { left: -2.05rem; top: 0.7rem; }
+  .t-page-story .cd-timeline-content h1 {
+    position: static;
+    width: auto;
+    margin: 0 0 0.4rem;
+    text-align: left !important;
+    font-size: 1.9rem;
+  }
+  .t-page-story .cd-timeline-content .cd-list { grid-template-columns: 5.6rem 1fr; }
 }
