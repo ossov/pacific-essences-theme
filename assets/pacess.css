@@ -66,6 +66,11 @@
 /* ---------------------------------------------------------------------------
    Product cards
 
+   Scoped to .product-card-wrapper, not .card-wrapper. Dawn puts .card-wrapper
+   on article cards too, so the plinth and the contained, blended image were
+   landing on the blog as well — where the picture is a photograph that should
+   fill its frame, not a bottle floating on a tint.
+
    The same card serves the three specials on the home page and the thirty-six
    on a collection page, so it has to sell at three and stay quiet at
    thirty-six. The resonance line does that work: it is the one thing on the
@@ -74,13 +79,13 @@
    intentions you can read.
    ------------------------------------------------------------------------ */
 
-.card-wrapper .card--card {
+.product-card-wrapper .card--card {
   border: 1px solid var(--pe-card-hair, #e7eff4);
   border-radius: 14px;
   overflow: hidden;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
-.card-wrapper:hover .card--card {
+.product-card-wrapper:hover .card--card {
   transform: translateY(-3px);
   box-shadow: 0 16px 32px rgba(18, 48, 63, 0.1);
 }
@@ -93,14 +98,14 @@
    and a blended image can only mix with what is painted inside its own
    context. With the plinth outside it, the multiply below had nothing to
    blend against and the photographs kept their own white. */
-.card-wrapper .card__media {
+.product-card-wrapper .card__media {
   background: linear-gradient(160deg, #f7fbfd, #eef6fa);
 }
 /* The plinth is inset on the picture itself. .card__media is absolutely
    positioned with inset:0 and holds another absolutely positioned box, so
    padding there shifted that inner box sideways instead of insetting it —
    every image sat 12px right of its frame and bled off the other edge. */
-.card-wrapper .card__media .media img {
+.product-card-wrapper .card__media .media img {
   padding: 14px;
   object-fit: contain;
   /* The photographs carry their own pale background baked in, and it is not
@@ -111,8 +116,8 @@
   mix-blend-mode: multiply;
 }
 
-.card-wrapper .card__content { padding: 13px 16px 16px; }
-.card-wrapper .card__information {
+.product-card-wrapper .card__content { padding: 13px 16px 16px; }
+.product-card-wrapper .card__information {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -121,12 +126,12 @@
      so the two disagreed. Everything reads down one edge instead. */
   text-align: left;
 }
-.card-wrapper .card__information > *,
-.card-wrapper .card__heading,
-.card-wrapper .card__heading a { text-align: left; }
+.product-card-wrapper .card__information > *,
+.product-card-wrapper .card__heading,
+.product-card-wrapper .card__heading a { text-align: left; }
 
-.card__information .card__heading { margin: 0; }
-.card__information .card__heading .full-unstyled-link {
+.product-card-wrapper .card__information .card__heading { margin: 0; }
+.product-card-wrapper .card__information .card__heading .full-unstyled-link {
   font-size: 1.7rem;
   font-weight: 800;
   line-height: 1.2;
@@ -194,8 +199,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card-wrapper .card--card { transition: none; }
-  .card-wrapper:hover .card--card { transform: none; }
+  .product-card-wrapper .card--card { transition: none; }
+  .product-card-wrapper:hover .card--card { transform: none; }
 }
 
 /* Dawn puts 68px of margin above the footer. That is invisible when a page
