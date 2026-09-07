@@ -1216,28 +1216,70 @@
   border-radius: 12px;
 }
 
-/* The dated sub-entries — the annual Circle of Healing trainings, mostly. */
-.t-page-story .cd-timeline-content .cd-list {
+/* The dated sub-entries — the annual Circle of Healing trainings, mostly.
+
+   The date column is max-content rather than a fixed 7rem, so it fits the
+   longest date present and no more. Anything without a date belongs in the
+   list below this one, not in a column six characters wide. */
+.t-page-story .cd-timeline-content .cd-list,
+.t-page-story .cd-timeline-content .cd-list > dl {
   display: grid;
-  grid-template-columns: 7rem 1fr;
+  grid-template-columns: max-content 1fr;
   gap: 0.2rem 1.2rem;
   margin: 1.2rem 0 0;
   padding: 1rem 0 0;
   border-top: 1px solid var(--pe-card-hair, #e7eff4);
 }
+/* A safety net. If a date list ever gets an entry with no date again, the text
+   spans the full width instead of being squeezed into the date column. */
+.t-page-story .cd-timeline-content .cd-list dt:has(+ dd:empty) { grid-column: 1 / -1; }
+.t-page-story .cd-timeline-content .cd-list > dl { margin: 0; padding: 0; border: 0; }
+
+/* Extra things that happened in a year but carry no date of their own. */
+.t-page-story .cd-timeline-content .cd-more {
+  margin: 1.2rem 0 0;
+  padding: 1rem 0 0 1.8rem;
+  border-top: 1px solid var(--pe-card-hair, #e7eff4);
+  list-style: none;
+}
+.t-page-story .cd-timeline-content .cd-more li {
+  position: relative;
+  margin: 0 0 0.5rem;
+  font-size: 1.45rem;
+  line-height: 1.6;
+  color: var(--pe-muted-2, #555555);
+}
+.t-page-story .cd-timeline-content .cd-more li::before {
+  content: '';
+  position: absolute;
+  left: -1.4rem;
+  top: 0.85rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--pe-blue, #2a87b9);
+}
+/* Styled on the dt and dd themselves, not on a <p> inside them — some entries
+   wrap their text in a paragraph and some do not. */
 .t-page-story .cd-timeline-content .cd-list dt,
-.t-page-story .cd-timeline-content .cd-list dd { margin: 0; }
-.t-page-story .cd-timeline-content .cd-list dt p {
+.t-page-story .cd-timeline-content .cd-list dd {
   margin: 0;
   font-size: 1.35rem;
+  line-height: 1.5;
+}
+.t-page-story .cd-timeline-content .cd-list dt {
   font-weight: 800;
   color: var(--pe-blue, #2a87b9);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
+.t-page-story .cd-timeline-content .cd-list dd { color: var(--pe-card-muted, #7c97a6); }
+.t-page-story .cd-timeline-content .cd-list dt p,
 .t-page-story .cd-timeline-content .cd-list dd p {
   margin: 0;
-  font-size: 1.35rem;
-  color: var(--pe-card-muted, #7c97a6);
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
 }
 
 @media screen and (max-width: 749px) {
@@ -1250,5 +1292,6 @@
     margin: 0 0 0.4rem;
     font-size: 1.9rem;
   }
-  .t-page-story .cd-timeline-content .cd-list { grid-template-columns: 5.6rem 1fr; }
+  .t-page-story .cd-timeline-content .cd-list,
+  .t-page-story .cd-timeline-content .cd-list > dl { grid-template-columns: max-content 1fr; }
 }
