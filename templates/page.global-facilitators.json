@@ -111,7 +111,9 @@
         "rule_color": "#e7eff4",
         "color_scheme": "scheme-1",
         "padding_top": 40,
-        "padding_bottom": 72
+        "padding_bottom": 72,
+        "card": true,
+        "card_background": "#ffffff"
       }
     }
   },

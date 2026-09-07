@@ -44,10 +44,34 @@
     #ed-{{ section.id }} .ed-grid {
       display: grid;
       grid-template-columns: repeat({{ section.settings.columns }}, 1fr);
-      gap: 3.4rem 2.6rem;
+      gap: {% if section.settings.card %}2.4rem{% else %}3.4rem 2.6rem{% endif %};
       margin-top: 3.4rem;
+      /* Stretch, so every card in a row is as tall as the tallest and the
+         bottoms line up. The bios run from 200 to 900 characters. */
+      align-items: stretch;
     }
-    #ed-{{ section.id }} .ed-card { display: flex; flex-direction: column; }
+    #ed-{{ section.id }} .ed-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      {%- if section.settings.card %}
+      background: {{ section.settings.card_background }};
+      border: 1px solid {{ section.settings.rule_color }};
+      border-radius: 14px;
+      padding: 2.2rem 2.2rem 2.4rem;
+      transition: box-shadow 0.18s ease, transform 0.18s ease;
+      {%- endif %}
+    }
+    {%- if section.settings.card %}
+    #ed-{{ section.id }} .ed-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 30px rgba(18, 48, 63, 0.1);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #ed-{{ section.id }} .ed-card { transition: none; }
+      #ed-{{ section.id }} .ed-card:hover { transform: none; }
+    }
+    {%- endif %}
 
     /* Logos: fitted whole, never cropped, and their white ground blended into
        the page so they do not each sit on a slab of a slightly different white. */
@@ -102,7 +126,7 @@
       color: {{ section.settings.muted_color }};
     }
     #ed-{{ section.id }} .ed-bio {
-      margin: 0.8rem 0 0;
+      margin: 0.8rem 0 1.2rem;
       font-size: 1.45rem;
       line-height: 1.6;
       color: {{ section.settings.text_color }};
@@ -112,7 +136,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.3rem;
-      margin-top: 1.2rem;
+      margin-top: auto;
       padding-top: 1.2rem;
       border-top: 1px solid {{ section.settings.rule_color }};
       font-size: 1.45rem;
@@ -256,6 +280,8 @@
 
     { "type": "header", "content": "Appearance" },
     { "type": "range", "id": "columns", "min": 2, "max": 4, "step": 1, "label": "Columns", "default": 3 },
+    { "type": "checkbox", "id": "card", "label": "Put each entry in a card", "default": true },
+    { "type": "color", "id": "card_background", "label": "Card background", "default": "#ffffff" },
     { "type": "range", "id": "logo_height", "min": 48, "max": 160, "step": 4, "unit": "px", "label": "Logo height", "default": 84 },
     { "type": "range", "id": "face_size", "min": 56, "max": 160, "step": 4, "unit": "px", "label": "Portrait size", "default": 96 },
     { "type": "color", "id": "heading_color", "label": "Heading", "default": "#2a87b9" },
