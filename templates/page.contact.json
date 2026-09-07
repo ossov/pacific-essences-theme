@@ -47,7 +47,8 @@
         "side_background": "#f2f8fb",
         "color_scheme": "scheme-1",
         "padding_top": 40,
-        "padding_bottom": 72
+        "padding_bottom": 72,
+        "field_radius": 10
       }
     }
   },

@@ -37,6 +37,16 @@
   }
   #ec-{{ section.id }} .ec-inner { max-width: 92rem; margin: 0 auto; }
 
+  /* Dawn draws every field border on ::before and ::after and takes the corner
+     from these two variables, which the theme has set to 0 store-wide. Setting
+     them here rounds the fields on this page only — the search box, the
+     newsletter and the login form are left alone. The outset is the outer of
+     the two rings, so it is one pixel larger. */
+  #ec-{{ section.id }} {
+    --inputs-radius: {{ section.settings.field_radius }}px;
+    --inputs-radius-outset: {{ section.settings.field_radius | plus: 1 }}px;
+  }
+
   #ec-{{ section.id }} .ec-head { margin: 0 0 3rem; text-align: center; }
   #ec-{{ section.id }} .ec-title {
     margin: 0;
@@ -69,6 +79,9 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.4rem;
+    /* Dawn's name/email row carries no bottom margin of its own, so without
+       this the phone field sits hard against it and the two borders touch. */
+    margin-bottom: 1.4rem;
   }
   #ec-{{ section.id }} .ec-form .field { margin-bottom: 1.4rem; }
   #ec-{{ section.id }} .ec-form .contact__fields .field { margin-bottom: 0; }
@@ -338,6 +351,18 @@
     {
       "type": "paragraph",
       "content": "Social links come from the theme's own social settings, so they match the footer."
+    },
+
+    {
+      "type": "range",
+      "id": "field_radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Field corners",
+      "default": 10,
+      "info": "Rounds the form fields on this page only. Set to 0 to match the rest of the store."
     },
 
     { "type": "header", "content": "Colours" },
