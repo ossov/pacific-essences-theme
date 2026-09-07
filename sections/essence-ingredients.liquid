@@ -73,12 +73,16 @@
       padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
     }
 
+    /* Centred on the row below it, not on the page — the row is centred too,
+       so the two share an axis. */
     #ei-{{ section.id }} .ei-head {
       display: flex;
       align-items: baseline;
+      justify-content: center;
       gap: 1.2rem;
       flex-wrap: wrap;
       margin: 0 0 2.2rem;
+      text-align: center;
     }
     #ei-{{ section.id }} .ei-eyebrow {
       margin: 0;
