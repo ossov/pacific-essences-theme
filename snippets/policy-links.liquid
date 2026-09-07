@@ -1,0 +1,36 @@
+{%- comment -%}
+  The other policies, listed at the foot of a policy page.
+
+  Shopify renders shop policies with its own fixed markup and ignores theme
+  templates entirely — templates/policy.json is rejected outright ("Template
+  type 'policy' does not support JSON templates") and templates/policy.liquid
+  is never reached. So the page itself cannot be rebuilt; it can only be styled,
+  and anything extra has to be added around it from the layout.
+
+  This is that extra: the set of policies, minus the one being read, so someone
+  who has just read about returns can get to shipping without going back to the
+  footer. Built from the shop's own policies, so it follows whatever is turned
+  on in Settings.
+{%- endcomment -%}
+
+{%- assign shown = 0 -%}
+{%- for policy in shop.policies -%}
+  {%- if policy.title != page_title and policy.body != blank -%}
+    {%- assign shown = shown | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if shown > 0 -%}
+  <nav class="policy-also" aria-label="Other policies">
+    {%- comment -%}
+      A literal rather than a translation key: a missing key renders as
+      "Translation missing: …" rather than as blank, so `default` never fires.
+    {%- endcomment -%}
+    <span class="policy-also__label">Also worth reading</span>
+    {%- for policy in shop.policies -%}
+      {%- if policy.title != page_title and policy.body != blank -%}
+        <a href="{{ policy.url }}">{{ policy.title }}</a>
+      {%- endif -%}
+    {%- endfor -%}
+  </nav>
+{%- endif -%}

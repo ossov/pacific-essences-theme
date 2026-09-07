@@ -344,6 +344,14 @@
       
 
   {{ content_for_layout }}
+
+      {%- comment -%}
+        Shopify renders shop policies itself and ignores theme templates, so
+        anything extra on those pages has to be added here, around it.
+      {%- endcomment -%}
+      {%- if request.page_type == 'policy' -%}
+        {% render 'policy-links' %}
+      {%- endif -%}
     </main>
 
     {% sections 'footer-group' %}

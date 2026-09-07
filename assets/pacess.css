@@ -1295,3 +1295,113 @@
   .t-page-story .cd-timeline-content .cd-list,
   .t-page-story .cd-timeline-content .cd-list > dl { grid-template-columns: max-content 1fr; }
 }
+
+/* ---------------------------------------------------------------------------
+   Shop policies — refunds, shipping, privacy, terms
+
+   These four are Shopify policies, not pages, and Shopify renders them with its
+   own fixed markup: a .shopify-policy__container holding a title and an .rte.
+   A theme template does not get a look in — templates/policy.json is refused on
+   upload ("Template type 'policy' does not support JSON templates") and a
+   policy.liquid is never reached. So this styles what Shopify emits. The list
+   of other policies at the foot is added from layout/theme.liquid, which is the
+   only place on these pages the theme still controls.
+
+   Two of the four run to eight thousand characters and two are a paragraph, so
+   the work here is mostly measure, hierarchy and spacing.
+   ------------------------------------------------------------------------ */
+
+.t-policy .shopify-policy__container {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 4.4rem 1.5rem 0;
+}
+
+.t-policy .shopify-policy__title { margin: 0 0 2.6rem; text-align: left; }
+.t-policy .shopify-policy__title h1 {
+  margin: 0;
+  font-size: clamp(2.6rem, 2rem + 1.2vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--pe-blue, #2a87b9);
+}
+
+.t-policy .shopify-policy__body { padding: 0; }
+.t-policy .shopify-policy__body .rte {
+  max-width: 68ch;
+  color: #41616f;
+}
+.t-policy .shopify-policy__body .rte > *:first-child { margin-top: 0; }
+
+.t-policy .shopify-policy__body h2 {
+  margin: 0 0 1.4rem;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--pe-deep, #1c5b7d);
+}
+.t-policy .shopify-policy__body h3 {
+  margin: 3rem 0 0.8rem;
+  font-size: 1.65rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--pe-deep, #1c5b7d);
+}
+.t-policy .shopify-policy__body h4 {
+  margin: 2rem 0 0.6rem;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pe-deep, #1c5b7d);
+}
+.t-policy .shopify-policy__body p { margin: 0 0 1.4rem; font-size: 1.55rem; line-height: 1.75; }
+.t-policy .shopify-policy__body ul,
+.t-policy .shopify-policy__body ol { margin: 0 0 1.6rem; padding-left: 2rem; }
+.t-policy .shopify-policy__body li { margin-bottom: 0.7rem; font-size: 1.55rem; line-height: 1.7; }
+.t-policy .shopify-policy__body a { color: var(--pe-blue, #2a87b9); }
+
+/* The refund policy opens with three paragraphs used as spacers, which pushed
+   the text a screen down the page. */
+.t-policy .shopify-policy__body p:empty { display: none; }
+
+.t-policy .shopify-policy__body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1.6rem;
+  font-size: 1.45rem;
+}
+.t-policy .shopify-policy__body th,
+.t-policy .shopify-policy__body td {
+  border: 1px solid var(--pe-card-hair, #e7eff4);
+  padding: 0.8rem 1rem;
+  text-align: left;
+}
+
+/* Added from the layout, since Shopify owns everything above it. */
+.t-policy .policy-also {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.8rem 1.8rem;
+  max-width: 76rem;
+  margin: 4rem auto 0;
+  padding: 1.8rem 1.5rem 0;
+  border-top: 1px solid var(--pe-card-hair, #e7eff4);
+}
+.t-policy .policy-also__label {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pe-card-muted, #7c97a6);
+}
+.t-policy .policy-also a {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--pe-blue, #2a87b9);
+  text-decoration: none;
+}
+.t-policy .policy-also a:hover { text-decoration: underline; }
