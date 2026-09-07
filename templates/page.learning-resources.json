@@ -15,10 +15,109 @@
       "settings": {
         "padding_top": 28,
         "padding_bottom": 28
+      },
+      "disabled": true
+    },
+    "resources": {
+      "type": "learning-resources",
+      "blocks": {
+        "g_guides": {
+          "type": "group",
+          "settings": {
+            "heading": "Guides",
+            "note": ""
+          }
+        },
+        "i_abundance": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/pacific-essences-abundance-program-kit-01.jpg",
+            "heading": "22 Day Abundance Program",
+            "subtitle": "Meditations, as sound files",
+            "kind": "Guide",
+            "link": "/pages/22-day-abundance-program-meditations"
+          }
+        },
+        "i_heartspirit": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/pacific-essences-home-slider-heart-spirit-1.png",
+            "heading": "A Guide to Heart Spirit Essences",
+            "subtitle": "",
+            "kind": "Guide",
+            "link": "/pages/a-guide-to-heart-spirit-essences"
+          }
+        },
+        "g_book": {
+          "type": "group",
+          "settings": {
+            "heading": "Energy Medicine, the book",
+            "note": "4 languages"
+          }
+        },
+        "i_french": {
+          "type": "item",
+          "settings": {
+            "product": "energy-medicine-french-edition-pdf-ebook",
+            "subtitle": "French",
+            "kind": "PDF eBook"
+          }
+        },
+        "i_spanish": {
+          "type": "item",
+          "settings": {
+            "product": "energy-medicine-spanish-edition-pdf-ebook",
+            "subtitle": "Spanish",
+            "kind": "PDF eBook"
+          }
+        },
+        "i_portuguese": {
+          "type": "item",
+          "settings": {
+            "product": "medicina-energetica-portuguese-edition-cura-uma-dadiva-dos-reinos-da-natureza-book",
+            "subtitle": "Portuguese",
+            "kind": "PDF eBook"
+          }
+        },
+        "i_japanese": {
+          "type": "item",
+          "settings": {
+            "product": "energy-medicine-japanese-edition-pdf-ebook",
+            "subtitle": "Japanese",
+            "kind": "PDF eBook"
+          }
+        }
+      },
+      "block_order": [
+        "g_guides",
+        "i_abundance",
+        "i_heartspirit",
+        "g_book",
+        "i_french",
+        "i_spanish",
+        "i_portuguese",
+        "i_japanese"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "Pacific Essences Learning Resources",
+        "thumb_height": 88,
+        "heading_color": "#2a87b9",
+        "label_color": "#2a87b9",
+        "group_color": "#1c5b7d",
+        "name_color": "#123b51",
+        "muted_color": "#7c97a6",
+        "rule_color": "#e7eff4",
+        "badge_background": "#eaf3f8",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 64,
+        "drop_white": true
       }
     }
   },
   "order": [
-    "main"
+    "main",
+    "resources"
   ]
 }
