@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
@@ -31,7 +22,7 @@
         "text_FbDnxV": {
           "type": "text",
           "settings": {
-            "text": "<p>Pacific Essences® formulates pure Flower, Sea and Gem & Crystal Essences as non-invasive, gentle and effective tools for healing. </p><p>As the leading practitioners and pioneers of Energy Medicine®, we have over 40 years of experience learning, creating, and teaching about these powerful Essences from Mother Nature.</p>",
+            "text": "<p>Pacific Essences\u00ae formulates pure Flower, Sea and Gem & Crystal Essences as non-invasive, gentle and effective tools for healing. </p><p>As the leading practitioners and pioneers of Energy Medicine\u00ae, we have over 40 years of experience learning, creating, and teaching about these powerful Essences from Mother Nature.</p>",
             "text_style": "body"
           }
         },
@@ -66,179 +57,6 @@
         "padding_bottom": 32
       }
     },
-    "collapsible_content_TAUTnb": {
-      "type": "collapsible-content",
-      "blocks": {
-        "collapsible_row_BF3hTL": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "What Is An Essence?",
-            "icon": "none",
-            "row_content": "<p>Essences are a safe, easy-to -use form of Energy Medicine®. They support rebalancing on the wholistic level, to achieve physical, emotional, mental and spiritual homeostasis.</p><p>We call it Energy Medicine® because in fact it is through the Essences’ relationship and interactions with the energy systems (chakras and meridians) in the human being that healing occurs.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_G3WFVH": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "How Do Essences Work?",
-            "icon": "none",
-            "row_content": "<p>Current scientific research, including that of Japanese scientist Dr. Masaru Emoto, has shown that water has a memory. Subtle, non-physical aspects of flowers and other beings, such as their Vital Force, can be imprinted on water. In this way, the positive “memory signature” of a particular Essence creates a vibrational shift back to a state of harmonious balance.</p><p>The body has an innate intelligence to self-correct imbalanced or negative states, known as homeostasis in Western medicine. Essences, on a frequency level, facilitate this self-healing body wisdom by recalibrating the body’s energy systems - the Meridians and Chakras.</p><p>Recent testing with an energy measuring device in Japan shows extremely high and consistent energy ratings for our Essence Combinations. This means that energetically Pacific Essences® are pure energy from the plant source from which they are made with little or no influence from outside interference. Some of the categories of measurement included: Immune System, Vitality, Autonomic Nervous System, Manic Depression, Stress, Happiness, Fear, Despair, Loneliness, Shyness, Pressure, Mental Fatigue, Worry/Anxiety, Confidence, Concentration, Memory, and Free from Trauma.<br/><br/></p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_pYLNiN": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "How Are Essences Made?",
-            "icon": "none",
-            "row_content": "<p>To make a Flower Essence, the flower is placed into a crystal bowl filled with pure spring water. The bowl is kept in sunlight for a short while, up to a couple of hours, in order to transfer the vibrational energy of the plant to the water. </p><p>In the case of a living creature like a whale or a dolphin, the water that the animal has passed through is collected. No animal is ever harmed in this process. </p><p>When possible, we don’t harm the plant when making the Essences. Rather than clipping a flower off, we prefer to dip the flower or submerge it for a short time in the spring water. The plant remains whole, living and vibrant.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_qYxemq": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "How Are Essences Used?",
-            "icon": "none",
-            "row_content": "<p>Typically taken orally, Essences can be used directly from the stock bottle or prepared into a dosage bottle. <strong>Do not allow the dropper to come into direct contact with your mouth or lips,</strong> to avoid contaminating the stock or dosage bottle.</p><p>The general rule for making a dosage bottle is to fill a clean, glass dropper bottle with a dilution of 25% alcohol/brandy (a preservative) and 75% water. Choose the purest water available. Add two or more drops from the stock Essence bottle and shake gently. Label it, and it is ready for use. </p><p>Drops from the dosage bottle can be taken directly in the mouth, or consumed in a glass of water. Alternately, replace the dropper bottle with a mister bottle for an external-skin spray. </p><p>The daily dosage is individual, but generally one can take 4 drops 2-4 times a day, or 11 drops morning and evening. Trust your intuition. </p><p>Essences are completely safe and can be used as a single remedy or in combinations. Essences can also be used in the bath. For those with alcohol sensitivities, such as children and pregnant women, consider applying the drops topically anywhere on the skin or creating a spray to be used topically.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_jKemWA": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Are There Any Side Effects?",
-            "icon": "none",
-            "row_content": "<p>The gift of Essences is their ability to work on the subtle energetic levels, while triggering real wholistic change.</p><p>Many people find that the gentleness of Essence rebalancing is almost undetected. It is only with reflection that they notice that the negative state has dissipated and has been replaced with a return to their emotional/mental centre.</p><p>Essences are safe to use in all situations and highly effective and immediate for children and animals. Note that our Essences for Animals Collection does not contain alcohol as a preservative.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_wdbnYD": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Are Essences Safe For Children?",
-            "icon": "none",
-            "row_content": "<p>Yes. Essences are completely safe for children and very effective. Balancer, our combination for stress and overwhelm, is often used when a child is crying uncontrollably or has had a bump or bruise. Effects are swift and powerful. If a parent is concerned about the alcohol content, we suggest putting a few drops in water or applying it topically on the skin since our skin is a major organ of absorption and excretion.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_nGmqBW": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Are Essences Safe for Animals?",
-            "icon": "none",
-            "row_content": "<p>Yes, Essences are completely safe for animals. In fact, we created a special <a href=\"https://pacificessences.com/collections/essences-for-animals\">collection of 18 combinations for animals</a> that address issues like re-homing, grief and loss, fear of going to the vet or groomers, and other issues specific to animals. These Essences do not contain alcohol as a preservative. When using Essences with animals, we suggest spraying them on your hands and stroking their fur or spraying in their kennels or beds or putting a few drops in their water.<br/><br/></p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_emhUgx": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "What Are The Essence Ingredients?",
-            "icon": "none",
-            "row_content": "<p>Pacific Essences® do NOT contain any physical elements of the plant, animal, gem or crystal sources. Instead, the individual “frequency” of these beings is captured and stored in water. Alcohol or Brandy is used as a preservative with a dilution of 50% spring water, 50% Brandy (20% alcohol by volume).</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_wyYRyy": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Can I Get Essences Without Alcohol Preservative?",
-            "icon": "none",
-            "row_content": "<p>No, we only sell Essences that use alcohol as the preservative. We recommend that people who may have alcohol sensitivity use their Essences by putting some drops in a cup of boiled water so that the alcohol evaporates, putting drops in a bath and absorbing the Essence through the skin, or applying directly onto the skin.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_zjHGQP": {
-          "type": "collapsible_row",
-          "disabled": true,
-          "settings": {
-            "heading": "Collapsible row",
-            "icon": "none",
-            "row_content": "",
-            "page": ""
-          }
-        },
-        "collapsible_row_bbTRhF": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "How Do I Choose The Right Essence?",
-            "icon": "none",
-            "row_content": "<p>If you are interested in exploring the powerful effects of Essences but don't know quite where to start, we've created the perfect tool just for you. Take our short intuitive quiz (simply trust your own instincts for which images or words call to you - it's fun!) to discover which of our synergistic Essence Combinations will support you best.<br/><br/>Try out our Quiz <a href=\"/pages/essence-combination-quiz\" title=\"Good Vibrations - Essence Combination Quiz\">here</a>. </p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_6QAaDn": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "What Conditions Can Essences Treat?",
-            "icon": "none",
-            "row_content": "<p>Essences can treat essentially anything, because they are treating the person and not the disease.</p><p>Essences do not treat specific conditions. Essences treat the person. Because essences are Energy Medicine®, they are based on the science of Physics and not on Chemistry (like pharmaceuticals or even herbal medicine). They create subtle shifts in the energy anatomy and energy physiology of the person, resulting in increased feelings of well-being.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_bU6JYr": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "How Long Should I Take An Essence For?",
-            "icon": "none",
-            "row_content": "<p>Usually we take Essences one bottle at a time. Then take a break, and take note of what has shifted. Essences create an opportunity to be more self-aware and take note of conditions, people and situations which disrupt our sense of well-being. Essences also help us to change our responses to these disruptive experiences.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_3XL7TQ": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "How Long Do Essences Last?",
-            "icon": "none",
-            "row_content": "<p>We put a shelf life of 10 years on all our Essence bottles, and often Essences last much longer than that. However, if the dropper becomes contaminated by coming in contact with your tongue when taking the drops, there is the possibility of bacteria accumulating.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_zGt3By": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Are Animals Harmed In Making Essences?",
-            "icon": "none",
-            "row_content": "<p><a href=\"https://pacificessences.com/\">Pacific Essences</a> made the first <a href=\"https://pacificessences.com/collections/sea-essences\">Sea Essences</a> on the planet from large mammals like Sea Turtle, Whale, and dolphins, and also smaller creatures like Starfish, sponges, and Anemone. Nothing is harmed in the process of making these Essences. We collect the water from the tide pools in which they are living, or from the water through which they are swimming.</p>",
-            "page": ""
-          }
-        }
-      },
-      "block_order": [
-        "collapsible_row_BF3hTL",
-        "collapsible_row_G3WFVH",
-        "collapsible_row_pYLNiN",
-        "collapsible_row_qYxemq",
-        "collapsible_row_jKemWA",
-        "collapsible_row_wdbnYD",
-        "collapsible_row_nGmqBW",
-        "collapsible_row_emhUgx",
-        "collapsible_row_wyYRyy",
-        "collapsible_row_zjHGQP",
-        "collapsible_row_bbTRhF",
-        "collapsible_row_6QAaDn",
-        "collapsible_row_bU6JYr",
-        "collapsible_row_3XL7TQ",
-        "collapsible_row_zGt3By"
-      ],
-      "name": "t:sections.collapsible_content.presets.name",
-      "settings": {
-        "caption": "",
-        "heading": "Frequently Asked Questions",
-        "heading_size": "h1",
-        "heading_alignment": "center",
-        "layout": "none",
-        "container_color_scheme": "",
-        "color_scheme": "scheme-7ae94d6e-6efb-4f8a-9896-9223191ec4de",
-        "open_first_collapsible_row": false,
-        "image_ratio": "adapt",
-        "desktop_layout": "image_second",
-        "padding_top": 36,
-        "padding_bottom": 60
-      }
-    },
     "multirow_FfegMY": {
       "type": "multirow",
       "blocks": {
@@ -270,7 +88,7 @@
             "image": "shopify://shop_images/3_289b7327-694d-4705-b3f4-66c9e1380e36.png",
             "caption": "",
             "heading": "<strong>Gem & Crystal Essences</strong>",
-            "text": "<p>Our Gem and Crystal Essences are lovingly prepared using the energy of both the Sun and the Moon in the Mother tincture. The geometry of gems and crystals demonstrates that their external symmetry is a reflection of their internal order. <br/><br/></p>",
+            "text": "<p>Our Gem and Crystal Essences are lovingly prepared using the energy of both the Sun and the Moon in the Mother tincture. The geometry of gems and crystals demonstrates that their external symmetry is a reflection of their internal order.\u00a0<br/><br/></p>",
             "button_label": "SHOP | GEM ESSENCES",
             "button_link": "shopify://collections/gem-and-crystal-essences"
           }
@@ -292,7 +110,7 @@
             "image": "shopify://shop_images/5_c5efd854-d735-44e6-8d9d-05a3fafd6f1e.png",
             "caption": "",
             "heading": "<strong>Essence Combinations</strong>",
-            "text": "<p>When a number of Essences are combined in a formula, the whole becomes greater than the sum of its parts. That’s why we call these Combinations 'synergistic formulas'. We have learned that when some Essences are combined, they can create an even bigger impact than when used individually.</p>",
+            "text": "<p>When a number of Essences are combined in a formula, the whole becomes greater than the sum of its parts. That\u2019s why we call these Combinations 'synergistic formulas'. We have learned that when some Essences are combined, they can create an even bigger impact than when used individually.</p>",
             "button_label": "SHOP | ESSENCE COMBINATIONS",
             "button_link": "shopify://collections/flower-essence-combinations"
           }
@@ -333,12 +151,176 @@
         "padding_top": 0,
         "padding_bottom": 0
       }
+    },
+    "essence_faq": {
+      "type": "essence-faq",
+      "blocks": {
+        "group_1": {
+          "type": "group",
+          "settings": {
+            "heading": "What they are"
+          }
+        },
+        "q_1": {
+          "type": "question",
+          "settings": {
+            "heading": "What Is An Essence?",
+            "answer": "<p>Essences are a safe, easy-to -use form of Energy Medicine\u00ae. They support rebalancing on the wholistic level, to achieve physical, emotional, mental and spiritual homeostasis.</p><p>We call it Energy Medicine\u00ae because in fact it is through the Essences\u2019 relationship and interactions with the energy systems (chakras and meridians) in the human being that healing occurs.</p>"
+          }
+        },
+        "q_2": {
+          "type": "question",
+          "settings": {
+            "heading": "How Do Essences Work?",
+            "answer": "<p>Current scientific research, including that of Japanese scientist Dr. Masaru Emoto, has shown that water has a memory.\u00a0Subtle, non-physical aspects of flowers and other beings, such as their Vital Force, can be imprinted on water. In this way, the positive \u201cmemory signature\u201d of a particular Essence creates a vibrational shift back to a state of harmonious balance.</p><p>The body has an innate intelligence to self-correct imbalanced or negative states,\u00a0known as homeostasis in Western medicine. Essences, on a frequency level, facilitate this self-healing body wisdom by recalibrating the body\u2019s energy systems - the Meridians and Chakras.</p><p>Recent testing with an energy measuring device in Japan shows extremely high and consistent energy ratings for our Essence Combinations. This means that energetically Pacific Essences\u00ae are pure energy from the plant source from which they are made with little or no influence from outside interference. Some of the categories of measurement included: Immune System, Vitality, Autonomic Nervous System, Manic Depression, Stress, Happiness, Fear, Despair, Loneliness, Shyness, Pressure, Mental Fatigue, Worry/Anxiety, Confidence, Concentration, Memory, and Free from Trauma.<br/><br/></p>"
+          }
+        },
+        "q_3": {
+          "type": "question",
+          "settings": {
+            "heading": "How Are Essences Made?",
+            "answer": "<p>To make a Flower Essence, the flower is placed into a crystal bowl filled with pure spring water. The bowl is kept in sunlight for a short while, up to a couple of hours, in order to transfer the vibrational energy of the plant to the water. </p><p>In the case of a living creature like a whale or a dolphin, the water that the animal has passed through is collected. No animal is ever harmed in this process. </p><p>When possible, we don\u2019t harm the plant when making the Essences. Rather than clipping a flower off, we prefer to dip the flower or submerge it for a short time in the spring water. The plant remains whole, living and vibrant.</p>"
+          }
+        },
+        "q_4": {
+          "type": "question",
+          "settings": {
+            "heading": "What Are The Essence Ingredients?",
+            "answer": "<p>Pacific Essences\u00ae do NOT contain any physical elements of the plant, animal, gem or crystal sources. Instead, the individual \u201cfrequency\u201d of these beings is captured and stored in water. Alcohol or Brandy is used as a preservative with a dilution of 50% spring water, 50% Brandy (20% alcohol by volume).</p>"
+          }
+        },
+        "group_2": {
+          "type": "group",
+          "settings": {
+            "heading": "Using them"
+          }
+        },
+        "q_5": {
+          "type": "question",
+          "settings": {
+            "heading": "How Are Essences Used?",
+            "answer": "<p>Typically taken orally, Essences can be used directly from the stock bottle or prepared into a dosage bottle. <strong>Do not allow the dropper to come into direct contact with your mouth or lips,</strong> to avoid contaminating the stock or dosage bottle.</p><p>The general rule for making a dosage bottle is to fill a clean, glass dropper bottle with a dilution of 25% alcohol/brandy (a preservative) and 75% water. Choose the purest water available. Add two or more drops from the stock Essence bottle and shake gently. Label it, and it is ready for use. </p><p>Drops from the dosage bottle can be taken directly in the mouth, or consumed in a glass of water. Alternately, replace the dropper bottle with a mister bottle for an external-skin spray.\u00a0</p><p>The daily dosage is individual, but generally one can take 4 drops 2-4 times a day, or 11 drops morning and evening. Trust your intuition. </p><p>Essences are completely safe and can be used as a single remedy or in combinations.\u00a0Essences can also be used in the bath. For those with alcohol sensitivities, such as children and pregnant women, consider applying the drops topically anywhere on the skin or creating a spray to be used topically.</p>"
+          }
+        },
+        "q_6": {
+          "type": "question",
+          "settings": {
+            "heading": "How Do I Choose The Right Essence?",
+            "answer": "<p>If you are interested in exploring the powerful effects of Essences but don't know quite where to start, we've created the perfect tool just for you. Take our short intuitive quiz (simply trust your own instincts for which images or words call to you - it's fun!) to discover which of our synergistic Essence Combinations will support you best.<br/><br/>Try out our Quiz <a href=\"/pages/essence-combination-quiz\" title=\"Good Vibrations - Essence Combination Quiz\">here</a>. </p>"
+          }
+        },
+        "q_7": {
+          "type": "question",
+          "settings": {
+            "heading": "What Conditions Can Essences Treat?",
+            "answer": "<p>Essences can treat essentially anything, because they are treating the person and not the disease.</p><p>Essences do not treat specific conditions. Essences treat the person. Because essences are Energy Medicine\u00ae, they are based on the science of Physics and not on Chemistry (like pharmaceuticals or even herbal medicine). They create subtle shifts in the energy anatomy and energy physiology of the person, resulting in increased feelings of well-being.</p>"
+          }
+        },
+        "q_8": {
+          "type": "question",
+          "settings": {
+            "heading": "How Long Should I Take An Essence For?",
+            "answer": "<p>Usually we take Essences one bottle at a time. Then take a break, and take note of what has shifted. Essences create an opportunity to be more self-aware and take note of conditions, people and situations which disrupt our sense of well-being. Essences also help us to change our responses to these disruptive experiences.</p>"
+          }
+        },
+        "group_3": {
+          "type": "group",
+          "settings": {
+            "heading": "Safety"
+          }
+        },
+        "q_9": {
+          "type": "question",
+          "settings": {
+            "heading": "Are There Any Side Effects?",
+            "answer": "<p>The gift of Essences is their ability to work on the subtle energetic levels, while triggering real wholistic change.</p><p>Many people find that the gentleness of Essence rebalancing is almost undetected. It is only with reflection that they notice that the negative state has dissipated and has been replaced with a return to their emotional/mental centre.</p><p>Essences are safe to use in all situations and highly effective and immediate for children and animals. Note that our Essences for Animals Collection does not contain alcohol as a preservative.</p>"
+          }
+        },
+        "q_10": {
+          "type": "question",
+          "settings": {
+            "heading": "Are Essences Safe For Children?",
+            "answer": "<p>Yes. Essences are completely safe for children and very effective. Balancer, our combination for stress and overwhelm, is often used when a child is crying uncontrollably or has had a bump or bruise. Effects are swift and powerful. If a parent is concerned about the alcohol content, we suggest putting a few drops in water or applying it topically on the skin since our skin is a major organ of absorption and excretion.</p>"
+          }
+        },
+        "q_11": {
+          "type": "question",
+          "settings": {
+            "heading": "Are Essences Safe for Animals?",
+            "answer": "<p>Yes, Essences are completely safe for animals. In fact, we created a special <a href=\"https://pacificessences.com/collections/essences-for-animals\">collection of 18 combinations for animals</a> that address issues like re-homing, grief and loss, fear of going to the vet or groomers, and other issues specific to animals. These Essences do not contain alcohol as a preservative. When using Essences with animals, we suggest spraying them on your hands and stroking their fur or spraying in their kennels or beds or putting a few drops in their water.<br/><br/></p>"
+          }
+        },
+        "q_12": {
+          "type": "question",
+          "settings": {
+            "heading": "Are Animals Harmed In Making Essences?",
+            "answer": "<p><a href=\"https://pacificessences.com/\">Pacific Essences</a> made the first <a href=\"https://pacificessences.com/collections/sea-essences\">Sea Essences</a> on the planet from large mammals like Sea Turtle, Whale, and dolphins, and also smaller creatures like Starfish, sponges, and Anemone. Nothing is harmed in the process of making these Essences. We collect the water from the tide pools in which they are living, or from the water through which they are swimming.</p>"
+          }
+        },
+        "group_4": {
+          "type": "group",
+          "settings": {
+            "heading": "Practical"
+          }
+        },
+        "q_13": {
+          "type": "question",
+          "settings": {
+            "heading": "Can I Get Essences Without Alcohol Preservative?",
+            "answer": "<p>No, we only sell Essences that use alcohol as the preservative. We recommend that people who may have alcohol sensitivity use their Essences by putting some drops in a cup of boiled water so that the alcohol evaporates,\u00a0putting drops in a bath and absorbing the Essence through the skin, or\u00a0applying directly onto the skin.</p>"
+          }
+        },
+        "q_14": {
+          "type": "question",
+          "settings": {
+            "heading": "How Long Do Essences Last?",
+            "answer": "<p>We put a shelf life of 10 years on all our Essence bottles, and often Essences last much longer than that. However, if the dropper becomes contaminated by coming in contact with your tongue when taking the drops, there is the possibility of bacteria accumulating.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "group_1",
+        "q_1",
+        "q_2",
+        "q_3",
+        "q_4",
+        "group_2",
+        "q_5",
+        "q_6",
+        "q_7",
+        "q_8",
+        "group_3",
+        "q_9",
+        "q_10",
+        "q_11",
+        "q_12",
+        "group_4",
+        "q_13",
+        "q_14"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "Frequently Asked Questions",
+        "show_counts": true,
+        "count_noun": "questions",
+        "heading_color": "#2a87b9",
+        "label_color": "#2a87b9",
+        "group_color": "#1c5b7d",
+        "question_color": "#123b51",
+        "answer_color": "#4a6b7c",
+        "muted_color": "#7c97a6",
+        "rule_color": "#e7eff4",
+        "sign_background": "#eaf3f8",
+        "color_scheme": "scheme-7ae94d6e-6efb-4f8a-9896-9223191ec4de",
+        "padding_top": 36,
+        "padding_bottom": 60
+      }
     }
   },
   "order": [
     "main",
     "image_with_text_wMVQYe",
-    "collapsible_content_TAUTnb",
+    "essence_faq",
     "multirow_FfegMY"
   ]
 }

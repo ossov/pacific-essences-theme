@@ -1,0 +1,256 @@
+{%- comment -%}
+  The FAQ.
+
+  Dawn's collapsible content is one flat run of rows, which is what the page
+  was: fourteen identical pills with nothing to say what was where. This is the
+  same accordion with one addition — a "group" block. Every group block starts a
+  new group and takes the questions after it, so the grouping is just the order
+  of the blocks in the theme editor. Move a question above a different heading
+  and it belongs to that group; no ids, no linking, nothing to keep in step.
+{%- endcomment -%}
+
+{%- liquid
+  # How many questions sit under each group. Worked out in advance so the count
+  # can be printed in the group's own header, which is above them.
+  assign counts = ''
+  assign n = 0
+  assign in_group = false
+  for block in section.blocks
+    if block.type == 'group'
+      if in_group
+        assign counts = counts | append: n | append: ','
+      endif
+      assign in_group = true
+      assign n = 0
+    elsif block.type == 'question'
+      assign n = n | plus: 1
+    endif
+  endfor
+  if in_group
+    assign counts = counts | append: n | append: ','
+  endif
+  assign count_list = counts | split: ','
+-%}
+
+{%- if section.blocks.size > 0 -%}
+  {% style %}
+    #fq-{{ section.id }} {
+      padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    }
+    #fq-{{ section.id }} .fq-inner { max-width: 76rem; margin: 0 auto; }
+
+    #fq-{{ section.id }} .fq-head { margin: 0 0 3.2rem; text-align: center; }
+    #fq-{{ section.id }} .fq-eyebrow {
+      margin: 0 0 0.8rem;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: {{ section.settings.label_color }};
+    }
+    #fq-{{ section.id }} .fq-title {
+      margin: 0;
+      font-size: clamp(2.4rem, 1.9rem + 1vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      color: {{ section.settings.heading_color }};
+      text-wrap: balance;
+    }
+
+    #fq-{{ section.id }} .fq-group + .fq-group { margin-top: 3.4rem; }
+    #fq-{{ section.id }} .fq-group-head {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin: 0 0 0.6rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 2px solid {{ section.settings.label_color }};
+    }
+    #fq-{{ section.id }} .fq-group-name {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: {{ section.settings.group_color }};
+    }
+    #fq-{{ section.id }} .fq-group-count {
+      font-size: 1.3rem;
+      color: {{ section.settings.muted_color }};
+    }
+
+    #fq-{{ section.id }} .fq-q { border-bottom: 1px solid {{ section.settings.rule_color }}; }
+    #fq-{{ section.id }} .fq-q > summary {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.4rem;
+      padding: 1.4rem 0;
+      cursor: pointer;
+      list-style: none;
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: {{ section.settings.question_color }};
+    }
+    #fq-{{ section.id }} .fq-q > summary::-webkit-details-marker { display: none; }
+    #fq-{{ section.id }} .fq-sign {
+      flex: 0 0 2.2rem;
+      height: 2.2rem;
+      margin-top: 0.2rem;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: {{ section.settings.sign_background }};
+      color: {{ section.settings.label_color }};
+      font-size: 1.6rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    /* The vertical stroke of the plus, turned away to leave the minus. */
+    #fq-{{ section.id }} .fq-sign::after {
+      content: '';
+      position: absolute;
+      width: 1.1rem;
+      height: 2px;
+      background: currentColor;
+      transform: rotate(90deg);
+      transition: transform 0.2s ease;
+    }
+    #fq-{{ section.id }} .fq-sign::before {
+      content: '';
+      position: absolute;
+      width: 1.1rem;
+      height: 2px;
+      background: currentColor;
+    }
+    #fq-{{ section.id }} .fq-sign { position: relative; }
+    #fq-{{ section.id }} .fq-q[open] .fq-sign::after { transform: rotate(0deg); }
+    #fq-{{ section.id }} .fq-q[open] > summary { color: {{ section.settings.label_color }}; }
+    #fq-{{ section.id }} .fq-q > summary:hover { color: {{ section.settings.label_color }}; }
+    #fq-{{ section.id }} .fq-q > summary:focus-visible {
+      outline: 2px solid {{ section.settings.label_color }};
+      outline-offset: 3px;
+    }
+
+    #fq-{{ section.id }} .fq-a {
+      padding: 0 0 1.8rem 3.6rem;
+      max-width: 72ch;
+      font-size: 1.6rem;
+      line-height: 1.7;
+      color: {{ section.settings.answer_color }};
+    }
+    #fq-{{ section.id }} .fq-a > *:first-child { margin-top: 0; }
+    #fq-{{ section.id }} .fq-a > *:last-child { margin-bottom: 0; }
+    #fq-{{ section.id }} .fq-a p { margin: 0 0 1.1rem; }
+    #fq-{{ section.id }} .fq-a a { color: {{ section.settings.label_color }}; }
+
+    @media screen and (max-width: 749px) {
+      #fq-{{ section.id }} .fq-q > summary { font-size: 1.6rem; gap: 1rem; }
+      #fq-{{ section.id }} .fq-a { padding-left: 3.2rem; font-size: 1.5rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #fq-{{ section.id }} .fq-sign::after { transition: none; }
+    }
+  {% endstyle %}
+
+  <div id="fq-{{ section.id }}" class="fq-section color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-width">
+      <div class="fq-inner">
+        {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+          <div class="fq-head">
+            {%- if section.settings.eyebrow != blank -%}
+              <p class="fq-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+            {%- endif -%}
+            {%- if section.settings.heading != blank -%}
+              <h2 class="fq-title">{{ section.settings.heading | escape }}</h2>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- assign open_group = false -%}
+        {%- assign gi = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'group' -%}
+              {%- if open_group %}</div>{% endif -%}
+              <div class="fq-group" {{ block.shopify_attributes }}>
+                <div class="fq-group-head">
+                  <h3 class="fq-group-name">{{ block.settings.heading | escape }}</h3>
+                  {%- if section.settings.show_counts -%}
+                    {%- assign this_count = count_list[gi] -%}
+                    <span class="fq-group-count">
+                      {{- this_count }} {{ section.settings.count_noun | escape -}}
+                    </span>
+                  {%- endif -%}
+                </div>
+              {%- assign open_group = true -%}
+              {%- assign gi = gi | plus: 1 -%}
+
+            {%- when 'question' -%}
+              <details class="fq-q" {{ block.shopify_attributes }}>
+                <summary>
+                  <span class="fq-sign" aria-hidden="true"></span>
+                  <span>{{ block.settings.heading | escape }}</span>
+                </summary>
+                <div class="fq-a rte">{{ block.settings.answer }}</div>
+              </details>
+          {%- endcase -%}
+        {%- endfor -%}
+        {%- if open_group %}</div>{% endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 40,
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Frequently Asked Questions" },
+    { "type": "checkbox", "id": "show_counts", "label": "Show how many questions are in each group", "default": true },
+    { "type": "text", "id": "count_noun", "label": "Word after the number", "default": "questions" },
+
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#2a87b9" },
+    { "type": "color", "id": "label_color", "label": "Accent and open question", "default": "#2a87b9" },
+    { "type": "color", "id": "group_color", "label": "Group name", "default": "#1c5b7d" },
+    { "type": "color", "id": "question_color", "label": "Question", "default": "#123b51" },
+    { "type": "color", "id": "answer_color", "label": "Answer", "default": "#4a6b7c" },
+    { "type": "color", "id": "muted_color", "label": "Count", "default": "#7c97a6" },
+    { "type": "color", "id": "rule_color", "label": "Rule between questions", "default": "#e7eff4" },
+    { "type": "color", "id": "sign_background", "label": "Behind the plus", "default": "#eaf3f8" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Colour scheme", "default": "scheme-1" },
+
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Top padding", "default": 36 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Bottom padding", "default": 60 }
+  ],
+  "blocks": [
+    {
+      "type": "group",
+      "name": "Group heading",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Group name", "default": "What they are" },
+        {
+          "type": "paragraph",
+          "content": "Every question below this heading belongs to it, until the next group heading."
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Question", "default": "What is an essence?" },
+        { "type": "richtext", "id": "answer", "label": "Answer" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "FAQ" }]
+}
+{% endschema %}

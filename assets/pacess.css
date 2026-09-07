@@ -1096,20 +1096,17 @@
 /* ---------------------------------------------------------------------------
    Our Story — the timeline
 
-   The page content is a decade of accumulated markup: cd-timeline-* classes
-   from a stylesheet that no longer exists, decorative placeholder icons, empty
-   parallax "bubble" divs, and text-align:center written inline on almost every
-   element. None of that can be edited from here — the store token has no
-   access to page content — so this styles what is there and neutralises the
-   rest rather than rewriting it.
+   The page content carried a decade of accumulated markup: decorative
+   placeholder icons, empty parallax "bubble" divs, dead section markers and
+   text-align:center written inline on almost every element. That has been
+   cleared out of the page itself rather than hidden here, and the blocks
+   reordered so 1977 really is first — in the content, not just on screen, so
+   a screen reader and a search engine read the same order everyone else sees.
+   Not one word of the copy changed.
 
-   Two consequences worth knowing. The inline alignment can only be beaten with
-   !important, which is why there is more of it here than anywhere else in this
-   file. And the order is reversed by the layout, not by the content: the page
-   still stores 2020 first, so a screen reader and a search engine read it
-   newest-first while the page shows it oldest-first. That is a compromise, not
-   a design decision — when the content itself is reordered, delete the
-   column-reverse below and everything else still holds.
+   What remains are the cd-timeline-* class names. They are the only handle the
+   content gives us, so the styling hangs off them; the stylesheet that
+   originally went with them is long gone.
    ------------------------------------------------------------------------ */
 
 /* The intro above the timeline. */
@@ -1131,13 +1128,9 @@
 /* ---- the spine ---- */
 .t-page-story #cd-timeline {
   position: relative;
-  display: flex;
-  /* Oldest first. See the note above: this is layout, not content order. */
-  flex-direction: column-reverse;
   max-width: 82rem;
   margin: 0 auto;
   padding: 0 0 0 15.6rem;
-  text-align: left !important;
 }
 .t-page-story #cd-timeline::before {
   content: '';
@@ -1155,17 +1148,10 @@
   );
 }
 
-/* The icons are generic placeholders — a camera, a map pin, a film reel — that
-   say nothing about the year they sit on. The bubbles are empty divs left over
-   from a parallax effect. Both are decoration with no content. */
-.t-page-story #cd-timeline .cd-timeline-img,
-.t-page-story #cd-timeline .bubble { display: none !important; }
-
 .t-page-story .cd-timeline-block {
   position: relative;
   margin: 0 0 3.4rem;
   padding: 0;
-  text-align: left !important;
 }
 .t-page-story .cd-timeline-block:first-child { margin-bottom: 0; }
 /* The marker on the line. Sized and offset to sit centred on the 2px rule. */
@@ -1181,8 +1167,6 @@
   box-shadow: 0 0 0 4px #ffffff;
 }
 
-.t-page-story .cd-timeline-content { text-align: left !important; }
-
 /* The year, lifted out of the flow into the gutter beside the line. */
 .t-page-story .cd-timeline-content h1 {
   position: absolute;
@@ -1194,7 +1178,7 @@
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.01em;
-  text-align: right !important;
+  text-align: right;
   color: var(--pe-deep, #1c5b7d);
   font-variant-numeric: tabular-nums;
   /* 1977 carries "Our Beginning" under the date, and Dawn breaks words
@@ -1211,7 +1195,6 @@
   line-height: 1.3;
   letter-spacing: -0.005em;
   color: var(--pe-card-ink, #123b51);
-  text-align: left !important;
 }
 .t-page-story .cd-timeline-content h2 ~ h2 { margin-top: 2rem; }
 
@@ -1221,17 +1204,15 @@
   font-size: 1.55rem;
   line-height: 1.65;
   color: var(--pe-muted-2, #555555);
-  text-align: left !important;
 }
 /* The content is full of <p> </p> spacers doing the job of a margin. */
 .t-page-story .cd-timeline-content p:empty { display: none; }
 
 .t-page-story .cd-timeline-content img {
-  display: block !important;
   max-width: 28rem;
   width: 100%;
   height: auto;
-  margin: 1.2rem 0 0.4rem !important;
+  margin: 1.2rem 0 0.4rem;
   border-radius: 12px;
 }
 
@@ -1267,7 +1248,6 @@
     position: static;
     width: auto;
     margin: 0 0 0.4rem;
-    text-align: left !important;
     font-size: 1.9rem;
   }
   .t-page-story .cd-timeline-content .cd-list { grid-template-columns: 5.6rem 1fr; }
