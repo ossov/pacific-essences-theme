@@ -1,0 +1,89 @@
+{%- comment -%}
+  The bottle and the plant, in one frame.
+
+  Single essences carry three images: the bottle, an Instagram graphic with text
+  baked into it, and a photograph of the plant. Only the first was ever shown.
+  This shows the bottle and the plant, cycling, and leaves the graphic in the
+  gallery untouched.
+
+  The plant is found by filename, not by position — it is the file called
+  "pacific-essences-…", which holds on all 144 single essences. Position would
+  not: on Fluorite, Iolite, Moonstone and Rutile the graphic is third and the
+  plant is second.
+
+  Expects: botanical (a media object), section_id, and optionally latin.
+{%- endcomment -%}
+
+{%- liquid
+  assign lead = product.featured_media
+  assign gap = section.settings.gallery_interval | default: 7 | times: 1000
+  assign name_parts = product.title | split: '|'
+  assign plant_name = name_parts[0] | strip
+  # The alt text runs "Pacific Essences - Blue Camas - camassia quamash - …".
+  # The third part is the botanical name on the flower, sea and tree essences,
+  # but on the gem essences it is the category instead — minerals have no
+  # binomial — so anything containing "Essence" is dropped.
+  assign latin = ''
+  if botanical.alt != blank
+    assign alt_parts = botanical.alt | split: ' - '
+    if alt_parts.size > 2
+      assign latin_try = alt_parts[2] | strip
+      unless latin_try contains 'Essence'
+        assign latin = latin_try
+      endunless
+    endif
+  endif
+-%}
+
+<div
+  class="eg-gallery"
+  id="EssenceGallery-{{ section_id }}"
+  data-essence-gallery
+  data-interval="{{ gap }}"
+>
+  <div class="eg-stage">
+    <figure class="eg-slide is-on eg-slide--contain">
+      {{
+        lead
+        | image_url: width: 1200
+        | image_tag:
+          loading: 'eager',
+          sizes: '(min-width: 990px) 420px, 100vw',
+          widths: '300, 420, 620, 840, 1200',
+          alt: lead.alt | default: product.title | escape
+      }}
+    </figure>
+    <figure class="eg-slide eg-slide--cover">
+      {{
+        botanical
+        | image_url: width: 600
+        | image_tag:
+          loading: 'lazy',
+          sizes: '(min-width: 990px) 420px, 100vw',
+          widths: '300, 420, 600',
+          alt: botanical.alt | default: plant_name | escape
+      }}
+    </figure>
+  </div>
+
+  {%- if section.settings.show_plant_caption -%}
+    <p class="eg-caption" data-eg-caption>
+      <span data-eg-cap-0></span>
+      <span data-eg-cap-1 hidden>
+        {{- plant_name | escape -}}
+        {%- if latin != blank %} &middot; <em>{{ latin | escape }}</em>{% endif -%}
+      </span>
+    </p>
+  {%- endif -%}
+
+  <div class="eg-thumbs">
+    <button type="button" class="eg-thumb is-on" data-eg-go="0" aria-label="{{ 'products.product.media.gallery_viewer' | t | default: 'Show the bottle' }}">
+      {{ lead | image_url: width: 160 | image_tag: loading: 'lazy', widths: '80, 160', alt: '' }}
+      <span class="eg-bar"></span>
+    </button>
+    <button type="button" class="eg-thumb" data-eg-go="1" aria-label="{{ plant_name | escape }}">
+      {{ botanical | image_url: width: 160 | image_tag: loading: 'lazy', widths: '80, 160', alt: '' }}
+      <span class="eg-bar"></span>
+    </button>
+  </div>
+</div>

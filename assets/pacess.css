@@ -715,7 +715,10 @@
   /* The identity column is sized to its content and then centred in its track,
      which parks its right edge 19px short of the gutter and throws the
      symmetry off. It should fill the track it was given. */
-  .t-product .product.grid--3-col-tablet > .product__info-wrapper-left {
+  .t-product .product.grid--3-col-tablet > .product__info-wrapper-left,
+  /* The gallery sizes itself from an aspect ratio, so unlike a bare <img> it
+     has no intrinsic width to hold the column open. */
+  .t-product .product.grid--3-col-tablet > .product__media-wrapper--essence {
     width: 100% !important;
     justify-self: stretch;
   }
@@ -864,6 +867,96 @@
   height: 1.1rem;
   border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(18, 48, 63, 0.14);
+}
+
+/* ---------------------------------------------------------------------------
+   The essence gallery — the bottle and the plant
+
+   One frame, two pictures, previews underneath. Both frames are the same shape
+   so nothing moves as it turns over: the plant photographs are square and the
+   bottles are 4000x4500, so the plant is cropped a little on the sides rather
+   than letterboxed.
+   ------------------------------------------------------------------------ */
+
+.t-product .eg-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.t-product .eg-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4000 / 4500;
+  border-radius: var(--pe-radius-media, 25px);
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.t-product .eg-slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.t-product .eg-slide.is-on { opacity: 1; }
+.t-product .eg-slide img { width: 100%; height: 100%; display: block; }
+.t-product .eg-slide--contain img { object-fit: contain; }
+.t-product .eg-slide--cover img { object-fit: cover; }
+
+.t-product .eg-caption {
+  margin: 0;
+  text-align: center;
+  font-size: 1.3rem;
+  line-height: 1.4;
+  color: #7c97a6;
+  /* Held open so the frame does not jump when the caption appears. */
+  min-height: 1.9rem;
+}
+.t-product .eg-caption em { font-style: italic; }
+
+.t-product .eg-thumbs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.t-product .eg-thumb {
+  position: relative;
+  width: 6.6rem;
+  aspect-ratio: 4000 / 4500;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1.6px #e2ecf2;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.t-product .eg-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.t-product .eg-thumb.is-on { box-shadow: inset 0 0 0 2.4px var(--pe-blue, #2a87b9); }
+.t-product .eg-thumb:hover { transform: translateY(-2px); }
+.t-product .eg-thumb:focus-visible { outline: 2px solid var(--pe-blue, #2a87b9); outline-offset: 2px; }
+
+/* The timer, so the picture never changes without warning. */
+.t-product .eg-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 0;
+  background: var(--pe-blue, #2a87b9);
+}
+.t-product .eg-bar.is-running { animation: eg-fill linear forwards; }
+@keyframes eg-fill { from { width: 0; } to { width: 100%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .t-product .eg-slide { transition: none; }
+  .t-product .eg-bar.is-running { animation: none; }
+  .t-product .eg-thumb { transition: none; }
+  .t-product .eg-thumb:hover { transform: none; }
 }
 
 /* The right column faces the image. */
