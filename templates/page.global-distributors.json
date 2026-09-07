@@ -1,0 +1,112 @@
+{
+  "sections": {
+    "directory": {
+      "type": "essence-directory",
+      "blocks": {
+        "d_br": {
+          "type": "entry",
+          "settings": {
+            "image": "shopify://shop_images/pacific-essences-distributor-france.png",
+            "style": "logo",
+            "eyebrow": "Brazil",
+            "name": "Ess\u00eancias Florais",
+            "place": "S\u00e3o Paulo, SP",
+            "link_1_label": "essenciasflorais.com.br",
+            "link_1_url": "http://www.essenciasflorais.com.br/",
+            "link_2_label": "info@essenciasflorais.com.br",
+            "link_2_url": "mailto:info@essenciasflorais.com.br",
+            "plain": "+55 (11) 5531-2274"
+          }
+        },
+        "d_de": {
+          "type": "entry",
+          "settings": {
+            "image": "shopify://shop_images/pacific-essences-distributor-germany.png",
+            "style": "logo",
+            "eyebrow": "Germany",
+            "name": "Der Essenzenladen",
+            "place": "Aschaffenburg, Deutschland",
+            "link_1_label": "essenzenladen.de",
+            "link_1_url": "http://www.essenzenladen.de/",
+            "link_2_label": "info@essenzenladen.de",
+            "link_2_url": "mailto:info@essenzenladen.de",
+            "plain": "+49 (0)6021 22001"
+          }
+        },
+        "d_jp": {
+          "type": "entry",
+          "settings": {
+            "image": "shopify://shop_images/pacific-essences-distributor-japan.png",
+            "style": "logo",
+            "eyebrow": "Japan",
+            "name": "Nature World Corp",
+            "place": "Tokyo, Japan",
+            "link_1_label": "natureworld.co.jp",
+            "link_1_url": "http://www.natureworld.co.jp/",
+            "link_2_label": "info@natureworld.co.jp",
+            "link_2_url": "mailto:info@natureworld.co.jp",
+            "plain": "813 5214 4881"
+          }
+        },
+        "d_nl": {
+          "type": "entry",
+          "settings": {
+            "image": "shopify://shop_images/Bloesem_logojpg.jpg",
+            "style": "logo",
+            "eyebrow": "Netherlands",
+            "name": "Bloesem Remedies Nederland",
+            "link_1_label": "bloesemremedies.com",
+            "link_1_url": "https://www.bloesemremedies.com/",
+            "link_2_label": "info@bloesemremedies.com",
+            "link_2_url": "mailto:info@bloesemremedies.com",
+            "plain": "077-2300011"
+          }
+        },
+        "d_uk": {
+          "type": "entry",
+          "settings": {
+            "image": "shopify://shop_images/pacific-essences-distributor-uk.png",
+            "style": "logo",
+            "eyebrow": "United Kingdom",
+            "name": "Essences for Life",
+            "place": "Stoke-on-Trent, Staffs",
+            "link_1_label": "essencesforlife.co.uk",
+            "link_1_url": "http://www.essencesforlife.co.uk/",
+            "link_2_label": "essencesforlife@gmail.com",
+            "link_2_url": "mailto:essencesforlife@gmail.com",
+            "link_3_label": "facebook.com/essencesforlife",
+            "link_3_url": "https://www.facebook.com/essencesforlife",
+            "plain": "(0044) 7794 190185"
+          }
+        }
+      },
+      "block_order": [
+        "d_br",
+        "d_de",
+        "d_jp",
+        "d_nl",
+        "d_uk"
+      ],
+      "settings": {
+        "banner": "shopify://shop_images/Global_Distributors_Shopify_Image.png",
+        "heading": "Global Distributors",
+        "intro": "<p>Pacific Essences\u00ae has an expert team of distributors who are ready to serve you from all around the world. All our distributors have been to Canada and taken our Energy Medicine\u00ae Practitioner training \u2013 they are as committed as we are to preserving the integrity and quality of Pacific Essences\u00ae products.</p>",
+        "columns": 3,
+        "logo_height": 84,
+        "face_size": 96,
+        "heading_color": "#2a87b9",
+        "link_color": "#2a87b9",
+        "name_color": "#123b51",
+        "text_color": "#4a6b7c",
+        "muted_color": "#7c97a6",
+        "rule_color": "#e7eff4",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 72
+      }
+    }
+  },
+  "order": [
+    "directory"
+  ]
+}
