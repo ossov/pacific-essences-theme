@@ -1,0 +1,290 @@
+{%- comment -%}
+  What a combination is made of.
+
+  The list is not stored here as pictures. It is stored as references to the
+  essences themselves — custom.ingredient_essences — so each ingredient brings
+  its own photograph from its own product page and links back to it. Add a
+  photograph to one essence and it appears on every combination containing it;
+  nothing has to be copied.
+
+  Some ingredients are not sold on their own (Hauyin and Eilat Stone in Twelve
+  Gems, Skunk Cabbage in Detox). Those have no photograph and no page to link
+  to, so rather than draw an empty circle for them they are named in a line
+  under the row. The circles show what can be shown; the count above stays the
+  true total, so the page never claims fewer ingredients than the bottle has.
+
+  Water and brandy are deliberately absent. They are what the essence is
+  carried in, not what it is made of.
+{%- endcomment -%}
+
+{%- liquid
+  assign essences = product.metafields.custom.ingredient_essences.value
+
+  # Anything named in the written list that has no essence behind it. Compared
+  # by the part of the title before the "|", which is how the names are written.
+  assign extras = ''
+  assign extra_count = 0
+  assign written = product.metafields.custom.ingredients.value | default: ''
+  if written != blank and essences != blank
+    assign written_names = written | split: ','
+    for written_name in written_names
+      assign candidate = written_name | strip
+      if candidate == blank
+        continue
+      endif
+      assign lower = candidate | downcase
+      if lower == 'water' or lower == 'brandy' or lower == 'alcohol'
+        continue
+      endif
+      if lower contains 'preservative' or lower contains 'first water'
+        continue
+      endif
+      assign matched = false
+      for essence in essences
+        assign essence_name = essence.title | split: '|' | first | strip
+        if essence_name == candidate
+          assign matched = true
+          break
+        endif
+      endfor
+      unless matched
+        assign extras = extras | append: candidate | append: '~'
+        assign extra_count = extra_count | plus: 1
+      endunless
+    endfor
+  endif
+
+  assign total = 0
+  if essences != blank
+    assign total = essences.size | plus: extra_count
+  endif
+
+  # The circle is a fixed pixel size, so sizes can say so exactly. A filter
+  # argument cannot interpolate, hence the capture.
+  capture shot_sizes
+    echo section.settings.circle_size
+    echo 'px'
+  endcapture
+-%}
+
+{%- if essences != blank and essences.size > 1 -%}
+  {% style %}
+    #ei-{{ section.id }} {
+      padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    }
+
+    #ei-{{ section.id }} .ei-head {
+      display: flex;
+      align-items: baseline;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin: 0 0 2.2rem;
+    }
+    #ei-{{ section.id }} .ei-eyebrow {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: {{ section.settings.label_color }};
+    }
+    #ei-{{ section.id }} .ei-count {
+      font-size: 1.4rem;
+      color: {{ section.settings.muted_color }};
+    }
+
+    /* A row, not a grid. The counts run from three to eleven and a grid would
+       leave a ragged empty column on most of them; a centred wrapping row
+       stays balanced at every count we have. */
+    #ei-{{ section.id }} .ei-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2.4rem 2rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    #ei-{{ section.id }} .ei-item {
+      width: {{ section.settings.circle_size | plus: 24 }}px;
+      text-align: center;
+    }
+    #ei-{{ section.id }} .ei-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    #ei-{{ section.id }} .ei-shot {
+      display: block;
+      width: {{ section.settings.circle_size }}px;
+      height: {{ section.settings.circle_size }}px;
+      margin: 0 auto;
+      border-radius: 50%;
+      overflow: hidden;
+      background: {{ section.settings.ring_color }};
+      box-shadow: 0 0 0 1px {{ section.settings.ring_color }}, 0 6px 14px rgba(18, 59, 81, 0.1);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    #ei-{{ section.id }} .ei-shot img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    #ei-{{ section.id }} .ei-link:hover .ei-shot {
+      transform: translateY(-3px);
+      box-shadow: 0 0 0 1px {{ section.settings.label_color }}, 0 12px 22px rgba(18, 59, 81, 0.16);
+    }
+    #ei-{{ section.id }} .ei-name {
+      display: block;
+      margin-top: 1rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: {{ section.settings.name_color }};
+      text-wrap: balance;
+    }
+    #ei-{{ section.id }} .ei-link:hover .ei-name {
+      color: {{ section.settings.label_color }};
+    }
+    #ei-{{ section.id }} .ei-link:focus-visible .ei-shot {
+      outline: 2px solid {{ section.settings.label_color }};
+      outline-offset: 3px;
+    }
+
+    /* The ingredients with no essence of their own. Named, not drawn. */
+    #ei-{{ section.id }} .ei-also {
+      margin: 2.2rem 0 0;
+      text-align: center;
+      font-size: 1.4rem;
+      line-height: 1.5;
+      color: {{ section.settings.muted_color }};
+    }
+
+    @media screen and (max-width: 749px) {
+      #ei-{{ section.id }} .ei-row { gap: 2rem 1.4rem; }
+      #ei-{{ section.id }} .ei-item { width: {{ section.settings.circle_size | times: 0.8 | round | plus: 18 }}px; }
+      #ei-{{ section.id }} .ei-shot {
+        width: {{ section.settings.circle_size | times: 0.8 | round }}px;
+        height: {{ section.settings.circle_size | times: 0.8 | round }}px;
+      }
+      #ei-{{ section.id }} .ei-name { font-size: 1.3rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #ei-{{ section.id }} .ei-shot { transition: none; }
+      #ei-{{ section.id }} .ei-link:hover .ei-shot { transform: none; }
+    }
+  {% endstyle %}
+
+  <div id="ei-{{ section.id }}" class="ei-section color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-width">
+      <div class="ei-head">
+        <h2 class="ei-eyebrow">{{ section.settings.eyebrow | escape }}</h2>
+        {%- if section.settings.show_count -%}
+          <span class="ei-count">{{ total }} {{ section.settings.count_noun | escape }}</span>
+        {%- endif -%}
+      </div>
+
+      <ul class="ei-row">
+        {%- for essence in essences -%}
+          {%- liquid
+            assign essence_name = essence.title | split: '|' | first | strip
+
+            # The botanical photograph, found the same way the single essence
+            # page finds it: the plant shots are the ones whose file is named
+            # pacific-essences-*. Falls back to the product's featured image so
+            # an ingredient never renders as an empty circle.
+            assign shot = null
+            for item in essence.media
+              assign item_src = item.preview_image | image_url: width: 120
+              if item_src contains 'pacific-essences-'
+                assign shot = item.preview_image
+                break
+              endif
+            endfor
+            unless shot
+              assign shot = essence.featured_image
+            endunless
+          -%}
+          <li class="ei-item">
+            <a class="ei-link" href="{{ essence.url }}">
+              <span class="ei-shot">
+                {%- if shot -%}
+                  {{
+                    shot
+                    | image_url: width: 400
+                    | image_tag:
+                      loading: 'lazy',
+                      sizes: shot_sizes,
+                      widths: '200, 300, 400',
+                      alt: essence_name
+                  }}
+                {%- endif -%}
+              </span>
+              <span class="ei-name">{{ essence_name | escape }}</span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if extra_count > 0 -%}
+        <p class="ei-also">
+          {%- liquid
+            assign extra_names = extras | split: '~'
+            assign last_extra = extra_names.size | minus: 1
+          -%}
+          {{- section.settings.also_label | escape -}}
+          {%- for extra_name in extra_names -%}
+            {%- if forloop.first -%}
+              {{ ' ' }}
+            {%- elsif forloop.index0 == last_extra %} and {% else %}, {% endif -%}
+            {{- extra_name | escape -}}
+          {%- endfor -%}.
+        </p>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Ingredients",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Made with" },
+    { "type": "checkbox", "id": "show_count", "label": "Show the number of essences", "default": true },
+    { "type": "text", "id": "count_noun", "label": "Word after the number", "default": "essences" },
+    {
+      "type": "text",
+      "id": "also_label",
+      "label": "Line for ingredients with no page of their own",
+      "default": "Also contains",
+      "info": "Shown only where an ingredient is not sold as a single essence."
+    },
+
+    { "type": "header", "content": "Appearance" },
+    {
+      "type": "range",
+      "id": "circle_size",
+      "min": 64,
+      "max": 128,
+      "step": 4,
+      "unit": "px",
+      "label": "Circle size",
+      "default": 96
+    },
+    { "type": "color", "id": "label_color", "label": "Eyebrow and hover colour", "default": "#2a87b9" },
+    { "type": "color", "id": "name_color", "label": "Name colour", "default": "#123b51" },
+    { "type": "color", "id": "muted_color", "label": "Count and note colour", "default": "#7c97a6" },
+    { "type": "color", "id": "ring_color", "label": "Ring colour", "default": "#e7eff4" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Colour scheme", "default": "scheme-1" },
+
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Top padding", "default": 8 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Bottom padding", "default": 48 }
+  ],
+  "presets": [{ "name": "Ingredients" }]
+}
+{% endschema %}
