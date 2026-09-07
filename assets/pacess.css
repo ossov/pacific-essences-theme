@@ -881,14 +881,19 @@
 .t-product .eg-gallery {
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
+  /* 8 + an 18px caption + 8 puts the previews 34px under the picture, which is
+     the same 34px that sits between the previews and the buy box. */
+  gap: 0.8rem;
 }
 
 .t-product .eg-stage {
   position: relative;
   width: 100%;
   aspect-ratio: 4000 / 4500;
-  border-radius: var(--pe-radius-media, 25px);
+  /* No rounding on the frame. The bottle photograph fills it exactly, so a
+     radius here does not round a card — it clips the corners off the
+     photograph, which is what looked cut. The previews keep a small radius
+     because they are cropped anyway. */
   overflow: hidden;
   background: #ffffff;
 }
@@ -912,7 +917,7 @@
   line-height: 1.4;
   color: #7c97a6;
   /* Held open so the frame does not jump when the caption appears. */
-  min-height: 1.9rem;
+  min-height: 1.8rem;
 }
 .t-product .eg-caption em { font-style: italic; }
 

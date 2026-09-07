@@ -43,24 +43,37 @@
 >
   <div class="eg-stage">
     <figure class="eg-slide is-on eg-slide--contain">
+      {%- comment -%}
+        sizes deliberately claims twice the layout width. The frame is 420px,
+        so an honest 420 makes the browser fetch a 420 source and render it
+        1:1 — which is what made this softer than the gallery it replaced,
+        because Dawn was serving a much larger file and letting the browser
+        scale it down. Asking for 840 restores that crispness on ordinary
+        screens as well as retina ones.
+      {%- endcomment -%}
       {{
         lead
-        | image_url: width: 1200
+        | image_url: width: 1946
         | image_tag:
           loading: 'eager',
-          sizes: '(min-width: 990px) 420px, 100vw',
-          widths: '300, 420, 620, 840, 1200',
+          sizes: '(min-width: 990px) 840px, 100vw',
+          widths: '420, 620, 840, 1100, 1400, 1946',
           alt: lead.alt | default: product.title | escape
       }}
     </figure>
     <figure class="eg-slide eg-slide--cover">
+      {%- comment -%}
+        The plant photographs are only 600x600, so 600 is everything there is.
+        A 420 source was being stretched to fill a 472-tall frame, which is
+        where most of the softness came from.
+      {%- endcomment -%}
       {{
         botanical
         | image_url: width: 600
         | image_tag:
           loading: 'lazy',
-          sizes: '(min-width: 990px) 420px, 100vw',
-          widths: '300, 420, 600',
+          sizes: '(min-width: 990px) 840px, 100vw',
+          widths: '420, 600',
           alt: botanical.alt | default: plant_name | escape
       }}
     </figure>
