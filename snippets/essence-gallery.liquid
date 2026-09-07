@@ -50,6 +50,16 @@
         because Dawn was serving a much larger file and letting the browser
         scale it down. Asking for 840 restores that crispness on ordinary
         screens as well as retina ones.
+
+        The candidate list starts at 840 rather than 420 on purpose. The
+        browser is free to paint one candidate and then upgrade to another,
+        and until the second one has decoded it keeps showing the first —
+        which is why the picture could arrive soft and only sharpen when
+        something forced a repaint, like switching to the plant and back.
+        With no candidate below 840 in the list it no longer matters which
+        one is on screen or when it swaps: every one of them is larger than
+        the frame it is drawn into. 840 is also the right size for a phone,
+        where this runs full width on a retina screen.
       {%- endcomment -%}
       {{
         lead
@@ -57,7 +67,7 @@
         | image_tag:
           loading: 'eager',
           sizes: '(min-width: 990px) 840px, 100vw',
-          widths: '420, 620, 840, 1100, 1400, 1946',
+          widths: '840, 1100, 1400, 1946',
           alt: lead.alt | default: product.title | escape
       }}
     </figure>
@@ -73,7 +83,7 @@
         | image_tag:
           loading: 'lazy',
           sizes: '(min-width: 990px) 840px, 100vw',
-          widths: '420, 600',
+          widths: '600',
           alt: botanical.alt | default: plant_name | escape
       }}
     </figure>
@@ -91,11 +101,11 @@
 
   <div class="eg-thumbs">
     <button type="button" class="eg-thumb is-on" data-eg-go="0" aria-label="{{ 'products.product.media.gallery_viewer' | t | default: 'Show the bottle' }}">
-      {{ lead | image_url: width: 160 | image_tag: loading: 'lazy', widths: '80, 160', alt: '' }}
+      {{ lead | image_url: width: 160 | image_tag: loading: 'eager', widths: '160', alt: '' }}
       <span class="eg-bar"></span>
     </button>
     <button type="button" class="eg-thumb" data-eg-go="1" aria-label="{{ plant_name | escape }}">
-      {{ botanical | image_url: width: 160 | image_tag: loading: 'lazy', widths: '80, 160', alt: '' }}
+      {{ botanical | image_url: width: 160 | image_tag: loading: 'eager', widths: '160', alt: '' }}
       <span class="eg-bar"></span>
     </button>
   </div>
