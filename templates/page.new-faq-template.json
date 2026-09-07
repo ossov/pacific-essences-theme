@@ -294,8 +294,8 @@
         "family_6"
       ],
       "settings": {
-        "eyebrow": "Explore",
-        "heading": "The six families",
+        "eyebrow": "",
+        "heading": "Explore",
         "columns": 3,
         "heading_color": "#2a87b9",
         "label_color": "#2a87b9",
