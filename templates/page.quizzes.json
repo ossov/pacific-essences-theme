@@ -120,7 +120,7 @@
             "image": "shopify://shop_images/Animal_Essences_-_Feature_Image.jpg",
             "caption": "",
             "heading": "Essences for Animals",
-            "text": "<p>Try out this quiz to find the right essence for your aniamal!</p>",
+            "text": "<p>Try out this quiz to find the right essence for your animal!</p>",
             "button_label": "Animal Quiz",
             "button_link": "/pages/animal-essences-quiz"
           }
@@ -131,7 +131,7 @@
             "image": "shopify://shop_images/Pacific_Essences_Essential_Oils.jpg",
             "caption": "",
             "heading": "Self Questionnaire",
-            "text": "<p>Try out or self questionnaire to reflect and discover the essence you need.</p>",
+            "text": "<p>Try out our self questionnaire to reflect and discover the essence you need.</p>",
             "button_label": "Self Questionnaire",
             "button_link": "/pages/self-questionnaire"
           }

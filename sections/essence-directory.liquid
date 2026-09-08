@@ -39,6 +39,7 @@
       max-width: 100%;
       height: auto;
       margin: 0 auto 2rem;
+      border-radius: {{ section.settings.banner_radius }}px;
     }
 
     #ed-{{ section.id }} .ed-grid {
@@ -275,6 +276,7 @@
   "settings": [
     { "type": "header", "content": "Heading" },
     { "type": "image_picker", "id": "banner", "label": "Banner image" },
+    { "type": "range", "id": "banner_radius", "min": 0, "max": 32, "step": 2, "unit": "px", "label": "Banner corners", "default": 18 },
     { "type": "text", "id": "heading", "label": "Heading" },
     { "type": "richtext", "id": "intro", "label": "Intro" },
 

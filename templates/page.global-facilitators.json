@@ -113,7 +113,8 @@
         "padding_top": 40,
         "padding_bottom": 72,
         "card": true,
-        "card_background": "#ffffff"
+        "card_background": "#ffffff",
+        "banner_radius": 18
       }
     }
   },

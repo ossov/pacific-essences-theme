@@ -859,11 +859,13 @@
   opacity: 0.7;
 }
 
+/* The flag sits inside the text rather than beside it. As a flex sibling it
+   was centred against the whole block, so when the line grew to two the flag
+   dropped to the middle of the left edge with nothing next to it. Inline, it
+   stays against the first word however many lines the sentence runs to. */
 .t-product .pe-hero-origin {
   order: 4;
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
+  display: block;
   margin: 0.9rem 0 0;
   font-size: 1.3rem;
   font-weight: 600;
@@ -873,9 +875,11 @@
 }
 
 .t-product .pe-hero-flag {
-  flex: none;
+  display: inline-block;
   width: 2.2rem;
   height: 1.1rem;
+  margin-right: 0.7rem;
+  vertical-align: -0.1em;
   border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(18, 48, 63, 0.14);
 }
@@ -1626,6 +1630,11 @@
    photographs are landscape, so they were cropped and the row padded out to
    528px. One 16:10 frame matches the pictures and takes about 150px off every
    row. */
+/* The corner comes from --media-radius, which the store sets to 0 store-wide.
+   Dawn reads that variable in a rule more specific than anything sensible to
+   write here, so the variable is set on the row instead of the radius being
+   forced on the element. */
+.t-page-quizzes .multirow__inner > .image-with-text { --media-radius: 14px; }
 .t-page-quizzes .image-with-text__media {
   border-radius: 14px;
   overflow: hidden;

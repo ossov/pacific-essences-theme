@@ -59,7 +59,18 @@
         "hide_variants": true,
         "enable_video_looping": false,
         "padding_top": 36,
-        "padding_bottom": 12
+        "padding_bottom": 12,
+        "show_plant_caption": true,
+        "gallery_interval": 7,
+        "origin_line": "Made in the Canadian West Coast Rainforest since 1983",
+        "reviews_label": "reviews",
+        "guide_label": "Not sure? Ask the Essence Guide",
+        "guide_link": "",
+        "guide_only_when": "Combination",
+        "guide_prompt": "Is [product] right for me?",
+        "guide_endpoint": "/apps/essence-chat/chat-v2",
+        "trust_1": "Ships worldwide",
+        "trust_2": ""
       }
     },
     "collapsible_content_iD6HhX": {
