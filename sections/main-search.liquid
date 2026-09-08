@@ -66,13 +66,28 @@
 {% paginate search.results by 24 %}
   <div class="template-search{% unless search.performed and search.results_count > 0 %} template-search--empty{% endunless %} section-{{ section.id }}-padding">
     <div class="template-search__header page-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-      <h1 class="h2 center">
-        {%- if search.performed -%}
-          {{- 'templates.search.title' | t -}}
-        {%- else -%}
-          {{- 'general.search.search' | t -}}
+      {%- comment -%}
+        The heading leads with what was searched for rather than the words
+        "Search results", because people arrive here from a typo or a
+        half-remembered name and the first thing they need is confirmation of
+        what the store heard. The count sits under it.
+
+        Three states, all kept: a search with results, a search with none, and
+        the page reached with no query at all.
+      {%- endcomment -%}
+      {%- if search.performed and search.terms != blank -%}
+        <p class="search-eyebrow">{{ 'templates.search.title' | t }}</p>
+        <h1 class="h2 center search-term">&ldquo;{{ search.terms }}&rdquo;</h1>
+        {%- if search.results_count > 0 -%}
+          <p class="search-count" role="status">
+            {{- 'templates.search.results_with_count' | t: terms: search.terms, count: search.results_count -}}
+          </p>
         {%- endif -%}
-      </h1>
+      {%- else -%}
+        <h1 class="h2 center search-term search-term--plain">
+          {{- 'general.search.search' | t -}}
+        </h1>
+      {%- endif -%}
       <div class="template-search__search">
         {%- if settings.predictive_search_enabled -%}
           <predictive-search data-loading-text="{{ 'accessibility.loading' | t }}">

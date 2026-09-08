@@ -1460,3 +1460,97 @@
   /* The parent makes its text transparent; the rule must not inherit that. */
   -webkit-text-fill-color: initial;
 }
+
+/* ---------------------------------------------------------------------------
+   Search results
+
+   Two things were wrong here, and only one of them was styling.
+
+   The filter and sort controls had no styling at all — no radius, no border,
+   no background — so they read as bare words with a caret. They are pills now.
+
+   The pictures were every height the photographs happened to be: measured at
+   300, 300, 300, 172, 267, 172 and 267 pixels down a single grid. The cards
+   were aligned; the images inside them were not, so every name and price
+   started at a different height. A collection page never shows this because
+   every product on one is the same shape — search is where a bottle, a kit and
+   a deck of cards land side by side. One square frame for all of them fixes it.
+   ------------------------------------------------------------------------ */
+
+.t-search .template-search__header { margin-bottom: 2.4rem; }
+
+.t-search .search-eyebrow {
+  margin: 0 0 0.6rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pe-card-muted, #7c97a6);
+}
+.t-search h1.search-term {
+  margin: 0;
+  font-size: clamp(3.2rem, 2.2rem + 2vw, 4.6rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.028em;
+  color: var(--pe-blue, #2a87b9);
+  overflow-wrap: anywhere;
+}
+.t-search .search-count {
+  margin: 0.8rem 0 0;
+  text-align: center;
+  font-size: 1.4rem;
+  color: var(--pe-card-muted, #7c97a6);
+}
+
+/* ---- the filter and sort line ---- */
+
+.t-search .facets__form,
+.t-search .facets-vertical-form {
+  gap: 1rem 1.6rem;
+  padding: 1.2rem 0;
+  border-top: 1px solid var(--pe-card-hair, #e7eff4);
+  border-bottom: 1px solid var(--pe-card-hair, #e7eff4);
+}
+.t-search .facets__heading,
+.t-search .facet-filters__label,
+.t-search .facets__label {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pe-card-muted, #7c97a6);
+}
+.t-search .facets__summary,
+.t-search .facet-filters__field .select {
+  border: 1px solid var(--pe-card-hair, #e7eff4);
+  border-radius: 50px;
+  background: #ffffff;
+  padding: 0.7rem 1.4rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--pe-deep, #1c5b7d);
+  transition: border-color 0.16s ease, color 0.16s ease;
+}
+.t-search .facets__summary:hover,
+.t-search .facet-filters__field .select:hover { border-color: var(--pe-blue, #2a87b9); }
+.t-search .facets__disclosure[open] > .facets__summary {
+  border-color: var(--pe-blue, #2a87b9);
+  color: var(--pe-blue, #2a87b9);
+}
+.t-search .product-count__text,
+.t-search .facets__status { font-size: 1.3rem; color: var(--pe-card-muted, #7c97a6); }
+
+/* ---- one shape for every result picture ---- */
+
+/* Dawn sizes these boxes with a padding-bottom pseudo-element driven by
+   --ratio-percent, written inline on each card from the photograph's own
+   proportions — 112.5% for a tall shot, 100% for a square one. Setting
+   aspect-ratio here does nothing, because the pseudo-element is what makes the
+   height. Overriding the variable works with that mechanism rather than
+   against it; !important because the value is inline. */
+.t-search .product-grid .card__inner.ratio,
+.t-search #product-grid .card__inner.ratio {
+  --ratio-percent: 100% !important;
+}
