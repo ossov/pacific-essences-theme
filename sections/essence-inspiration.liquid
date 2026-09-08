@@ -1,0 +1,342 @@
+{%- comment -%}
+  Your Daily Essence Inspiration.
+
+  Draws one essence at random and shows the square graphic that already lives on
+  its product page — the one with the words set into the picture, which the
+  product gallery no longer uses since it shows the bottle and the plant.
+
+  Where the pool comes from, and why it is fetched rather than rendered:
+  Liquid caps collection.products at 50 items per loop and `offset` does not get
+  past it — measured, a five-pass loop over a 143-product collection returned 50.
+  So the list is fetched from the collection's own products.json, which returns
+  all of them in about 21KB. That happens on load, a graphic is chosen straight
+  away and pre-downloaded, so the click reveals something already in the browser
+  rather than starting a download.
+
+  A product joins the pool by being in the chosen collection AND having an image
+  whose filename contains "IG". That is a naming convention rather than data,
+  the same fragility that lost the Lakshmi photograph when the Goddess range was
+  renamed. It holds for all 143 today; a metafield would make it durable.
+{%- endcomment -%}
+
+{%- liquid
+  assign pool = section.settings.collection | default: collections['individual-essences']
+-%}
+
+{% style %}
+  #ei-{{ section.id }} {
+    /* A custom element is inline until told otherwise, so the band painted only
+       behind the text instead of across the section. */
+    display: block;
+    background: linear-gradient(160deg, {{ section.settings.band_from }} 0%, {{ section.settings.band_to }} 100%);
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+  }
+  #ei-{{ section.id }} .ins-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 4rem;
+    align-items: center;
+    max-width: 100rem;
+    margin: 0 auto;
+  }
+
+  /* A fixed square, so nothing on the page moves when the picture arrives. */
+  #ei-{{ section.id }} .ins-stage {
+    /* A span is inline, and width and aspect-ratio do not apply to inline
+       elements — without this the frame collapses to nothing. */
+    display: block;
+    position: relative;
+    width: 100%;
+    max-width: {{ section.settings.image_size }}px;
+    margin-inline: auto;
+    aspect-ratio: 1 / 1;
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.06);
+  }
+  #ei-{{ section.id }} .ins-stage img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+  #ei-{{ section.id }} .ins-stage img.is-on { opacity: 1; }
+  #ei-{{ section.id }} .ins-stage.is-drawing { animation: ins-pulse 0.9s ease; }
+  @keyframes ins-pulse {
+    0% { transform: scale(1); }
+    45% { transform: scale(0.97); }
+    100% { transform: scale(1); }
+  }
+  #ei-{{ section.id }} a.ins-stage-link { display: block; }
+
+  #ei-{{ section.id }} .ins-eyebrow {
+    margin: 0 0 0.8rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: {{ section.settings.eyebrow_color }};
+  }
+  #ei-{{ section.id }} .ins-heading {
+    margin: 0;
+    font-size: clamp(2.4rem, 1.9rem + 1.2vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: {{ section.settings.heading_color }};
+    text-wrap: balance;
+  }
+  #ei-{{ section.id }} .ins-body {
+    margin: 1.2rem 0 0;
+    max-width: 46ch;
+    font-size: 1.6rem;
+    line-height: 1.65;
+    color: {{ section.settings.body_color }};
+  }
+  #ei-{{ section.id }} .ins-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.4rem;
+    margin-top: 2.2rem;
+  }
+  #ei-{{ section.id }} .ins-button {
+    border: 0;
+    border-radius: var(--pe-radius-button, 30px);
+    padding: 1.3rem 3rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    cursor: pointer;
+    background: {{ section.settings.button_color }};
+    color: {{ section.settings.button_text_color }};
+  }
+  #ei-{{ section.id }} .ins-button[disabled] { opacity: 0.45; cursor: default; }
+  #ei-{{ section.id }} .ins-visit {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: {{ section.settings.heading_color }};
+    text-decoration: none;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 2px;
+  }
+  #ei-{{ section.id }} .ins-name {
+    margin: 1.8rem 0 0;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: {{ section.settings.heading_color }};
+  }
+  #ei-{{ section.id }} .ins-note {
+    margin: 1rem 0 0;
+    font-size: 1.35rem;
+    color: {{ section.settings.body_color }};
+  }
+  #ei-{{ section.id }} [hidden] { display: none !important; }
+
+  @media screen and (max-width: 749px) {
+    #ei-{{ section.id }} .ins-layout { grid-template-columns: 1fr; gap: 2.6rem; }
+    #ei-{{ section.id }} .ins-copy { text-align: center; }
+    #ei-{{ section.id }} .ins-body { margin-inline: auto; }
+    #ei-{{ section.id }} .ins-actions { justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #ei-{{ section.id }} .ins-stage.is-drawing { animation: none; }
+    #ei-{{ section.id }} .ins-stage img { transition: none; }
+  }
+{% endstyle %}
+
+<essence-inspiration
+  id="ei-{{ section.id }}"
+  class="ins-section"
+  data-collection="{{ pool.handle | default: 'individual-essences' }}"
+  data-key="ei-{{ section.id }}"
+>
+  <div class="page-width">
+    <div class="ins-layout">
+      <div>
+        {%- if section.settings.placeholder -%}
+          <span class="ins-stage" data-stage>
+            {{
+              section.settings.placeholder
+              | image_url: width: 900
+              | image_tag: class: 'is-on', loading: 'lazy', widths: '450, 700, 900', alt: ''
+            }}
+          </span>
+        {%- else -%}
+          <span class="ins-stage" data-stage></span>
+        {%- endif -%}
+      </div>
+
+      <div class="ins-copy">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="ins-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 class="ins-heading">{{ section.settings.heading | escape }}</h2>
+        {%- if section.settings.description != blank -%}
+          <p class="ins-body">{{ section.settings.description }}</p>
+        {%- endif -%}
+
+        <p class="ins-name" data-name hidden></p>
+
+        <div class="ins-actions">
+          <button type="button" class="ins-button" data-draw>
+            {{ section.settings.button_label | escape }}
+          </button>
+          <a class="ins-visit" data-visit href="#" hidden>
+            {{ section.settings.visit_label | escape }}
+          </a>
+        </div>
+
+        <p class="ins-note" data-note hidden>{{ section.settings.done_note | escape }}</p>
+      </div>
+    </div>
+  </div>
+</essence-inspiration>
+
+<script>
+  (function () {
+    if (customElements.get('essence-inspiration')) return;
+
+    customElements.define('essence-inspiration', class extends HTMLElement {
+      connectedCallback() {
+        this.stage  = this.querySelector('[data-stage]');
+        this.button = this.querySelector('[data-draw]');
+        this.visit  = this.querySelector('[data-visit]');
+        this.nameEl = this.querySelector('[data-name]');
+        this.note   = this.querySelector('[data-note]');
+        this.key    = this.dataset.key;
+
+        this.button.addEventListener('click', () => this.draw());
+
+        /* One draw per session. Kept in sessionStorage rather than a variable so
+           it survives a reload and clears when the tab closes. Wrapped because a
+           private window can throw on access rather than return null. */
+        var already = null;
+        try { already = sessionStorage.getItem(this.key); } catch (e) {}
+        if (already) {
+          try { this.reveal(JSON.parse(already), true); } catch (e) {}
+        }
+
+        this.load();
+      }
+
+      /* Liquid cannot reach past 50 products in a collection, so the pool comes
+         from the collection's own JSON. Fetched on load and one chosen straight
+         away, so the click reveals a picture already downloaded. */
+      load() {
+        var url = '/collections/' + this.dataset.collection + '/products.json?limit=250';
+        fetch(url, { credentials: 'same-origin' })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then((data) => {
+            if (!data || !data.products) return;
+            this.pool = data.products.map(function (p) {
+              var img = (p.images || []).filter(function (i) {
+                return /IG|instagram/i.test(i.src.split('/').pop());
+              })[0];
+              if (!img) return null;
+              return {
+                src: img.src.split('?')[0],
+                title: (p.title || '').split('|')[0].trim(),
+                url: '/products/' + p.handle
+              };
+            }).filter(Boolean);
+
+            if (!this.pool.length || this.chosen) return;
+            this.chosen = this.pool[Math.floor(Math.random() * this.pool.length)];
+            this.preload(this.chosen.src);
+          })
+          .catch(function () {});
+      }
+
+      /* Ask the CDN for a sized version. The originals are 1080px PNGs of up to
+         2MB; at this width Shopify serves a few tens of kilobytes of WebP. */
+      sized(src) {
+        return src + '?width=900';
+      }
+
+      preload(src) {
+        var i = new Image();
+        i.src = this.sized(src);
+        return i;
+      }
+
+      draw() {
+        if (this.drawn) return;
+        var pick = this.chosen || (this.pool && this.pool[Math.floor(Math.random() * this.pool.length)]);
+        if (!pick) return;
+        this.stage.classList.add('is-drawing');
+        setTimeout(() => {
+          this.stage.classList.remove('is-drawing');
+          this.reveal(pick, false);
+          try { sessionStorage.setItem(this.key, JSON.stringify(pick)); } catch (e) {}
+        }, 420);
+      }
+
+      reveal(pick, restoring) {
+        this.drawn = true;
+        var img = new Image();
+        img.alt = pick.title;
+        img.src = this.sized(pick.src);
+        img.loading = 'eager';
+        img.addEventListener('load', function () { img.classList.add('is-on'); });
+
+        var link = document.createElement('a');
+        link.className = 'ins-stage-link';
+        link.href = pick.url;
+        link.appendChild(img);
+
+        this.stage.innerHTML = '';
+        this.stage.appendChild(link);
+
+        this.nameEl.textContent = pick.title;
+        this.nameEl.hidden = false;
+        this.visit.href = pick.url;
+        this.visit.hidden = false;
+        this.button.disabled = true;
+        if (this.note) this.note.hidden = false;
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Daily inspiration",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Draw from",
+      "info": "Only products in this collection that have a graphic are drawn. Defaults to Individual Essences."
+    },
+    { "type": "image_picker", "id": "placeholder", "label": "Picture before the draw" },
+
+    { "type": "header", "content": "Words" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Today" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Your Daily Essence Inspiration" },
+    { "type": "richtext", "id": "description", "label": "Description" },
+    { "type": "text", "id": "button_label", "label": "Button", "default": "Draw an essence" },
+    { "type": "text", "id": "visit_label", "label": "Link to the product", "default": "Read about this essence" },
+    { "type": "text", "id": "done_note", "label": "Note after the draw", "default": "Come back tomorrow for another." },
+
+    { "type": "header", "content": "Appearance" },
+    { "type": "range", "id": "image_size", "min": 260, "max": 560, "step": 20, "unit": "px", "label": "Picture size", "default": 420 },
+    { "type": "color", "id": "band_from", "label": "Band, top", "default": "#0f3446" },
+    { "type": "color", "id": "band_to", "label": "Band, bottom", "default": "#16495f" },
+    { "type": "color", "id": "eyebrow_color", "label": "Eyebrow", "default": "#7fc4e2" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#eaf6fb" },
+    { "type": "color", "id": "body_color", "label": "Body text", "default": "#9dc0d1" },
+    { "type": "color", "id": "button_color", "label": "Button", "default": "#eaf6fb" },
+    { "type": "color", "id": "button_text_color", "label": "Button text", "default": "#0f3446" },
+
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top padding", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom padding", "default": 64 }
+  ],
+  "presets": [{ "name": "Daily inspiration" }]
+}
+{% endschema %}

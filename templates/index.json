@@ -248,7 +248,7 @@
         "text_4LTc7C": {
           "type": "text",
           "settings": {
-            "text": "<p>May is the month where we celebrate Mother energy in all its forms. Consider <strong>gifting your mum (or a special mother figure in your life) a Pacific Essences Gift Certificate for Mother’s Day!</strong></p>",
+            "text": "<p>May is the month where we celebrate Mother energy in all its forms. Consider <strong>gifting your mum (or a special mother figure in your life) a Pacific Essences Gift Certificate for Mother\u2019s Day!</strong></p>",
             "text_style": "body"
           }
         },
@@ -297,7 +297,7 @@
         "text_dqHcpk": {
           "type": "text",
           "settings": {
-            "text": "<p>We are thrilled to offer a <strong>seven-night retreat in May 2026</strong> to explore the five elements of traditional Chinese medicine, and the flower and sea Essences which resonate with them. </p><p>This retreat also provides training for participants to become Energy Medicine® Practitioners if they choose. Our course is approved for <strong>50 CEUs by the NCCAOM</strong> for Acupuncture and Oriental Medicine Practitioners.</p>",
+            "text": "<p>We are thrilled to offer a <strong>seven-night retreat in May 2026</strong> to explore the five elements of traditional Chinese medicine, and the flower and sea Essences which resonate with them. </p><p>This retreat also provides training for participants to become Energy Medicine\u00ae Practitioners if they choose. Our course is approved for <strong>50 CEUs by the NCCAOM</strong> for Acupuncture and Oriental Medicine Practitioners.</p>",
             "text_style": "body"
           }
         },
@@ -409,7 +409,8 @@
     "random_card_selector_XrXiM4": {
       "type": "random-card-selector",
       "name": "t:sections.random_card_selector.name",
-      "settings": {}
+      "settings": {},
+      "disabled": true
     },
     "essence_journal": {
       "type": "essence-journal",
@@ -433,6 +434,28 @@
         "padding_top": 56,
         "padding_bottom": 56
       }
+    },
+    "essence_inspiration": {
+      "type": "essence-inspiration",
+      "settings": {
+        "collection": "individual-essences",
+        "eyebrow": "Today",
+        "heading": "Your Daily Essence Inspiration",
+        "description": "<p>One essence, drawn at random from the flowers, trees, sea and gems of the Pacific Northwest \u2014 to sit with for the day.</p>",
+        "button_label": "Draw an essence",
+        "visit_label": "Read about this essence",
+        "done_note": "Come back tomorrow for another.",
+        "image_size": 420,
+        "band_from": "#0f3446",
+        "band_to": "#16495f",
+        "eyebrow_color": "#7fc4e2",
+        "heading_color": "#eaf6fb",
+        "body_color": "#9dc0d1",
+        "button_color": "#eaf6fb",
+        "button_text_color": "#0f3446",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
@@ -444,6 +467,7 @@
     "featured_collection_NGddmY",
     "essence_journal",
     "17876670097e2973bc",
+    "essence_inspiration",
     "random_card_selector_XrXiM4"
   ]
 }
