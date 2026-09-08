@@ -49,6 +49,10 @@
   /* Heading gradients. Two are in use; they differ in angle and stops.
      Worth reducing to one when we get to the restyle. */
   --pe-gradient-title: linear-gradient(90deg, #5dbdfc, #975af2, #f45dfc);
+  /* Deep brand blue into light. Reads as a gradient close up and as brand blue
+     from across the room, which the purple-to-pink one above does not. */
+  --pe-gradient-tide: linear-gradient(100deg, #1c5b7d 0%, #2a87b9 52%, #5fb4e0 100%);
+  --pe-gradient-tide-flat: linear-gradient(90deg, #1c5b7d, #5fb4e0);
   --pe-gradient-heading: linear-gradient(100deg, #830af5, #ffbff2);
 
   /* Corner radii. There are four distinct values in play; also a restyle
@@ -1405,3 +1409,54 @@
   text-decoration: none;
 }
 .t-policy .policy-also a:hover { text-decoration: underline; }
+
+/* ---------------------------------------------------------------------------
+   Blog heading
+
+   The blog opened with its name at Dawn's default heading size and weight, then
+   went straight into the cards with nothing between. Bigger, tighter, in the
+   tide gradient, with a short rule underneath — the same mark the product title
+   uses, so the two pages agree.
+
+   Only the heading is touched. The cards below are Dawn's and stay as they are.
+   ------------------------------------------------------------------------ */
+
+.t-blog .main-blog > .title--primary,
+.t-blog-essence-stories .main-blog > .title--primary {
+  /* The solid colour is the fallback and is set first on purpose: gradient text
+     works by making the letters transparent, so if the clip is not supported
+     the heading would otherwise disappear rather than go blue. */
+  color: var(--pe-blue, #2a87b9);
+  margin: 0 auto 3.2rem;
+  font-size: clamp(3.4rem, 2.4rem + 2vw, 5.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.028em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .t-blog .main-blog > .title--primary,
+  .t-blog-essence-stories .main-blog > .title--primary {
+    width: fit-content;
+    background-image: var(--pe-gradient-tide, linear-gradient(100deg, #1c5b7d, #2a87b9 52%, #5fb4e0));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Drawn rather than added, so the heading is still just the blog's name. */
+.t-blog .main-blog > .title--primary::after,
+.t-blog-essence-stories .main-blog > .title--primary::after {
+  content: '';
+  display: block;
+  width: 6.4rem;
+  height: 3px;
+  margin: 1.8rem auto 0;
+  border-radius: 2px;
+  background: var(--pe-gradient-tide-flat, linear-gradient(90deg, #1c5b7d, #5fb4e0));
+  /* The parent makes its text transparent; the rule must not inherit that. */
+  -webkit-text-fill-color: initial;
+}
