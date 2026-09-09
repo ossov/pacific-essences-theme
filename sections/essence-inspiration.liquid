@@ -65,6 +65,11 @@
     backface-visibility: hidden;
     border-radius: 18px;
     overflow: hidden;
+  }
+  /* Only ever on the face you are looking at. A shadow on the hidden face is
+     still cast by the 3D context, and shows as a stripe under the card. */
+  #ei-{{ section.id }} .ins-face--back,
+  #ei-{{ section.id }} .ins-card.is-settled .ins-face--front {
     box-shadow: 0 18px 46px rgba(0, 0, 0, 0.34);
   }
   #ei-{{ section.id }} .ins-face--front { transform: rotateY(180deg); }
@@ -102,23 +107,33 @@
   }
   #ei-{{ section.id }} a.ins-stage-link { display: block; height: 100%; }
 
-  /* The face-down card. Drawn rather than uploaded so the section is never
-     blank out of the box; the image setting replaces it when one is chosen. */
+  /* The face-down card: a quiet seascape, drawn rather than uploaded so the
+     section is never blank out of the box. The image setting replaces it when
+     one is chosen. */
   #ei-{{ section.id }} .ins-back {
     display: block;
     width: 100%;
     height: 100%;
     background:
-      radial-gradient(120% 90% at 50% 10%, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 60%),
-      linear-gradient(150deg, {{ section.settings.card_from }} 0%, {{ section.settings.card_to }} 100%);
+      radial-gradient(34% 26% at 73% 24%, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0) 72%),
+      linear-gradient(185deg, {{ section.settings.card_from }} 0%, {{ section.settings.card_to }} 100%);
   }
   #ei-{{ section.id }} .ins-back svg { display: block; width: 100%; height: 100%; }
-  #ei-{{ section.id }} .ins-ripple { animation: ins-ripple 6s ease-in-out infinite; transform-origin: 50% 50%; }
-  #ei-{{ section.id }} .ins-ripple--2 { animation-delay: 1.1s; }
-  #ei-{{ section.id }} .ins-ripple--3 { animation-delay: 2.2s; }
-  @keyframes ins-ripple {
-    0%, 100% { opacity: 0.4; transform: scale(1); }
-    50%      { opacity: 0.85; transform: scale(1.04); }
+
+  /* The swells drift, slowly and out of step, so the card is never quite still.
+     They are drawn wider than the card and clipped, so the ends never show. */
+  #ei-{{ section.id }} .ins-swell { animation: ins-drift 17s ease-in-out infinite; }
+  #ei-{{ section.id }} .ins-swell--2 { animation-duration: 23s; animation-direction: reverse; }
+  #ei-{{ section.id }} .ins-swell--3 { animation-duration: 29s; }
+  #ei-{{ section.id }} .ins-star { animation: ins-twinkle 7s ease-in-out infinite; }
+  #ei-{{ section.id }} .ins-star--2 { animation-duration: 9.5s; animation-delay: 2.5s; }
+  @keyframes ins-twinkle {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 0.12; }
+  }
+  @keyframes ins-drift {
+    0%, 100% { transform: translateX(-16px); }
+    50%      { transform: translateX(16px); }
   }
 
   #ei-{{ section.id }} .ins-eyebrow {
@@ -202,7 +217,8 @@
   @media (prefers-reduced-motion: reduce) {
     #ei-{{ section.id }} .ins-card,
     #ei-{{ section.id }} .ins-card.is-shuffling,
-    #ei-{{ section.id }} .ins-ripple,
+    #ei-{{ section.id }} .ins-swell,
+    #ei-{{ section.id }} .ins-star,
     #ei-{{ section.id }} .ins-rise { animation: none; transition: none; }
     #ei-{{ section.id }} .ins-button { transition: none; }
   }
@@ -230,19 +246,46 @@
               {%- else -%}
                 <span class="ins-back">
                   <svg viewBox="0 0 400 400" role="presentation" focusable="false" aria-hidden="true">
-                    <g fill="none" stroke="{{ section.settings.card_mark }}" stroke-width="1">
-                      <circle class="ins-ripple ins-ripple--3" cx="200" cy="200" r="164" opacity="0.3"/>
-                      <circle class="ins-ripple ins-ripple--2" cx="200" cy="200" r="128" opacity="0.4"/>
-                      <circle class="ins-ripple" cx="200" cy="200" r="92" opacity="0.5"/>
-                      <rect x="20" y="20" width="360" height="360" rx="10" opacity="0.35"/>
-                    </g>
                     <g fill="{{ section.settings.card_mark }}">
-                      <path d="M200 148 L210 190 L252 200 L210 210 L200 252 L190 210 L148 200 L190 190 Z" opacity="0.9"/>
-                      <circle cx="200" cy="200" r="4" opacity="0.5"/>
+                      <circle cx="72" cy="84" r="1.6" opacity="0.5"/>
+                      <circle class="ins-star" cx="128" cy="52" r="1.2" opacity="0.38"/>
+                      <circle cx="168" cy="128" r="1.4" opacity="0.42"/>
+                      <circle cx="58" cy="170" r="1.2" opacity="0.3"/>
+                      <circle cx="224" cy="74" r="1.1" opacity="0.3"/>
+                      <circle class="ins-star ins-star--2" cx="330" cy="198" r="1.5" opacity="0.4"/>
+                      <circle cx="106" cy="212" r="1" opacity="0.26"/>
+                      <circle cx="268" cy="172" r="1.2" opacity="0.3"/>
                     </g>
-                    <text x="200" y="330" text-anchor="middle"
-                          font-family="inherit" font-size="13" letter-spacing="5"
-                          fill="{{ section.settings.card_mark }}" opacity="0.7">PACIFIC ESSENCES</text>
+
+                    <circle cx="292" cy="98" r="27" fill="{{ section.settings.card_mark }}" opacity="0.15"/>
+                    <circle cx="292" cy="98" r="27" fill="none" stroke="{{ section.settings.card_mark }}" stroke-width="1" opacity="0.42"/>
+
+                    <g>
+                      <g class="ins-swell">
+                        <path fill="{{ section.settings.card_water }}" opacity="0.24"
+                              d="M-60 262 C30 232 110 290 200 268 C290 246 370 286 460 256 L460 420 L-60 420 Z"/>
+                        <path fill="none" stroke="{{ section.settings.card_mark }}" stroke-width="1.2" opacity="0.22"
+                              d="M-60 262 C30 232 110 290 200 268 C290 246 370 286 460 256"/>
+                      </g>
+                      <g class="ins-swell ins-swell--2">
+                        <path fill="{{ section.settings.card_water }}" opacity="0.32"
+                              d="M-60 294 C26 266 120 318 210 298 C296 280 380 316 460 290 L460 420 L-60 420 Z"/>
+                        <path fill="none" stroke="{{ section.settings.card_mark }}" stroke-width="1.2" opacity="0.26"
+                              d="M-60 294 C26 266 120 318 210 298 C296 280 380 316 460 290"/>
+                      </g>
+                      <g class="ins-swell ins-swell--3">
+                        <path fill="{{ section.settings.card_water }}" opacity="0.36"
+                              d="M-60 330 C40 304 128 350 214 332 C300 314 386 346 460 326 L460 420 L-60 420 Z"/>
+                        <path fill="none" stroke="{{ section.settings.card_mark }}" stroke-width="1.2" opacity="0.3"
+                              d="M-60 330 C40 304 128 350 214 332 C300 314 386 346 460 326"/>
+                      </g>
+                    </g>
+
+                    <rect x="16" y="16" width="368" height="368" rx="11"
+                          fill="none" stroke="{{ section.settings.card_mark }}" stroke-width="1" opacity="0.3"/>
+                    <text x="200" y="360" text-anchor="middle"
+                          font-family="inherit" font-size="12" letter-spacing="4.5"
+                          fill="{{ section.settings.card_mark }}" opacity="0.6">PACIFIC ESSENCES</text>
                   </svg>
                 </span>
               {%- endif -%}
@@ -473,9 +516,10 @@
       "label": "Your own picture",
       "info": "Optional. Leave empty to use the drawn card back below."
     },
-    { "type": "color", "id": "card_from", "label": "Card, top", "default": "#1f6a90" },
-    { "type": "color", "id": "card_to", "label": "Card, bottom", "default": "#0a2938" },
-    { "type": "color", "id": "card_mark", "label": "Card markings", "default": "#cfe9f6" },
+    { "type": "color", "id": "card_from", "label": "Card, sky", "default": "#123a52" },
+    { "type": "color", "id": "card_to", "label": "Card, depths", "default": "#04141d" },
+    { "type": "color", "id": "card_water", "label": "Card, the swells", "default": "#5fb6d8" },
+    { "type": "color", "id": "card_mark", "label": "Card, moon and lettering", "default": "#cfe9f6" },
 
     { "type": "header", "content": "Appearance" },
     { "type": "range", "id": "image_size", "min": 260, "max": 560, "step": 20, "unit": "px", "label": "Picture size", "default": 420 },
